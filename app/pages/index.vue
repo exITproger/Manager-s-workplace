@@ -38,7 +38,6 @@
                   trailing: 'text-[#555] pr-3'
                 }"
               >
-                <!-- Крестик убран, чтобы не было ошибок -->
               </UInput>
             </div>
             <p class="text-[#d9d2e3] text-[13px] mt-1 ml-0.5">Supporting text</p>
@@ -136,3 +135,8 @@ const handleLogin = async () => {
   }
 }
 </script>
+<style scoped>
+/* Отключаем стандартные тени для инпутов UInput */
+:deep(.custom-input input) { --tw-ring-color: transparent !important; outline: none !important; box-shadow: none !important; }
+:deep(.custom-input) { --tw-ring-color: transparent !important; }
+</style>

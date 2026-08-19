@@ -1,50 +1,16 @@
 <template>
   <div class="min-h-screen bg-white dark:bg-gray-950 flex flex-col items-center justify-center relative px-4 py-8 font-sans">
     
-    <button
-      class="absolute top-10 right-5 cursor-pointer text-2xl hover:opacity-80 transition-opacity outline-none"
+    <UButton
+      variant="ghost"
+      color="neutral"
+      square
+      class="absolute top-10 right-5"
+      :icon="colorMode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
+      :ui="{ leadingIcon: 'size-7' }"
+      aria-label="Переключить тему"
       @click="toggleTheme"
-    >
-      <!-- Moon in light theme -->
-      <svg
-        v-if="colorMode.value !== 'dark'"
-        xmlns="http://www.w3.org/2000/svg"
-        width="28"
-        height="28"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="black"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-      </svg>
-
-      <!-- Sun in dark theme -->
-      <svg
-        v-else
-        xmlns="http://www.w3.org/2000/svg"
-        width="28"
-        height="28"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="white"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <circle cx="12" cy="12" r="4" />
-        <path d="M12 2v2" />
-        <path d="M12 20v2" />
-        <path d="m4.93 4.93 1.41 1.41" />
-        <path d="m17.66 17.66 1.41 1.41" />
-        <path d="M2 12h2" />
-        <path d="M20 12h2" />
-        <path d="m6.34 17.66-1.41 1.41" />
-        <path d="m19.07 4.93-1.41 1.41" />
-      </svg>
-    </button>
+    />
 
     <div class="flex flex-col items-center w-full max-w-[450px] text-center">
       <!-- Заголовок бренда -->

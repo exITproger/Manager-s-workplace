@@ -1,36 +1,53 @@
 <template>
-  <div class="min-h-screen bg-white flex flex-col items-center justify-center relative px-4 py-8 font-sans">
+  <div class="min-h-screen bg-white dark:bg-gray-950 flex flex-col items-center justify-center relative px-4 py-8 font-sans">
     
     <!-- Иконка луны SVG -->
     <button 
       class="absolute top-10 right-5 cursor-pointer text-2xl hover:opacity-80 transition-opacity outline-none"
       @click="toggleTheme"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="28"
+        height="28"
+        viewBox="0 0 24 24"
+        fill="none"
+        :stroke="colorMode.value === 'dark' ? 'white' : 'black'"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
       </svg>
     </button>
 
     <div class="flex flex-col items-center w-full max-w-[450px] text-center">
       <!-- Заголовок бренда -->
-      <h1 class="text-4xl font-medium tracking-widest text-black mb-1">ТОЧКА</h1>
-      <p class="text-black mb-8 text-lg">Рабочее место менеджера</p>
+      <h1 class="text-4xl font-medium tracking-widest text-black dark:text-white mb-1">
+        ТОЧКА
+      </h1>
 
-      <p class="text-black text-lg font-medium mb-6">Войдите в рабочий аккаунт</p>
+      <p class="text-black dark:text-gray-300 mb-8 text-lg">
+        Рабочее место менеджера
+      </p>
+
+      <p class="text-black dark:text-gray-200 text-lg font-medium mb-6">
+        Войдите в рабочий аккаунт
+      </p>
 
       <!-- ФИОЛЕТОВЫЙ БЛОК -->
-      <div class="bg-[#6b5b9c] w-full rounded-[6rem] p-9 pt-12 pb-14 flex flex-col items-center shadow-lg">
+      <div class="bg-[#6b5b9c] dark:bg-black w-full rounded-[6rem] p-9 pt-12 pb-14 flex flex-col items-center shadow-lg">
         
         <form @submit.prevent="handleLogin" class="w-full flex flex-col gap-5">
           
           <!-- Логин -->
           <div class="text-left w-full">
             <label class="block text-white text-[15px] mb-1.5 ml-0.5">Логин</label>
+
             <div class="relative w-full">
               <UInput 
                 v-model="form.login" 
                 placeholder="Input" 
-                color="white" 
                 variant="outline"
                 class="custom-input w-full"
                 :ui="{ 
@@ -40,18 +57,19 @@
               >
               </UInput>
             </div>
+
             <p class="text-[#d9d2e3] text-[13px] mt-1 ml-0.5">Supporting text</p>
           </div>
 
           <!-- Пароль -->
           <div class="text-left w-full">
             <label class="block text-white text-[15px] mb-1.5 ml-0.5">Пароль</label>
+
             <div class="relative w-full">
               <UInput 
                 v-model="form.password" 
                 type="password"
                 placeholder="Input" 
-                color="white" 
                 variant="outline"
                 class="custom-input w-full"
                 :ui="{ 
@@ -59,9 +77,9 @@
                   trailing: 'text-[#555] pr-3'
                 }"
               >
-                <!-- Крестик убран, чтобы не было ошибок -->
               </UInput>
             </div>
+
             <p class="text-[#d9d2e3] text-[13px] mt-1 ml-0.5">Supporting text</p>
           </div>
 
@@ -72,6 +90,7 @@
               v-model="form.remember"
               class="hidden peer"
             />
+
             <div class="w-[22px] h-[22px] bg-[#e5ddee] rounded-[4px] flex items-center justify-center transition-colors shadow-sm peer-checked:bg-[#e5ddee]">
               <svg 
                 v-show="form.remember" 
@@ -108,14 +127,17 @@
       </div>
 
       <!-- Подвал -->
-      <p class="text-black text-xs mt-10 opacity-60">Только для сотрудников компании</p>
+      <p class="text-black dark:text-gray-400 text-xs mt-10 opacity-60">
+        Только для сотрудников компании
+      </p>
 
     </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const router = useRouter()
+const colorMode = useColorMode()
 
 const form = reactive({
   login: '',
@@ -124,7 +146,7 @@ const form = reactive({
 })
 
 const toggleTheme = () => {
-  console.log('Переключение темы (луна)')
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 }
 
 const handleLogin = async () => {
@@ -135,6 +157,7 @@ const handleLogin = async () => {
   }
 }
 </script>
+
 <style scoped>
 /* Отключаем стандартные тени для инпутов UInput */
 :deep(.custom-input input) { --tw-ring-color: transparent !important; outline: none !important; box-shadow: none !important; }

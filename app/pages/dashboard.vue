@@ -186,7 +186,7 @@ const tasks = ref([
     deadline: 'Завтра, 19:00'
   }
 ])
-const goToHome = () => router.push('/')
+const goToHome = () => router.push('/dashboard')
 const goToTasks = () => router.push('/tasks')
 const goToCatalog = () => router.push('/products')
 const goToCart = () => router.push('/cart')

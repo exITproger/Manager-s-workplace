@@ -1,69 +1,66 @@
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-950">
+  <div class="min-h-screen bg-white flex flex-col">
     <!-- Верхняя панель -->
-    <div class="bg-white dark:bg-gray-900 px-4 py-3 flex justify-between items-center border-b dark:border-gray-800">
-      <span class="text-lg font-medium text-black dark:text-white">ТОЧКА</span>
-      <div class="flex items-center gap-4">
-        <UButton
-          variant="ghost"
-          color="neutral"
-          square
-          class="p-0 min-w-0 h-auto"
-          :icon="colorMode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
-          :ui="{ leadingIcon: 'size-6' }"
-          aria-label="Переключить тему"
-          @click="toggleTheme"
-        />
-        <!-- Кнопка "Назад"-->
-        <UButton
-          color="gray"
-          variant="ghost"
-          class="text-gray-700 dark:text-gray-300 p-0 min-w-0 h-auto"
-          @click="goBack"
-        >
-          <UIcon name="i-heroicons-arrow-left" class="w-6 h-6" />
-        </UButton>
-      </div>
+    <div class="px-4 pt-14 flex-shrink-0">
+      <UButton
+        color="gray"
+        variant="ghost"
+        class="text-[#70439e] p-0 min-w-0 h-auto flex items-center gap-1 text-sm font-normal"
+        @click="goBack"
+      >
+        <UIcon name="i-heroicons-arrow-left" class="w-4 h-4" />
+        <span>Назад</span>
+      </UButton>
     </div>
 
-    <!-- Заголовок страницы -->
-    <div class="px-4 pt-6 pb-2">
-      <h1 class="text-xl font-bold text-black dark:text-white">Личный кабинет</h1>
-      <p class="text-sm text-gray-500 dark:text-gray-400">Управление аккаунтом и настройки</p>
+    <!-- Заголовок -->
+    <div class="px-4 mt-4 flex-shrink-0">
+      <h1 class="text-2xl font-bold text-[#1E1E1E]">Личный кабинет</h1>
+      <p class="text-sm text-gray-500 mt-1">Управление аккаунтом и настройки</p>
     </div>
 
-    <!-- Блок с данными пользователя -->
-    <div class="px-4 mt-4 space-y-4">
-      
-      <!-- Карточка: Имя и ID) -->
-      <div class="bg-white dark:bg-gray-900 shadow overflow-hidden rounded-xl p-6 flex flex-col gap-1">
-        <p class="text-lg font-bold text-black dark:text-white">{{ user.name }}</p>
-        <p class="text-sm text-gray-500 dark:text-gray-400">ID: {{ user.id }}</p>
-      </div>
-
-      <!-- Карточка: Роли и привязки -->
-      <div class="bg-white dark:bg-gray-900 shadow overflow-hidden rounded-xl">
-        <div class="px-4 py-3 border-b dark:border-gray-800">
-          <span class="text-sm font-medium text-black dark:text-white">Данные учетной записи</span>
-        </div>
-        <div class="divide-y dark:divide-gray-800">
-          <div class="px-4 py-3 flex justify-between">
-            <span class="text-gray-500 dark:text-gray-400 text-sm">Логин</span>
-            <span class="text-black dark:text-white text-sm font-medium">{{ user.login }}</span>
+    <!-- Контент -->
+    <div class="px-4 mt-6 space-y-4 flex-1 overflow-y-auto pb-40">
+      <!-- Карточка пользователя -->
+      <div class="bg-[#FEF7FF] rounded-2xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-full bg-[#E8DEF8] flex items-center justify-center">
+            <span class="text-[#70439e] font-medium text-2xl">{{ userInitials }}</span>
           </div>
-          <div class="px-4 py-3 flex justify-between">
-            <span class="text-gray-500 dark:text-gray-400 text-sm">Привязанный филиал</span>
-            <span class="text-black dark:text-white text-sm font-medium">{{ user.branch_id || 'Не указан' }}</span>
+          <div>
+            <p class="text-lg font-bold text-[#1E1E1E]">{{ user.name }}</p>
+            <p class="text-sm text-gray-500">ID: {{ user.id }}</p>
           </div>
         </div>
       </div>
 
-      <!-- Кнопки действий -->
-      <div class="space-y-3 mt-4">
+      <!-- Данные учетной записи -->
+      <div class="bg-[#FEF7FF] rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-200">
+          <span class="text-sm font-medium text-[#1E1E1E]">Данные учетной записи</span>
+        </div>
+        <div class="divide-y divide-gray-200">
+          <div class="px-4 py-3 flex justify-between">
+            <span class="text-gray-500 text-sm">Логин</span>
+            <span class="text-[#1E1E1E] text-sm font-medium">{{ user.login }}</span>
+          </div>
+          <div class="px-4 py-3 flex justify-between">
+            <span class="text-gray-500 text-sm">Привязанный филиал</span>
+            <span class="text-[#1E1E1E] text-sm font-medium">{{ user.branch_id || 'Не указан' }}</span>
+          </div>
+          <div class="px-4 py-3 flex justify-between">
+            <span class="text-gray-500 text-sm">Роль</span>
+            <span class="text-[#1E1E1E] text-sm font-medium">{{ user.role || 'Менеджер' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Кнопка выхода -->
+      <div class="pt-2">
         <UButton
           color="gray"
           variant="ghost"
-          class="w-full justify-center text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
+          class="w-full justify-center text-red-500 hover:text-red-600 hover:bg-red-50 h-12 rounded-xl border border-red-200"
           @click="handleLogout"
         >
           <UIcon name="i-heroicons-arrow-right-on-rectangle" class="w-5 h-5 mr-2" />
@@ -73,15 +70,15 @@
     </div>
 
     <!-- Нижняя навигация -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t dark:border-gray-800 flex justify-around py-2 z-10">
+    <div class="fixed bottom-0 left-0 right-0 bg-white flex justify-around py-2" style="z-index: 20;">
       <UButton
         color="gray"
         variant="ghost"
         class="flex flex-col items-center text-gray-400 gap-0 h-auto py-1 px-0 min-w-0"
         @click="goToHome"
       >
-        <UIcon name="i-heroicons-home" class="w-6 h-6" />
-        <span class="text-[10px]">Главная</span>
+        <UIcon name="i-heroicons-home" class="w-6 h-6 text-[#1E1E1E]" />
+        <span class="text-[10px] text-[#1E1E1E]">Главная</span>
       </UButton>
       <UButton
         color="gray"
@@ -89,9 +86,9 @@
         class="flex flex-col items-center text-gray-400 gap-0 h-auto py-1 px-0 min-w-0 relative"
         @click="goToTasks"
       >
-        <UIcon name="i-heroicons-clipboard-document-list" class="w-6 h-6" />
-        <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-red-500 text-white text-[10px] rounded-full">5</span>
-        <span class="text-[10px]">Задачи</span>
+        <UIcon name="i-heroicons-clipboard-document-list" class="w-6 h-6 text-[#1E1E1E]" />
+        <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 rounded-full" style="background-color: rgba(179, 38, 30, 1); color: white; font-size: 10px;">5</span>
+        <span class="text-[10px] text-[#1E1E1E]">Задачи</span>
       </UButton>
       <UButton
         color="gray"
@@ -99,8 +96,8 @@
         class="flex flex-col items-center text-gray-400 gap-0 h-auto py-1 px-0 min-w-0"
         @click="goToCatalog"
       >
-        <UIcon name="i-heroicons-squares-2x2" class="w-6 h-6" />
-        <span class="text-[10px]">Каталог</span>
+        <UIcon name="i-heroicons-squares-2x2" class="w-6 h-6 text-[#1E1E1E]" />
+        <span class="text-[10px] text-[#1E1E1E]">Каталог</span>
       </UButton>
       <UButton
         color="gray"
@@ -108,18 +105,9 @@
         class="flex flex-col items-center text-gray-400 gap-0 h-auto py-1 px-0 min-w-0 relative"
         @click="goToCart"
       >
-        <UIcon name="i-heroicons-shopping-cart" class="w-6 h-6" />
-        <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-red-500 text-white text-[10px] rounded-full">2</span>
-        <span class="text-[10px]">Корзина</span>
-      </UButton>
-      <!-- Активная кнопка профиля -->
-      <UButton
-        color="gray"
-        variant="ghost"
-        class="flex flex-col items-center text-black dark:text-white gap-0 h-auto py-1 px-0 min-w-0"
-      >
-        <UIcon name="i-heroicons-user" class="w-6 h-6" />
-        <span class="text-[10px] font-bold">Профиль</span>
+        <UIcon name="i-heroicons-shopping-cart" class="w-6 h-6 text-[#1E1E1E]" />
+        <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 rounded-full" style="background-color: rgba(179, 38, 30, 1); color: white; font-size: 10px;">2</span>
+        <span class="text-[10px] text-[#1E1E1E]">Корзина</span>
       </UButton>
     </div>
   </div>
@@ -127,21 +115,24 @@
 
 <script setup>
 const router = useRouter()
-const colorMode = useColorMode()
 
-// Ваши данные
 const user = ref({
-  id: 121, 
+  id: 121,
   login: 'manager_007',
   name: 'Илья Иванов',
-  branch_id: 'Филиал Южный'
+  branch_id: 'Филиал Южный',
+  role: 'Менеджер'
 })
 
-const toggleTheme = () => {
-  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-}
+const userInitials = computed(() => {
+  return user.value.name
+    .split(' ')
+    .map(word => word[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2)
+})
 
-// Навигация
 const goBack = () => router.back()
 const goToHome = () => router.push('/dashboard')
 const goToTasks = () => router.push('/tasks')
@@ -150,12 +141,13 @@ const goToCart = () => router.push('/cart')
 
 const handleLogout = () => {
   if (confirm('Вы уверены, что хотите выйти?')) {
-    router.push('/') 
+    router.push('/')
   }
 }
 </script>
 
-<style>
+<style scoped>
+/* Стили для скрытия outline у input, если есть */
 input {
   outline: none !important;
   outline-style: none !important;

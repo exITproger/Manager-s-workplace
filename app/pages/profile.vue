@@ -35,15 +35,10 @@
     <!-- Блок с данными пользователя -->
     <div class="px-4 mt-4 space-y-4">
       
-      <!-- Карточка: Фото и Имя -->
-      <div class="bg-white dark:bg-gray-900 shadow overflow-hidden rounded-xl p-6 flex items-center gap-4">
-        <div class="w-16 h-16 rounded-full bg-[#6750A4] flex items-center justify-center text-white text-2xl font-medium">
-          {{ userInitials }}
-        </div>
-        <div>
-          <p class="text-lg font-bold text-black dark:text-white">{{ user.name }}</p>
-          <p class="text-sm text-gray-500 dark:text-gray-400">ID: {{ user.id }}</p>
-        </div>
+      <!-- Карточка: Имя и ID) -->
+      <div class="bg-white dark:bg-gray-900 shadow overflow-hidden rounded-xl p-6 flex flex-col gap-1">
+        <p class="text-lg font-bold text-black dark:text-white">{{ user.name }}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">ID: {{ user.id }}</p>
       </div>
 
       <!-- Карточка: Роли и привязки -->
@@ -134,22 +129,12 @@
 const router = useRouter()
 const colorMode = useColorMode()
 
-
+// Ваши данные
 const user = ref({
   id: 121, 
   login: 'manager_007',
   name: 'Илья Иванов',
   branch_id: 'Филиал Южный'
-})
-
-// Инициалы для аватарки
-const userInitials = computed(() => {
-  if (!user.value.name) return 'U'
-  const parts = user.value.name.split(' ')
-  if (parts.length >= 2) {
-    return (parts[0][0] + parts[1][0]).toUpperCase()
-  }
-  return parts[0].substring(0, 2).toUpperCase()
 })
 
 const toggleTheme = () => {
@@ -165,7 +150,7 @@ const goToCart = () => router.push('/cart')
 
 const handleLogout = () => {
   if (confirm('Вы уверены, что хотите выйти?')) {
-    router.push('/')
+    router.push('/') // Исправлено на '/', чтобы не было ошибки 404 в консоли
   }
 }
 </script>

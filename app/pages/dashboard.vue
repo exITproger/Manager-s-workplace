@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-950">
-    <div class="bg-white dark:bg-gray-900 px-4 py-3 flex justify-between items-center border-b dark:border-gray-800">
+    <div class="bg-gray-50 dark:bg-gray-950 px-4 py-3 flex justify-between items-center">
       <span class="text-lg font-medium text-black dark:text-white">ТОЧКА</span>
       <div class="flex items-center gap-4">
         <UButton
@@ -13,16 +13,16 @@
           aria-label="Переключить тему"
           @click="toggleTheme"
         />
-        <div class="relative">
+        <div class="relative flex items-center">
           <UButton
             color="gray"
             variant="ghost"
-            class="text-gray-700 dark:text-gray-300 p-0 min-w-0 h-auto"
+            class="text-gray-700 dark:text-gray-300 p-0 min-w-0 h-auto translate-y-px"
             @click="goToNotifications"
           >
             <UIcon name="i-heroicons-bell" class="w-6 h-6" />
           </UButton>
-          <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-red-500 text-white text-[10px] rounded-full">3</span>
+          <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-[#B3261E] text-white text-[10px] rounded-full">3</span>
         </div>
         <UButton
           color="gray"
@@ -98,7 +98,7 @@
         </div>
       </div>
     </div>
-    <div class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t dark:border-gray-800 flex justify-around py-2">
+    <div class="fixed bottom-0 left-0 right-0 bg-gray-50 dark:bg-gray-950 flex justify-around py-2">
       <UButton
         color="gray"
         variant="ghost"
@@ -115,7 +115,7 @@
         @click="goToTasks"
       >
         <UIcon name="i-heroicons-clipboard-document-list" class="w-6 h-6" />
-        <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-red-500 text-white text-[10px] rounded-full">5</span>
+        <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-[#B3261E] text-white text-[10px] rounded-full">5</span>
         <span class="text-[10px]">Задачи</span>
       </UButton>
       <UButton
@@ -134,7 +134,7 @@
         @click="goToCart"
       >
         <UIcon name="i-heroicons-shopping-cart" class="w-6 h-6" />
-        <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-red-500 text-white text-[10px] rounded-full">2</span>
+        <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-[#B3261E] text-white text-[10px] rounded-full">2</span>
         <span class="text-[10px]">Корзина</span>
       </UButton>
     </div>

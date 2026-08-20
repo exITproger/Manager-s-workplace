@@ -150,7 +150,7 @@ const goToCart = () => router.push('/cart')
 
 const handleLogout = () => {
   if (confirm('Вы уверены, что хотите выйти?')) {
-    router.push('/') // Исправлено на '/', чтобы не было ошибки 404 в консоли
+    router.push('/') 
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-950">
     <!-- Header -->
-    <div class="px-4 pt-14 flex-shrink-0">
+    <div class="px-4 pt-6 flex-shrink-0">
       <div class="flex items-center justify-between">
         <UButton
           color="neutral"
@@ -231,12 +231,6 @@ const addToCart = (product: (typeof products.value)[number]) => {
 
 const goBack = () => router.back()
 
-const goToHome = () => router.push('/')
-const goToTasks = () => router.push('/tasks')
-const goToCatalog = () => router.push('/products')
-const goToCart = () => router.push('/cart')
-const goToNotifications = () => router.push('/notifications')
-const goToProfile = () => router.push('/profile')
 </script>
 
 <style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-white flex flex-col">
+  <div class="min-h-screen bg-white flex flex-col pb-20">
     <div class="px-4 pt-14 flex-shrink-0">
       <UButton
         color="gray"
@@ -11,6 +11,8 @@
         <span>Назад</span>
       </UButton>
     </div>
+
+    <!-- вкладки Все / Непрочитанные -->
     <div class="px-4 mt-3 flex-shrink-0">
       <div class="flex border border-[#555555] rounded-full h-11 overflow-hidden">
         <button
@@ -32,40 +34,33 @@
         </button>
       </div>
     </div>
+
+    <!-- список уведомлений через компонент -->
     <div class="px-4 mt-6 space-y-6 flex-1 overflow-y-auto pb-40" style="padding-top: 8px;">
-      <div 
-        v-for="notification in notifications" 
-        :key="notification.id" 
-        class="relative bg-[#FEF7FF] rounded-2xl shadow-sm h-[135px] overflow-visible border border-gray-200"
-      >
-        <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10">
-          <div class="w-12 h-12 rounded-full bg-[#E8DEF8] flex items-center justify-center">
-            <span class="text-[#70439e] font-medium text-base">А</span>
-          </div>
-        </div>
-        <div class="absolute left-20 top-1/2 -translate-y-1/2 z-10" style="width: calc(100% - 130px);">
-          <span class="font-semibold text-base text-black block">Задача</span>
-          <span class="text-sm text-gray-500 block break-words">Вам назначена задача</span>
-          <span class="text-[15px] text-black block break-words whitespace-normal">Проверить остаток товара</span>
-          <span class="text-sm text-gray-400 block">{{ notification.time }}</span>
-        </div>
-        <div class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full" style="z-index: 5; background-color: rgba(179, 38, 30, 1); box-shadow: 0 0 0 3px #ffffff;"></div>
-      </div>
+      <NotificationCard
+        v-for="notification in notifications"
+        :key="notification.id"
+        :notification="notification"
+      />
     </div>
+
+    <BottomNav />
   </div>
 </template>
+
 <script setup>
+import NotificationCard from '~/components/notifications/NotificationCard.vue'
+
 const router = useRouter()
+
 const activeTab = ref('all')
+
 const notifications = ref([
   { id: 1, time: '10:42' },
   { id: 2, time: '10:42' },
   { id: 3, time: '10:42' },
   { id: 4, time: '10:42' }
 ])
-const goToHome = () => router.push('/dashboard')
-const goToTasks = () => router.push('/tasks')
-const goToCatalog = () => router.push('/products')
-const goToCart = () => router.push('/cart')
+
 const goBack = () => router.back()
 </script>

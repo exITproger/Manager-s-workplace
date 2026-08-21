@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed bottom-0 left-0 right-0 bg-gray-50 dark:bg-gray-950 flex justify-around py-2 border-t border-gray-200 dark:border-gray-800">
+  <div class="fixed bottom-0 left-0 right-0 bg-gray-50 dark:bg-gray-950 flex justify-around py-2 border-t border-gray-200 dark:border-gray-800 z-50">
     <!-- ГЛАВНАЯ (dashboard) -->
     <UButton
       color="gray"
@@ -59,7 +59,6 @@ const route = useRoute()
 const activeTab = computed(() => {
   const path = route.path
   
-  // ГЛАВНА
   if (path === '/' || path === '/dashboard' || path.startsWith('/dashboard')) return 'home'
   if (path.startsWith('/tasks')) return 'tasks'
   if (path.startsWith('/catalog')) return 'catalog'

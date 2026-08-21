@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-950">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-950 pb-20">
+    <!-- шапка -->
     <div class="bg-gray-50 dark:bg-gray-950 px-4 py-3 flex justify-between items-center">
       <span class="text-lg font-medium text-black dark:text-white">ТОЧКА</span>
       <div class="flex items-center gap-4">
@@ -34,10 +35,12 @@
         </UButton>
       </div>
     </div>
+
     <div class="px-4 pt-4">
       <p class="text-sm text-gray-600 dark:text-gray-300">Добрый день, <span class="font-bold text-black dark:text-white">User!</span></p>
       <p class="text-sm text-gray-500 dark:text-gray-400">Магазин Name. Центральный</p>
     </div>
+
     <div class="px-4 mt-3">
       <UInput
         v-model="searchQuery"
@@ -55,6 +58,7 @@
         </template>
       </UInput>
     </div>
+
     <div class="px-4 mt-4 flex justify-between items-center">
       <span class="text-sm font-medium text-black dark:text-white">Ближайшие задачи</span>
       <UButton
@@ -68,46 +72,32 @@
         <span>Всё</span>
       </UButton>
     </div>
+
     <div class="px-4 mt-3 space-y-3 pb-24">
-      <div v-for="task in tasks" :key="task.id" class="bg-white dark:bg-gray-900 shadow overflow-hidden rounded-none">
-        <div class="px-4 py-3 flex justify-between items-center" style="background-color: rgba(103, 80, 164, 1);">
-          <span class="text-white font-medium text-sm" :class="{ 'line-through': task.done }">{{ task.title }}</span>
-          <div 
-            class="w-5 h-5 border-2 border-white rounded flex items-center justify-center cursor-pointer" 
-            @click="task.done = !task.done"
-          >
-            <span v-if="task.done" class="text-white text-xs">✓</span>
-          </div>
-        </div>
-        <div class="px-4 py-3 grid grid-cols-3 gap-2 text-sm bg-[#E8DEF8] dark:bg-gray-800">
-          <div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] uppercase tracking-wide">Статус</p>
-            <div class="flex items-center gap-1 mt-0.5">
-              <span class="w-2 h-2 rounded-full" :class="task.statusColor"></span>
-              <span class="text-black dark:text-white text-xs">{{ task.status }}</span>
-            </div>
-          </div>
-          <div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] uppercase tracking-wide">Приоритет</p>
-            <p class="font-medium mt-0.5 text-black dark:text-white text-xs">{{ task.priority }}</p>
-          </div>
-          <div>
-            <p class="text-gray-500 dark:text-gray-400 text-[10px] uppercase tracking-wide whitespace-nowrap">Выполнить до</p>
-            <p class="font-medium mt-0.5 text-black dark:text-white text-xs whitespace-nowrap">{{ task.deadline }}</p>
-          </div>
-        </div>
-      </div>
+      <TaskCard
+        v-for="task in tasks"
+        :key="task.id"
+        :task="task"
+        @toggle-done="task.done = !task.done"
+      />
     </div>
+
+    <BottomNav />
   </div>
 </template>
+
 <script setup>
+import TaskCard from '~/components/tasks/TaskCard.vue'
+
 const router = useRouter()
 const colorMode = useColorMode()
 
 const toggleTheme = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 }
+
 const searchQuery = ref('')
+
 const tasks = ref([
   {
     id: 1,
@@ -146,6 +136,7 @@ const tasks = ref([
     deadline: 'Завтра, 19:00'
   }
 ])
+
 const goToHome = () => router.push('/dashboard')
 const goToTasks = () => router.push('/tasks')
 const goToCatalog = () => router.push('/products')
@@ -154,6 +145,7 @@ const goToNotifications = () => router.push('/notifications')
 const goToProfile = () => router.push('/profile')
 const goToAllTasks = () => router.push('/tasks')
 </script>
+
 <style>
 input {
   outline: none !important;

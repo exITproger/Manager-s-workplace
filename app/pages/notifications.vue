@@ -52,46 +52,6 @@
         <div class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full" style="z-index: 5; background-color: rgba(179, 38, 30, 1); box-shadow: 0 0 0 3px #ffffff;"></div>
       </div>
     </div>
-    <div class="fixed bottom-0 left-0 right-0 bg-white flex justify-around py-2" style="z-index: 20;">
-      <UButton
-        color="gray"
-        variant="ghost"
-        class="flex flex-col items-center text-gray-400 gap-0 h-auto py-1 px-0 min-w-0"
-        @click="goToHome"
-      >
-        <UIcon name="i-heroicons-home" class="w-6 h-6 text-[#1E1E1E]" />
-        <span class="text-[10px] text-[#1E1E1E]">Главная</span>
-      </UButton>
-      <UButton
-        color="gray"
-        variant="ghost"
-        class="flex flex-col items-center text-gray-400 gap-0 h-auto py-1 px-0 min-w-0 relative"
-        @click="goToTasks"
-      >
-        <UIcon name="i-heroicons-clipboard-document-list" class="w-6 h-6 text-[#1E1E1E]" />
-        <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 rounded-full" style="background-color: rgba(179, 38, 30, 1); color: white; font-size: 10px;">5</span>
-        <span class="text-[10px] text-[#1E1E1E]">Задачи</span>
-      </UButton>
-      <UButton
-        color="gray"
-        variant="ghost"
-        class="flex flex-col items-center text-gray-400 gap-0 h-auto py-1 px-0 min-w-0"
-        @click="goToCatalog"
-      >
-        <UIcon name="i-heroicons-squares-2x2" class="w-6 h-6 text-[#1E1E1E]" />
-        <span class="text-[10px] text-[#1E1E1E]">Каталог</span>
-      </UButton>
-      <UButton
-        color="gray"
-        variant="ghost"
-        class="flex flex-col items-center text-gray-400 gap-0 h-auto py-1 px-0 min-w-0 relative"
-        @click="goToCart"
-      >
-        <UIcon name="i-heroicons-shopping-cart" class="w-6 h-6 text-[#1E1E1E]" />
-        <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 rounded-full" style="background-color: rgba(179, 38, 30, 1); color: white; font-size: 10px;">2</span>
-        <span class="text-[10px] text-[#1E1E1E]">Корзина</span>
-      </UButton>
-    </div>
   </div>
 </template>
 <script setup>
@@ -103,7 +63,7 @@ const notifications = ref([
   { id: 3, time: '10:42' },
   { id: 4, time: '10:42' }
 ])
-const goToHome = () => router.push('/')
+const goToHome = () => router.push('/dashboard')
 const goToTasks = () => router.push('/tasks')
 const goToCatalog = () => router.push('/products')
 const goToCart = () => router.push('/cart')

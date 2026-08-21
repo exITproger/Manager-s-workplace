@@ -127,6 +127,10 @@
 </template>
 
 <script setup lang="ts">
+
+definePageMeta({
+  hideNav: true
+})
 const router = useRouter()
 const colorMode = useColorMode()
 
@@ -147,6 +151,8 @@ const handleLogin = async () => {
     alert('Пожалуйста, заполните все поля.')
   }
 }
+
+
 </script>
 
 <style scoped>

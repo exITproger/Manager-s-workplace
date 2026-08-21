@@ -98,46 +98,6 @@
         </div>
       </div>
     </div>
-    <div class="fixed bottom-0 left-0 right-0 bg-gray-50 dark:bg-gray-950 flex justify-around py-2">
-      <UButton
-        color="gray"
-        variant="ghost"
-        class="flex flex-col items-center text-black dark:text-white gap-0 h-auto py-1 px-0 min-w-0"
-        @click="goToHome"
-      >
-        <UIcon name="i-heroicons-home" class="w-6 h-6" />
-        <span class="text-[10px]">Главная</span>
-      </UButton>
-      <UButton
-        color="gray"
-        variant="ghost"
-        class="flex flex-col items-center text-gray-400 gap-0 h-auto py-1 px-0 min-w-0 relative"
-        @click="goToTasks"
-      >
-        <UIcon name="i-heroicons-clipboard-document-list" class="w-6 h-6" />
-        <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-[#B3261E] text-white text-[10px] rounded-full">5</span>
-        <span class="text-[10px]">Задачи</span>
-      </UButton>
-      <UButton
-        color="gray"
-        variant="ghost"
-        class="flex flex-col items-center text-gray-400 gap-0 h-auto py-1 px-0 min-w-0"
-        @click="goToCatalog"
-      >
-        <UIcon name="i-heroicons-squares-2x2" class="w-6 h-6" />
-        <span class="text-[10px]">Каталог</span>
-      </UButton>
-      <UButton
-        color="gray"
-        variant="ghost"
-        class="flex flex-col items-center text-gray-400 gap-0 h-auto py-1 px-0 min-w-0 relative"
-        @click="goToCart"
-      >
-        <UIcon name="i-heroicons-shopping-cart" class="w-6 h-6" />
-        <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-[#B3261E] text-white text-[10px] rounded-full">2</span>
-        <span class="text-[10px]">Корзина</span>
-      </UButton>
-    </div>
   </div>
 </template>
 <script setup>

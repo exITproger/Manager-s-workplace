@@ -1,7 +1,12 @@
+<!-- app.vue -->
 <template>
   <UApp>
     <NuxtRouteAnnouncer />
     <NuxtPage />
+    
+    <!-- Хост для уведомлений. timeout задаем здесь глобально (3 секунды) -->
+    <UNotifications :ui="{ timeout: 3000 }" />
+    
     <BottomNav v-if="showBottomNav" />
   </UApp>
 </template>

@@ -58,6 +58,7 @@
           v-for="product in filteredProducts"
           :key="product.id"
           :product="product"
+          @select="openProduct"
           @add-to-cart="addToCart"
         />
       </div>
@@ -77,142 +78,26 @@
         </p>
       </div>
     </div>
-
-    <!--
-    Bottom navigation
-    <div
-      class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 flex justify-around py-2 z-50"
-    >
-      Home
-      <UButton
-        color="neutral"
-        variant="ghost"
-        class="flex flex-col items-center text-gray-400 gap-0 h-auto py-1 px-0 min-w-0"
-        @click="goToHome"
-      >
-        <UIcon
-          name="i-heroicons-home"
-          class="w-6 h-6"
-        />
-        <span class="text-[10px]">Главная</span>
-      </UButton>
-
-      Tasks 
-      <UButton
-        color="neutral"
-        variant="ghost"
-        class="flex flex-col items-center text-gray-400 gap-0 h-auto py-1 px-0 min-w-0 relative"
-        @click="goToTasks"
-      >
-        <UIcon
-          name="i-heroicons-clipboard-document-list"
-          class="w-6 h-6"
-        />
-        <span
-          class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-[#B3261E] text-white text-[10px] rounded-full"
-        >
-          5
-        </span>
-        <span class="text-[10px]">Задачи</span>
-      </UButton>
-
-      Catalog
-      <UButton
-        color="neutral"
-        variant="ghost"
-        class="flex flex-col items-center text-black dark:text-white gap-0 h-auto py-1 px-0 min-w-0"
-        @click="goToCatalog"
-      >
-        <UIcon
-          name="i-heroicons-squares-2x2"
-          class="w-6 h-6"
-        />
-        <span class="text-[10px]">Каталог</span>
-      </UButton>
-
-      Cart
-      <UButton
-        color="neutral"
-        variant="ghost"
-        class="flex flex-col items-center text-gray-400 gap-0 h-auto py-1 px-0 min-w-0 relative"
-        @click="goToCart"
-      >
-        <UIcon
-          name="i-heroicons-shopping-cart"
-          class="w-6 h-6"
-        />
-        <span
-          class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-[#B3261E] text-white text-[10px] rounded-full"
-        >
-          2
-        </span>
-        <span class="text-[10px]">Корзина</span>
-      </UButton>
-    </div>
-    -->
-
   </div>
 </template>
 
 <script setup lang="ts">
+import { products } from '~/data/products'
+import type { Product } from '~/data/products'
+
 const router = useRouter()
 const colorMode = useColorMode()
 
 const searchQuery = ref('')
 
-const products = ref([
-  {
-    id: '100001',
-    name: 'Coca-Cola 0.5L',
-    price: '89',
-    quantity: '24',
-    image: '/phone.jpg'
-  },
-  {
-    id: '100002',
-    name: 'Pepsi 0.5L',
-    price: '79',
-    quantity: '18',
-    image: '/phone.jpg'
-  },
-  {
-    id: '100003',
-    name: 'Lay’s Classic',
-    price: '129',
-    quantity: '32',
-    image: '/phone.jpg'
-  },
-  {
-    id: '100004',
-    name: 'Snickers',
-    price: '99',
-    quantity: '41',
-    image: '/phone.jpg'
-  },
-  {
-    id: '100005',
-    name: 'Kinder Chocolate',
-    price: '119',
-    quantity: '27',
-    image: '/phone.jpg'
-  },
-  {
-    id: '100006',
-    name: 'Red Bull 0.25L',
-    price: '149',
-    quantity: '15',
-    image: '/phone.jpg'
-  }
-])
-
 const filteredProducts = computed(() => {
   const query = searchQuery.value.trim().toLowerCase()
 
   if (!query) {
-    return products.value
+    return products
   }
 
-  return products.value.filter((product) => {
+  return products.filter((product) => {
     return (
       product.name.toLowerCase().includes(query) ||
       product.id.toLowerCase().includes(query)
@@ -225,12 +110,15 @@ const toggleTheme = () => {
     colorMode.value === 'dark' ? 'light' : 'dark'
 }
 
-const addToCart = (product: (typeof products.value)[number]) => {
+const addToCart = (product: Product) => {
   console.log('Add to cart:', product)
 }
 
-const goBack = () => router.back()
+const openProduct = (product: Product) => {
+  router.push(`/products/${product.id}`)
+}
 
+const goBack = () => router.back()
 </script>
 
 <style>

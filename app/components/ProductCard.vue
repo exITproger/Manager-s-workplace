@@ -1,6 +1,11 @@
 <template>
   <div
-    class="relative bg-[#ECE6F0] dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden"
+    class="relative bg-[#ECE6F0] dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden cursor-pointer transition-transform active:scale-[0.99]"
+    role="button"
+    tabindex="0"
+    @click="emit('select', product)"
+    @keydown.enter="emit('select', product)"
+    @keydown.space.prevent="emit('select', product)"
   >
     <!-- Product image -->
     <div class="h-[200px] bg-gray-100 dark:bg-gray-800 overflow-hidden">
@@ -54,7 +59,7 @@
       variant="solid"
       class="absolute right-2 top-[70%] -translate-y-1/2 w-12 h-9 rounded-lg bg-white text-gray-700 border border-gray-300 flex items-center justify-center shadow-md hover:bg-gray-100"
       aria-label="Добавить в корзину"
-      @click="emit('add-to-cart', product)"
+      @click.stop="emit('add-to-cart', product)"
     >
       <UIcon
         name="i-lucide-shopping-basket"
@@ -65,19 +70,14 @@
 </template>
 
 <script setup lang="ts">
-interface Product {
-  id: string
-  name: string
-  price: string
-  quantity: string
-  image: string
-}
+import type { Product } from '~/data/products'
 
-const props = defineProps<{
+defineProps<{
   product: Product
 }>()
 
 const emit = defineEmits<{
+  select: [product: Product]
   'add-to-cart': [product: Product]
 }>()
 </script>

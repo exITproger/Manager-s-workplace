@@ -36,17 +36,11 @@
         }"
       >
         <template #leading>
-          <UIcon
-            name="i-heroicons-bars-3"
-            class="w-5 h-5 text-gray-400"
-          />
+          <UIcon name="i-heroicons-bars-3" class="w-5 h-5 text-gray-400" />
         </template>
 
         <template #trailing>
-          <UIcon
-            name="i-heroicons-magnifying-glass"
-            class="w-5 h-5 text-gray-400"
-          />
+          <UIcon name="i-heroicons-magnifying-glass" class="w-5 h-5 text-gray-400" />
         </template>
       </UInput>
     </div>
@@ -59,23 +53,14 @@
           :key="product.id"
           :product="product"
           @select="openProduct"
-          @add-to-cart="addToCart"
+          @add-to-cart="addToCartHandler"
         />
       </div>
 
       <!-- Empty state -->
-      <div
-        v-if="filteredProducts.length === 0"
-        class="py-16 text-center"
-      >
-        <UIcon
-          name="i-heroicons-magnifying-glass"
-          class="w-10 h-10 mx-auto text-gray-400"
-        />
-
-        <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">
-          Товары не найдены
-        </p>
+      <div v-if="filteredProducts.length === 0" class="py-16 text-center">
+        <UIcon name="i-heroicons-magnifying-glass" class="w-10 h-10 mx-auto text-gray-400" />
+        <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Товары не найдены</p>
       </div>
     </div>
   </div>
@@ -87,6 +72,7 @@ import type { Product } from '~/data/products'
 
 const router = useRouter()
 const colorMode = useColorMode()
+const cart = useCartStore() // Инициализируем стор
 
 const searchQuery = ref('')
 
@@ -106,12 +92,11 @@ const filteredProducts = computed(() => {
 })
 
 const toggleTheme = () => {
-  colorMode.preference =
-    colorMode.value === 'dark' ? 'light' : 'dark'
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 }
 
-const addToCart = (product: Product) => {
-  console.log('Add to cart:', product)
+const addToCartHandler = (product: Product) => {
+  cart.addToCart(product) // Метод из стора
 }
 
 const openProduct = (product: Product) => {

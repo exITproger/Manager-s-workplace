@@ -7,6 +7,8 @@
 </template>
 
 <script setup>
+import Notifications from './pages/notifications.vue';
+
 const route = useRoute()
 
 const showBottomNav = computed(() => {

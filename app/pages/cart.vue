@@ -27,11 +27,13 @@
 
     <!-- Cart Items -->
     <div class="flex-1 px-4 py-4 pb-32 space-y-3">
+      
+      <!-- Пустая корзина -->
       <div v-if="cart.items.length === 0" class="py-16 text-center">
         <UIcon name="i-heroicons-shopping-cart" class="w-10 h-10 mx-auto text-gray-400" />
         <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Корзина пуста</p>
-        <UButton class="mt-6 bg-[#70439e] text-white" @click="goBack">
-          Перейти к покупкам
+        <UButton class="mt-6 bg-[#70439e] text-white" @click="goCatalog">
+          За покупками
         </UButton>
       </div>
 
@@ -59,13 +61,34 @@
           </div>
           <div class="text-xs text-black dark:text-white">{{ item.id }}</div>
 
-          <!-- Controls (Плюс/Минус) -->
+          <!-- Controls (Плюс/Минус/Корзина) -->
           <div class="flex justify-between items-center mt-2">
             <div class="flex items-center gap-2 bg-white dark:bg-gray-700 rounded-lg p-1">
-              <UButton color="neutral" variant="ghost" class="p-0 min-w-0 h-auto w-6 h-6" @click="cart.decrement(item.id)">
+              
+              <!-- Если товар один, показываем корзину для удаления -->
+              <UButton 
+                v-if="item.count === 1"
+                color="error" 
+                variant="ghost" 
+                class="p-0 min-w-0 h-auto w-6 h-6 text-red-500" 
+                @click="cart.removeFromCart(item.id)"
+              >
+                <UIcon name="i-heroicons-trash" class="w-4 h-4" />
+              </UButton>
+
+              <!-- Если товаров больше одного, показываем минус -->
+              <UButton 
+                v-else
+                color="neutral" 
+                variant="ghost" 
+                class="p-0 min-w-0 h-auto w-6 h-6" 
+                @click="cart.decrement(item.id)"
+              >
                 <UIcon name="i-heroicons-minus" class="w-4 h-4" />
               </UButton>
+
               <span class="text-sm font-medium w-4 text-center">{{ item.count }}</span>
+              
               <UButton 
                 color="neutral" 
                 variant="ghost" 
@@ -83,7 +106,7 @@
     </div>
 
     <!-- Footer (К оформлению) -->
-    <div class="fixed bottom-16 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 p-4 z-40">
+    <div v-if="cart.items.length > 0" class="fixed bottom-16 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 p-4 z-40">
       <UButton
         color="neutral"
         variant="solid"
@@ -94,7 +117,6 @@
           <span>К оформлению : {{ cart.totalCount }}</span>
         </div>
         
-        <!-- Цена теперь внутри кнопки, справа -->
         <span class="font-bold">
           {{ cart.totalPrice.toLocaleString() }} ₽
         </span>
@@ -105,7 +127,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { useCartStore } from '~/stores/cart'
+import { useCartStore } from '@/stores/cart'
 import { useToast } from '#imports' 
 
 const router = useRouter()
@@ -113,7 +135,11 @@ const colorMode = useColorMode()
 const cart = useCartStore()
 const toast = useToast()
 
+// Возврат назад в истории браузера
 const goBack = () => router.back()
+
+// Переход в каталог
+const goCatalog = () => router.push('/catalog')
 
 const toggleTheme = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
@@ -122,7 +148,7 @@ const toggleTheme = () => {
 const handleIncrement = (item: any) => {
   const result = cart.increment(item.id)
 
-  // Если товар закончился на складе
+  // Если товар закончился на складе (Красный тост)
   if (!result.success) {
     toast.add({
       title: 'Предупреждение',
@@ -133,7 +159,7 @@ const handleIncrement = (item: any) => {
     return
   }
 
-  // Если выбрали последний товар (оранжевое предупреждение)
+  // Если выбрали последний товар (Оранжевый тост)
   if (item.count == Number(item.quantity)) {
     toast.add({
       title: 'Предупреждение',

@@ -43,9 +43,71 @@
           </div>
 
           <!-- Add to cart -->
+          <div
+            v-if="cartItem"
+            class="w-24 h-9 shrink-0 rounded-lg bg-[#7A66AF] shadow-md overflow-hidden flex items-center text-white"
+          >
+            <!-- Minus -->
+            <UButton
+              v-if="cartItem.count === 1"
+              color="neutral"
+              variant="ghost"
+              class="w-8 h-9 min-w-0 p-0 rounded-none text-white hover:bg-[#70439e] flex items-center justify-center"
+              aria-label="Удалить из корзины"
+              @click="handleRemove($event)"
+            >
+              <UIcon
+                name="i-heroicons-trash"
+                class="w-4 h-4"
+              />
+            </UButton>
+
+            <UButton
+              v-else
+              color="neutral"
+              variant="ghost"
+              class="w-8 h-9 min-w-0 p-0 rounded-none text-white hover:bg-[#70439e] flex items-center justify-center"
+              aria-label="Уменьшить количество"
+              @click="handleDecrement($event)"
+            >
+              <UIcon
+                name="i-heroicons-minus"
+                class="w-4 h-4"
+              />
+            </UButton>
+
+            <!-- Separator -->
+            <div class="w-px h-5 bg-white/40 shrink-0" />
+
+            <!-- Quantity -->
+            <div
+              class="w-8 h-9 flex items-center justify-center text-sm font-medium"
+            >
+              {{ cartItem.count }}
+            </div>
+
+            <!-- Separator -->
+            <div class="w-px h-5 bg-white/40 shrink-0" />
+
+            <!-- Plus -->
+            <UButton
+              color="neutral"
+              variant="ghost"
+              class="w-8 h-9 min-w-0 p-0 rounded-none text-white hover:bg-[#70439e] flex items-center justify-center"
+              :class="{ 'text-white/50': cartItem.count >= Number(cartItem.quantity) }"
+              aria-label="Увеличить количество"
+              @click="handleIncrement($event)"
+            >
+              <UIcon
+                name="i-heroicons-plus"
+                class="w-4 h-4"
+              />
+            </UButton>
+          </div>
+
           <UButton
-            class="w-24 h-9 shrink-0 rounded-lg bg-[#7A66AF] hover:bg-[#70439e] text-white flex items-center justify-center text-sm font-medium shadow-md"
-            @click="addToCartHandler"
+            v-else
+            class="w-24 h-9 shrink-0 rounded-lg bg-[#7A66AF] hover:bg-[#70439e] text-white flex items-center justify-center text-sm font-medium shadow-md"            @click="addToCartHandler"
           >
             В корзину
           </UButton>
@@ -146,14 +208,24 @@
 
 <script setup lang="ts">
 import { products } from '~/data/products'
+import { useToast } from '#imports'
 
 const route = useRoute()
 const router = useRouter()
 const colorMode = useColorMode()
 const cart = useCartStore()
+const toast = useToast()
 
 const product = computed(() => {
   return products.find((item) => item.id === route.params.id)
+})
+
+const cartItem = computed(() => {
+  if (!product.value) {
+    return undefined
+  }
+
+  return cart.items.find(item => item.id === product.value!.id)
 })
 
 const toggleTheme = () => {
@@ -163,6 +235,56 @@ const toggleTheme = () => {
 const addToCartHandler = () => {
   if (!product.value) return
   cart.addToCart(product.value)
+}
+
+const handleIncrement = (event: MouseEvent) => {
+  if (event.detail > 1) return
+
+  if (!cartItem.value) {
+    return
+  }
+
+  const result = cart.increment(cartItem.value.id)
+
+  if (!result.success) {
+    toast.add({
+      title: 'Предупреждение',
+      description: 'Недостаточное количество товара на складе!',
+      color: 'error',
+      icon: 'i-heroicons-exclamation-circle'
+    })
+
+    return
+  }
+
+  if (cartItem.value.count === Number(cartItem.value.quantity)) {
+    toast.add({
+      title: 'Предупреждение',
+      description: 'Выбран последний товар!',
+      color: 'warning',
+      icon: 'i-heroicons-exclamation-triangle'
+    })
+  }
+}
+
+const handleDecrement = (event: MouseEvent) => {
+  if (event.detail > 1) return
+
+  if (!cartItem.value) {
+    return
+  }
+
+  cart.decrement(cartItem.value.id)
+}
+
+const handleRemove = (event: MouseEvent) => {
+  if (event.detail > 1) return
+
+  if (!cartItem.value) {
+    return
+  }
+
+  cart.removeFromCart(cartItem.value.id)
 }
 
 const showCharacteristics = ref(false)

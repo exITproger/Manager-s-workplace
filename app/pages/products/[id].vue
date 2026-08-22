@@ -147,7 +147,7 @@
     }"
   >
     <template #content>
-      <div class="max-h-[80vh] overflow-y-auto px-4 pb-8">
+      <div class="max-h-[90vh] overflow-y-auto px-4 pb-8">
         <!-- Down arrow -->
         <div class="flex justify-center pt-2 pb-4">
           <UButton

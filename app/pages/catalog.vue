@@ -69,6 +69,7 @@
 <script setup lang="ts">
 import { products } from '~/data/products'
 import type { Product } from '~/data/products'
+import { useCartStore } from '@/stores/cart'
 
 const router = useRouter()
 const colorMode = useColorMode()

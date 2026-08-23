@@ -1,12 +1,13 @@
+<!-- components/tasks/TaskCard.vue -->
 <template>
-  <div class="bg-white dark:bg-gray-900 shadow overflow-hidden rounded-none">
+  <div class="bg-white dark:bg-gray-900 shadow overflow-hidden rounded-xl">
     <div class="px-4 py-3 flex justify-between items-center" style="background-color: rgba(103, 80, 164, 1);">
-      <span class="text-white font-medium text-sm" :class="{ 'line-through': task.done }">{{ task.title }}</span>
+      <span class="text-white font-medium text-sm">{{ task.title }}</span>
       <div 
-        class="w-5 h-5 border-2 border-white rounded flex items-center justify-center cursor-pointer" 
+        class="w-6 h-6 border-2 border-white rounded flex items-center justify-center cursor-pointer bg-white hover:bg-gray-50 transition-colors select-none" 
         @click="$emit('toggle-done')"
       >
-        <span v-if="task.done" class="text-white text-xs">✓</span>
+        <span v-if="task.done" class="text-[#8a5af0] text-xl font-extrabold leading-none select-none">✓</span>
       </div>
     </div>
     <div class="px-4 py-3 grid grid-cols-3 gap-2 text-sm bg-[#E8DEF8] dark:bg-gray-800">

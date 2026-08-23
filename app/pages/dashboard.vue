@@ -1,3 +1,4 @@
+<!-- pages/index.vue -->
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-950 pb-20">
     <!-- шапка -->
@@ -73,12 +74,12 @@
       </UButton>
     </div>
 
-    <div class="px-4 mt-3 space-y-3 pb-24">
+    <div class="px-4 mt-3 space-y-4 pb-24">
       <TaskCard
         v-for="task in tasks"
         :key="task.id"
         :task="task"
-        @toggle-done="task.done = !task.done"
+        @toggle-done="toggleTask(task)"
       />
     </div>
 
@@ -103,9 +104,9 @@ const tasks = ref([
     id: 1,
     title: 'Принять поставку товара',
     done: false,
-    status: 'Выполнено',
-    statusColor: 'bg-green-500',
-    priority: 'Высокий',
+    status: 'В работе',
+    statusColor: 'bg-yellow-500',
+    priority: 'Средний',
     deadline: 'Сегодня, 15:00'
   },
   {
@@ -114,7 +115,7 @@ const tasks = ref([
     done: false,
     status: 'В работе',
     statusColor: 'bg-yellow-500',
-    priority: 'Высокий',
+    priority: 'Срочный',
     deadline: 'Сегодня, 17:00'
   },
   {
@@ -123,7 +124,7 @@ const tasks = ref([
     done: false,
     status: 'В работе',
     statusColor: 'bg-yellow-500',
-    priority: 'Высокий',
+    priority: 'Срочный',
     deadline: 'Завтра, 10:00'
   },
   {
@@ -132,10 +133,21 @@ const tasks = ref([
     done: false,
     status: 'В работе',
     statusColor: 'bg-yellow-500',
-    priority: 'Обычный',
+    priority: 'Средний',
     deadline: 'Завтра, 19:00'
   }
 ])
+
+const toggleTask = (task) => {
+  task.done = !task.done
+  if (task.done) {
+    task.status = 'Выполнено'
+    task.statusColor = 'bg-green-500'
+  } else {
+    task.status = 'В работе'
+    task.statusColor = 'bg-yellow-500'
+  }
+}
 
 const goToHome = () => router.push('/dashboard')
 const goToTasks = () => router.push('/tasks')

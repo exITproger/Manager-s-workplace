@@ -54,7 +54,7 @@
               variant="ghost"
               class="w-8 h-9 min-w-0 p-0 rounded-none text-white hover:bg-[#70439e] flex items-center justify-center"
               aria-label="Удалить из корзины"
-              @click="handleRemove($event)"
+              @click="handleRemove"
             >
               <UIcon
                 name="i-heroicons-trash"
@@ -68,7 +68,7 @@
               variant="ghost"
               class="w-8 h-9 min-w-0 p-0 rounded-none text-white hover:bg-[#70439e] flex items-center justify-center"
               aria-label="Уменьшить количество"
-              @click="handleDecrement($event)"
+              @click="handleDecrement"
             >
               <UIcon
                 name="i-heroicons-minus"
@@ -96,7 +96,7 @@
               class="w-8 h-9 min-w-0 p-0 rounded-none text-white hover:bg-[#70439e] flex items-center justify-center"
               :class="{ 'text-white/50': cartItem.count >= Number(cartItem.quantity) }"
               aria-label="Увеличить количество"
-              @click="handleIncrement($event)"
+              @click="handleIncrement"
             >
               <UIcon
                 name="i-heroicons-plus"
@@ -107,7 +107,8 @@
 
           <UButton
             v-else
-            class="w-24 h-9 shrink-0 rounded-lg bg-[#7A66AF] hover:bg-[#70439e] text-white flex items-center justify-center text-sm font-medium shadow-md"            @click="addToCartHandler"
+            class="w-24 h-9 shrink-0 rounded-lg bg-[#7A66AF] hover:bg-[#70439e] text-white flex items-center justify-center text-sm font-medium shadow-md"
+            @click="addToCartHandler"
           >
             В корзину
           </UButton>
@@ -237,9 +238,7 @@ const addToCartHandler = () => {
   cart.addToCart(product.value)
 }
 
-const handleIncrement = (event: MouseEvent) => {
-  if (event.detail > 1) return
-
+const handleIncrement = () => {
   if (!cartItem.value) {
     return
   }
@@ -267,9 +266,7 @@ const handleIncrement = (event: MouseEvent) => {
   }
 }
 
-const handleDecrement = (event: MouseEvent) => {
-  if (event.detail > 1) return
-
+const handleDecrement = () => {
   if (!cartItem.value) {
     return
   }
@@ -277,9 +274,7 @@ const handleDecrement = (event: MouseEvent) => {
   cart.decrement(cartItem.value.id)
 }
 
-const handleRemove = (event: MouseEvent) => {
-  if (event.detail > 1) return
-
+const handleRemove = () => {
   if (!cartItem.value) {
     return
   }

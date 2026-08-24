@@ -111,6 +111,7 @@
         color="neutral"
         variant="solid"
         class="bg-[#70439e] text-white hover:bg-[#5a3380] w-full h-12 rounded-lg flex items-center justify-between px-4 border-2 border-black dark:border-white"
+        @click="showCheckout = true"
       >
         <div class="flex items-center gap-2">
           <UIcon name="i-heroicons-shopping-bag" class="w-5 h-5" />
@@ -122,18 +123,31 @@
         </span>
       </UButton>
     </div>
+
+    <!-- Компонент оформления заказа -->
+    <CheckoutForm 
+      v-if="showCheckout" 
+      :total-items="cart.totalCount"
+      :total-price="cart.totalPrice"
+      @close="showCheckout = false"
+      @order-submitted="handleOrderSubmitted"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cart'
-import { useToast } from '#imports' 
+import { useToast } from '#imports'
+import CheckoutForm from '@/components/CheckoutForm.vue'
 
 const router = useRouter()
 const colorMode = useColorMode()
 const cart = useCartStore()
 const toast = useToast()
+
+// Состояние для отображения формы оформления заказа
+const showCheckout = ref(false)
 
 // Возврат назад в истории браузера
 const goBack = () => router.back()
@@ -168,6 +182,19 @@ const handleIncrement = (item: any) => {
       icon: 'i-heroicons-exclamation-triangle'
     })
   }
+}
+
+// Обработчик успешного оформления заказа
+const handleOrderSubmitted = () => {
+  showCheckout.value = false
+  cart.clearCart() // Очищаем корзину после успешного заказа
+  
+  toast.add({
+    title: 'Заказ оформлен',
+    description: 'Спасибо за заказ! Мы свяжемся с вами в ближайшее время.',
+    color: 'success',
+    icon: 'i-heroicons-check-circle'
+  })
 }
 </script>
 

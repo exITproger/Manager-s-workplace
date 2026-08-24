@@ -1,10 +1,9 @@
 import type {UserLoginResponse} from "~/types/UserLoginResponse.ts";
-import type {UserMeResponse} from "~/types/UserMeResponse.ts";
 import type {LoginCredentials} from "~/types/LoginCredentials.ts";
 
 let client: ReturnType<typeof $fetch.create> | null = null
 
-const useApi = () => {
+export const useApi = () => {
   if (!client) {
     const config = useRuntimeConfig()
     client = $fetch.create({ baseURL: config.public.apiBase as string })
@@ -22,11 +21,5 @@ export function loginRequest(credentials: LoginCredentials): Promise<UserLoginRe
   return useApi()<UserLoginResponse>('/user/login', {
     method: 'POST',
     headers: { Authorization: `Basic ${toBase64(`${credentials.login}:${credentials.password}`)}` }
-  })
-}
-
-export function fetchMeRequest(token: string): Promise<UserMeResponse> {
-  return useApi()<UserMeResponse>('/user/me', {
-    headers: { Authorization: `Bearer ${token}` }
   })
 }

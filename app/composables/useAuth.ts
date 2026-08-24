@@ -1,27 +1,28 @@
-import type {UserMeResponse} from "~/types/UserMeResponse.ts";
 import type {LoginCredentials} from "~/types/LoginCredentials.ts";
-import {fetchMeRequest, loginRequest} from "~/api/auth";
+import {loginRequest} from "~/api/auth";
+import type {CookieRef} from "nuxt/app";
+
+export const tokenCookie = (): CookieRef<string | null> => {
+    return useCookie<string | null>('token')
+}
+
+export const token = (): string | null => {
+    return tokenCookie().value;
+}
 
 export const useAuth = () => {
-  const token = useCookie<string | null>('token')
-  const user = useState<UserMeResponse | null>('auth:user', () => null)
+    const token = tokenCookie()
+    const login = (credentials: LoginCredentials) => {
+        return loginRequest(credentials)
+            .then((response) =>
+                token.value = response.token
+            )
+    }
 
-  const login = (credentials: LoginCredentials) => {
-    return loginRequest(credentials)
-      .then((response) =>
-        fetchMeRequest(response.token)
-          .then((me) => {
-            token.value = response.token
-            user.value = me
-          })
-      )
-  }
+    const logout = () => {
+        token.value = null
+        navigateTo('/')
+    }
 
-  const logout = () => {
-    token.value = null
-    user.value = null
-    navigateTo('/')
-  }
-
-  return { user, login, logout }
+    return {login, logout}
 }

@@ -44,10 +44,6 @@
             <p class="text-sm text-gray-500 dark:text-gray-400">ID: {{ user?.id }}</p>
           </div>
         </div>
-        <!--<div class="px-4 py-3 flex justify-between">
-          <span class="text-gray-500 dark:text-gray-400 text-sm">Роль</span>
-          <span class="text-[#1E1E1E] dark:text-white text-sm font-medium">{{ user.role || 'Менеджер' }}</span>
-        </div>-->
       </div>
 
       <!-- Данные учетной записи -->
@@ -65,6 +61,10 @@
             <span class="text-gray-500 dark:text-gray-400 text-sm">Привязанный филиал</span>
             <span class="text-[#1E1E1E] dark:text-white text-sm font-medium">{{ user?.officeId ?? 'Не указан' }}</span>
           </div>
+          <!--<div class="px-4 py-3 flex justify-between">
+            <span class="text-gray-500 dark:text-gray-400 text-sm">Роль</span>
+            <span class="text-[#1E1E1E] dark:text-white text-sm font-medium">{{ user.role || 'Менеджер' }}</span>
+          </div>-->
         </div>
       </div>
 

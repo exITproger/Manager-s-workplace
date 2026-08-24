@@ -4,7 +4,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxt/ui', '@nuxt/icon', '@nuxtjs/color-mode', '@pinia/nuxt'],
   imports: {
-    dirs: ['stores'], 
+    dirs: ['stores'],
   },
-  css: ['~/assets/css/main.css']
+  css: ['~/assets/css/main.css'],
+  runtimeConfig: {
+    public: {
+      apiBase: ''
+    }
+  }
 })

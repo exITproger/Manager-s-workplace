@@ -86,10 +86,12 @@
 
 <script setup>
 import {useAuth} from "~/composables/useAuth.ts";
+import {useMeRequest} from "~/api/me.ts";
 
 const router = useRouter()
 const colorMode = useColorMode()
-const {user, logout} = useAuth()
+const {logout} = useAuth()
+const {data: user} = useMeRequest()
 
 const getFullName = () => {
   if (!user.value) return ''

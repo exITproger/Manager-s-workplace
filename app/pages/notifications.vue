@@ -1,34 +1,20 @@
 <script setup lang="ts">
-import type {NotificationListItem} from '~/types/NotificationListItem.ts'
+import type {Ref} from "vue";
 import NotificationCard from '~/components/notifications/NotificationCard.vue'
-import {fetchNotificationsRequest} from '~/api/notifications'
-import {fetchOrCacheMeRequest} from "~/api/me.ts";
-import type {UserMeResponse} from "~/types/UserMeResponse.ts";
+import {useMeRequest} from "~/api/me.ts";
+import {useNotificationsRequest} from "~/api/notifications.ts";
 
-const loading = ref(false)
-const notifications = ref<NotificationListItem[]>([])
-const user =  ref<UserMeResponse>();
+const recipientId = ref<number | undefined>(undefined)
+const {data: notifications, pending, execute} = useNotificationsRequest(recipientId as Ref<number | undefined>, {immediate: false})
 
 loadNotifications()
-loadMe()
 
 function loadNotifications() {
-  loading.value = true
-
-  fetchNotificationsRequest(user.value?.id)
-      .then((items) => {
-        notifications.value = items
+  useMeRequest()
+      .then(({data}) => {
+        recipientId.value = data.value?.id
+        execute()
       })
-      .catch(() => {
-      })
-      .finally(() => {
-        loading.value = false
-      })
-}
-
-function loadMe() {
-  fetchOrCacheMeRequest()
-      .then(me => user.value = me);
 }
 </script>
 <template>
@@ -61,7 +47,7 @@ function loadMe() {
     </div>-->
 
     <!-- список уведомлений -->
-    <div v-if="loading" class="flex-1 flex items-center justify-center">
+    <div v-if="pending" class="flex-1 flex items-center justify-center">
       <span class="text-sm text-gray-500">Загрузка...</span>
     </div>
     <div v-else class="px-4 mt-4 space-y-4 flex-1 overflow-y-auto pb-40" style="padding-top: 16px;">

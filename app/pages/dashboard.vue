@@ -1,17 +1,11 @@
 <!-- pages/index.vue -->
-<script setup> // requires add lang="ts"
-import {fetchOrCacheMeRequest} from "~/api/me.ts";
+<script setup lang="ts">
+import TaskCard from '~/components/tasks/TaskCard.vue'
+import {useMeRequest} from "~/api/me.ts";
 
 const router = useRouter()
 const colorMode = useColorMode()
-let user;
-
-loadMe()
-
-function loadMe() {
-  fetchOrCacheMeRequest()
-      .then(me => user = me);
-}
+const {data: user} = useMeRequest()
 
 const toggleTheme = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'

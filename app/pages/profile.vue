@@ -1,3 +1,44 @@
+<script setup>
+import {useAuth} from "~/composables/useAuth.ts";
+import {useMeRequest} from "~/api/me.ts";
+
+const router = useRouter()
+const colorMode = useColorMode()
+const {logout} = useAuth()
+const {data: user} = await useMeRequest()
+
+const getFullName = () => {
+  if (!user.value) return ''
+  return [user.value.surname, user.value.name, user.value.middleName]
+      .filter(Boolean)
+      .join(' ')
+}
+
+const getUserInitials = () => {
+  if (!user.value) return ''
+  return `${user.value.name?.[0] ?? ''}${user.value.surname?.[0] ?? ''}`.toUpperCase()
+}
+
+const toggleTheme = () => {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
+
+const goBack = () => router.back()
+
+const handleLogout = () => {
+  if (confirm('Вы уверены, что хотите выйти?')) {
+    logout()
+  }
+}
+</script>
+
+<style scoped>
+input {
+  outline: none !important;
+  outline-style: none !important;
+  box-shadow: none !important;
+}
+</style>
 <template>
   <div class="min-h-screen bg-white dark:bg-gray-950 flex flex-col">
     <!-- Верхняя панель -->
@@ -83,45 +124,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import {useAuth} from "~/composables/useAuth.ts";
-import {useMeRequest} from "~/api/me.ts";
-
-const router = useRouter()
-const colorMode = useColorMode()
-const {logout} = useAuth()
-const {data: user} = useMeRequest()
-
-const getFullName = () => {
-  if (!user.value) return ''
-  return [user.value.surname, user.value.name, user.value.middleName]
-      .filter(Boolean)
-      .join(' ')
-}
-
-const getUserInitials = () => {
-  if (!user.value) return ''
-  return `${user.value.name?.[0] ?? ''}${user.value.surname?.[0] ?? ''}`.toUpperCase()
-}
-
-const toggleTheme = () => {
-  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-}
-
-const goBack = () => router.back()
-
-const handleLogout = () => {
-  if (confirm('Вы уверены, что хотите выйти?')) {
-    logout()
-  }
-}
-</script>
-
-<style scoped>
-input {
-  outline: none !important;
-  outline-style: none !important;
-  box-shadow: none !important;
-}
-</style>

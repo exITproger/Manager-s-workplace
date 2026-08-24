@@ -5,7 +5,7 @@ import {useMeRequest} from "~/api/me.ts";
 
 const router = useRouter()
 const colorMode = useColorMode()
-const {data: user} = useMeRequest()
+const {data: user} = await useMeRequest()
 
 const toggleTheme = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'

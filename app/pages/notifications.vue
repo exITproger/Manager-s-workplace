@@ -1,21 +1,11 @@
 <script setup lang="ts">
-import type {Ref} from "vue";
 import NotificationCard from '~/components/notifications/NotificationCard.vue'
 import {useMeRequest} from "~/api/me.ts";
 import {useNotificationsRequest} from "~/api/notifications.ts";
 
-const recipientId = ref<number | undefined>(undefined)
-const {data: notifications, pending, execute} = useNotificationsRequest(recipientId as Ref<number | undefined>, {immediate: false})
+const {data: user} = await useMeRequest()
+const {data: notifications, pending} = await useNotificationsRequest(user.value?.id ?? undefined)
 
-loadNotifications()
-
-function loadNotifications() {
-  useMeRequest()
-      .then(({data}) => {
-        recipientId.value = data.value?.id
-        execute()
-      })
-}
 </script>
 <template>
   <div class="min-h-screen bg-white flex flex-col pb-20">

@@ -33,11 +33,11 @@ const handleLogin = () => {
   login(model)
       .then(() => router.push('/dashboard'))
       .catch((error) => {
-        const fetchError = error as FetchError<LoginErrorResponse>
+        const fetchError = error as FetchError<{ data?: LoginErrorResponse }>
         if (fetchError.statusCode === undefined) {
           model.errors = ['Нет подключения к серверу']
         } else {
-          const serverErrors = fetchError.data?.errors
+          const serverErrors = fetchError.data?.data?.errors
           model.errors = serverErrors?.length
               ? serverErrors
               : ['Не удалось войти. Попробуйте позже.']

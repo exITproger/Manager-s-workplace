@@ -10,7 +10,7 @@ export default defineEventHandler((event) => {
     })
   }
 
-  const bytes = Uint8Array.from(atob(auth.slice(6)), char => char.codePointAt(0))
+  const bytes = Uint8Array.from(atob(auth.slice(6)), char => char.charCodeAt(0))
   const decoded = new TextDecoder().decode(bytes)
   const separatorIndex = decoded.indexOf(':')
   const login = decoded.slice(0, separatorIndex)

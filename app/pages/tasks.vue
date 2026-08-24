@@ -253,9 +253,6 @@
         <div class="text-xs text-[#888888]">{{ task.sub }}</div>
       </div>
     </div>
-
-    <!-- Нижняя навигация -->
-    <BottomNav />
   </div>
 </template>
 

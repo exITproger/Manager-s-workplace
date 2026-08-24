@@ -118,15 +118,12 @@ const closeModal = () => {
             type="button"
             @click="paymentMethod = 'now'"
             :class="[
-              'flex-1 flex items-center justify-center gap-2 h-12 rounded-lg text-base font-medium transition-all',
+              'flex-1 flex items-center justify-center h-12 rounded-lg text-base font-medium transition-all',
               paymentMethod === 'now' 
                 ? 'bg-[#E8DEF8] text-[#1D1B20]' 
                 : 'bg-transparent text-[#49454F]'
             ]"
           >
-            <svg v-if="paymentMethod === 'now'" class="w-5 h-5 text-[#49454F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-            </svg>
             Оплатить сейчас
           </button>
 
@@ -134,15 +131,12 @@ const closeModal = () => {
             type="button"
             @click="paymentMethod = 'delivery'"
             :class="[
-              'flex-1 flex items-center justify-center gap-2 h-12 rounded-lg text-base font-medium transition-all',
+              'flex-1 flex items-center justify-center h-12 rounded-lg text-base font-medium transition-all',
               paymentMethod === 'delivery' 
                 ? 'bg-[#E8DEF8] text-[#1D1B20]' 
                 : 'bg-transparent text-[#49454F]'
             ]"
           >
-            <svg v-if="paymentMethod === 'delivery'" class="w-5 h-5 text-[#49454F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-            </svg>
             При получении
           </button>
         </div>

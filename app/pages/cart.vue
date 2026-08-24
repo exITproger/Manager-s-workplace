@@ -41,29 +41,38 @@
       <div 
         v-for="item in cart.items" 
         :key="item.id" 
-        class="bg-[#ECE6F0] dark:bg-gray-800 border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex gap-4"
+        class="bg-[#F2F2F7] dark:bg-gray-800 border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex gap-4"
       >
         <!-- Image -->
-        <div class="h-20 w-20 bg-gray-100 dark:bg-gray-700 rounded overflow-hidden flex-shrink-0">
-          <img :src="item.image" :alt="item.name" class="w-full h-full object-cover" />
+        <div class="h-20 w-20 bg-gray-100 dark:bg-gray-700 rounded overflow-hidden flex-shrink-0 flex items-center">
+          <img :src="item.image" :alt="item.name" class="w-full h-auto object-contain" />
         </div>
 
         <!-- Info -->
         <div class="flex-1 space-y-1.5">
+          <!-- Цена за 1 штуку -->
           <div class="flex items-center gap-1.5">
             <UIcon name="i-lucide-banknote" class="w-5 h-5 text-black dark:text-gray-400 shrink-0" />
             <span class="text-sm font-semibold text-black dark:text-white">{{ item.price }} ₽</span>
           </div>
-          <div class="text-xs font-medium text-black dark:text-white">{{ item.name }}</div>
+
+          <!-- Название с синей галочкой -->
+          <div class="flex items-center gap-1.5">
+            <UIcon name="i-heroicons-check-circle" class="w-5 h-5 text-blue-600 shrink-0" />
+            <span class="text-sm font-medium text-black dark:text-white">{{ item.name }}</span>
+          </div>
+
+          <div class="text-xs text-gray-500 dark:text-gray-400">{{ item.id }}</div>
+          
           <div class="flex items-center gap-1.5">
             <UIcon name="i-lucide-inbox" class="w-5 h-5 text-black dark:text-gray-400 shrink-0" />
             <span class="text-sm text-black dark:text-white">{{ item.quantity }} шт</span>
           </div>
-          <div class="text-xs text-black dark:text-white">{{ item.id }}</div>
 
-          <!-- Controls (Плюс/Минус/Корзина) -->
+          <!-- Controls (Плюс/Минус/Корзина) и итоговая цена -->
           <div class="flex justify-between items-center mt-2">
-            <div class="flex items-center gap-2 bg-white dark:bg-gray-700 rounded-lg p-1">
+            <!-- Блок с + и - цвет #E8DEF8 (фиолетовый оттенок) -->
+            <div class="flex items-center gap-2 bg-[#E8DEF8] dark:bg-gray-700 rounded-lg p-1">
               
               <UButton 
                 v-if="item.count === 1"
@@ -85,7 +94,7 @@
                 <UIcon name="i-heroicons-minus" class="w-4 h-4" />
               </UButton>
 
-              <span class="text-sm font-medium w-4 text-center">{{ item.count }}</span>
+              <span class="text-sm font-medium w-4 text-center text-black dark:text-white">{{ item.count }}</span>
               
               <UButton 
                 color="neutral" 
@@ -97,7 +106,13 @@
                 <UIcon name="i-heroicons-plus" class="w-4 h-4" />
               </UButton>
             </div>
-            <span class="text-sm font-semibold text-[#70439e] dark:text-[#b388e8]">{{ (Number(item.price) * item.count).toLocaleString() }} ₽</span>
+
+            <!-- Итоговая цена чёрным цветом -->
+            <div class="bg-[#E8DEF8] dark:bg-gray-700 rounded-lg px-3 py-1">
+              <span class="text-sm font-semibold text-black dark:text-white">
+                {{ (Number(item.price) * item.count).toLocaleString() }} ₽
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -108,7 +123,8 @@
       <UButton
         color="neutral"
         variant="solid"
-        class="bg-[#70439e] text-white hover:bg-[#5a3380] w-full h-12 rounded-lg flex items-center justify-between px-4 border-2 border-black dark:border-white"
+        class="bg-[#70439e] text-white w-full h-12 rounded-lg flex items-center justify-between px-4"
+        style="border: 3px solid black; box-shadow: inset 0 0 0 2px white;"
         @click="showCheckout = true"
       >
         <div class="flex items-center gap-2">
@@ -161,12 +177,12 @@ const toast = useToast()
 // Состояние для отображения формы оформления заказа
 const showCheckout = ref(false)
 
-// Данные для окна успеха (СОХРАНЯЕМ ДО ОЧИСТКИ КОРЗИНЫ!)
+// Данные для окна успеха
 const showOrderSuccess = ref(false)
 const lastOrderNumber = ref(0)
 const lastCustomerName = ref('')
 const lastCustomerPhone = ref('')
-const lastOrderTotalItems = ref(0)  // <--- Добавили переменную для количества
+const lastOrderTotalItems = ref(0)
 const lastOrderTotalPrice = ref(0)
 
 // Возврат назад в истории браузера
@@ -204,29 +220,23 @@ const handleIncrement = (item: any) => {
 
 // Обработчик успешного оформления заказа
 const handleOrderSubmitted = (orderData: any) => {
-  // Закрываем форму
   showCheckout.value = false
   
-  // Сохраняем данные, полученные из формы
   lastOrderNumber.value = orderData.orderNumber
   lastCustomerName.value = orderData.fullName
   lastCustomerPhone.value = orderData.phoneNumber
   
-  // ВАЖНО: Сохраняем количество и сумму ДО очистки корзины!
   lastOrderTotalItems.value = cart.totalCount
   lastOrderTotalPrice.value = cart.totalPrice
 
-  // Очищаем корзину
   cart.clearCart()
-
-  // Открываем модальное окно успеха вместо тоста
   showOrderSuccess.value = true
 }
 
 // Возврат к товарам из окна успеха
 const handleGoBackToProducts = () => {
   showOrderSuccess.value = false
-  router.push('/catalog') // или router.back()
+  router.push('/catalog')
 }
 </script>
 

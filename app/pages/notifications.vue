@@ -1,3 +1,36 @@
+<script setup lang="ts">
+import type {NotificationListItem} from '~/types/NotificationListItem.ts'
+import NotificationCard from '~/components/notifications/NotificationCard.vue'
+import {fetchNotificationsRequest} from '~/api/notifications'
+import {fetchOrCacheMeRequest} from "~/api/me.ts";
+import type {UserMeResponse} from "~/types/UserMeResponse.ts";
+
+const loading = ref(false)
+const notifications = ref<NotificationListItem[]>([])
+const user =  ref<UserMeResponse>();
+
+loadNotifications()
+loadMe()
+
+function loadNotifications() {
+  loading.value = true
+
+  fetchNotificationsRequest(user.value?.id)
+      .then((items) => {
+        notifications.value = items
+      })
+      .catch(() => {
+      })
+      .finally(() => {
+        loading.value = false
+      })
+}
+
+function loadMe() {
+  fetchOrCacheMeRequest()
+      .then(me => user.value = me);
+}
+</script>
 <template>
   <div class="min-h-screen bg-white flex flex-col pb-20">
     <BackButton/>
@@ -42,30 +75,3 @@
     <BottomNav/>
   </div>
 </template>
-
-<script setup lang="ts">
-import type {NotificationListItem} from '~/types/NotificationListItem.ts'
-import NotificationCard from '~/components/notifications/NotificationCard.vue'
-import {fetchNotificationsRequest} from '~/api/notifications'
-
-const {user} = useAuth()
-
-const loading = ref(false)
-const notifications = ref<NotificationListItem[]>([])
-
-loadNotifications()
-
-function loadNotifications() {
-  loading.value = true
-
-  fetchNotificationsRequest(user.value?.id)
-      .then((items) => {
-        notifications.value = items
-      })
-      .catch(() => {
-      })
-      .finally(() => {
-        loading.value = false
-      })
-}
-</script>

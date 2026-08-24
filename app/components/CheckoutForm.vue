@@ -8,16 +8,15 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   close: []
-  orderSubmitted: []
+  orderSubmitted: [orderData: { orderNumber: number, fullName: string, phoneNumber: string }]
 }>()
 
-// Управление видимостью окна
 const isOpen = ref(true)
 
 // Состояния полей формы
 const fullName = ref('')
 const phoneNumber = ref('')
-const paymentMethod = ref<'now' | 'delivery'>('delivery')
+const paymentMethod = ref<'now' | 'delivery'>('now')
 
 // Обработчик отправки формы
 const submitOrder = () => {
@@ -25,6 +24,9 @@ const submitOrder = () => {
     alert('Пожалуйста, заполните обязательные поля!')
     return
   }
+
+  // Генерируем номер заказа
+  const orderNumber = Math.floor(100 + Math.random() * 900)
 
   console.log('Данные заказа:', {
     fullName: fullName.value,
@@ -34,9 +36,13 @@ const submitOrder = () => {
     totalPrice: props.totalPrice
   })
   
-  // Закрываем окно после успешной отправки
+  // Закрываем форму и передаем данные в родителя
   isOpen.value = false
-  emit('orderSubmitted')
+  emit('orderSubmitted', {
+    orderNumber,
+    fullName: fullName.value,
+    phoneNumber: phoneNumber.value
+  })
 }
 
 // Функция закрытия
@@ -47,16 +53,13 @@ const closeModal = () => {
 </script>
 
 <template>
-  <!-- Затемняющий фон на весь экран (Backdrop) -->
   <div 
     v-if="isOpen" 
     class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all"
     @click.self="closeModal"
   >
-    <!-- Центрированное модальное окно -->
     <div class="relative w-full max-w-[660px] bg-[#F3EBF9] rounded-[28px] p-4 md:p-8 shadow-xl font-sans text-[#1D1B20] animate-in fade-in zoom-in-95 duration-200">
       
-      <!-- Кнопка закрытия окна (Крестик) -->
       <button 
         type="button" 
         @click="closeModal"
@@ -67,7 +70,6 @@ const closeModal = () => {
         </svg>
       </button>
 
-      <!-- Заголовок -->
       <h2 class="text-center text-[28px] md:text-[32px] font-medium mb-6">
         Оформление заказа
       </h2>
@@ -99,7 +101,7 @@ const closeModal = () => {
           <input
             v-model="phoneNumber"
             type="tel"
-            placeholder="89998886611"
+            placeholder="+7 (999) 888 66 11"
             class="w-full h-14 px-4 bg-white border border-[#79747E]/30 rounded-xl text-base text-[#1D1B20] placeholder-[#79747E]/60 focus:outline-none focus:border-[#6750A4] focus:ring-1 focus:ring-[#6750A4] transition-all"
           />
         </div>
@@ -112,7 +114,6 @@ const closeModal = () => {
         </p>
         
         <div class="flex bg-white rounded-xl p-1 border border-[#79747E]/10">
-          <!-- Оплатить сейчас -->
           <button
             type="button"
             @click="paymentMethod = 'now'"
@@ -129,7 +130,6 @@ const closeModal = () => {
             Оплатить сейчас
           </button>
 
-          <!-- При получении -->
           <button
             type="button"
             @click="paymentMethod = 'delivery'"
@@ -148,10 +148,8 @@ const closeModal = () => {
         </div>
       </div>
 
-      <!-- Разделительная черта -->
       <hr class="border-[#79747E]/20 my-6" />
 
-      <!-- Итоговая информация -->
       <div class="space-y-2 mb-6 px-1">
         <div class="flex justify-between items-baseline">
           <span class="text-[22px] font-medium">Итого</span>

@@ -54,25 +54,36 @@
     </div>
 
     <!-- Add to cart -->
-    <UButton
-      color="neutral"
-      variant="solid"
-      class="absolute right-2 top-[70%] -translate-y-1/2 w-12 h-9 rounded-lg bg-white text-gray-700 border border-gray-300 flex items-center justify-center shadow-md hover:bg-gray-100"
-      aria-label="Добавить в корзину"
-      @click.stop="emit('add-to-cart', product)"
-    >
-      <UIcon
-        name="i-lucide-shopping-basket"
-        class="w-5 h-5"
-      />
-    </UButton>
+    <div class="absolute right-2 top-[70%] -translate-y-1/2">
+      <UButton
+        color="neutral"
+        variant="solid"
+        class="w-12 h-9 rounded-lg bg-white text-gray-700 border border-gray-300 flex items-center justify-center shadow-md hover:bg-gray-100"
+        aria-label="Добавить в корзину"
+        @click.stop="emit('add-to-cart', product)"
+      >
+        <UIcon
+          name="i-lucide-shopping-basket"
+          class="w-5 h-5"
+        />
+      </UButton>
+
+      <span
+        v-if="cartItem"
+        class="absolute -top-1.5 -right-1.5 min-w-5.5 h-5.5 px-1 rounded-full bg-[#B3261E] text-white text-[12px] font-semibold flex items-center justify-center"
+        @click.stop="emit('add-to-cart', product)"
+      >
+        {{ cartItem.count }}
+      </span>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Product } from '~/data/products'
+import { useCartStore } from '@/stores/cart'
 
-defineProps<{
+const props = defineProps<{
   product: Product
 }>()
 
@@ -80,4 +91,11 @@ const emit = defineEmits<{
   select: [product: Product]
   'add-to-cart': [product: Product]
 }>()
+
+const cart = useCartStore()
+
+const cartItem = computed(() => {
+  return cart.items.find(item => item.id === props.product.id)
+})
+
 </script>

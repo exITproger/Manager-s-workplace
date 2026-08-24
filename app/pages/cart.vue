@@ -65,7 +65,6 @@
           <div class="flex justify-between items-center mt-2">
             <div class="flex items-center gap-2 bg-white dark:bg-gray-700 rounded-lg p-1">
               
-              <!-- Если товар один, показываем корзину для удаления -->
               <UButton 
                 v-if="item.count === 1"
                 color="error" 
@@ -76,7 +75,6 @@
                 <UIcon name="i-heroicons-trash" class="w-4 h-4" />
               </UButton>
 
-              <!-- Если товаров больше одного, показываем минус -->
               <UButton 
                 v-else
                 color="neutral" 
@@ -132,14 +130,28 @@
       @close="showCheckout = false"
       @order-submitted="handleOrderSubmitted"
     />
+
+    <!-- Компонент успешного заказа -->
+    <OrderSuccessModal
+      v-if="showOrderSuccess"
+      :order-number="lastOrderNumber"
+      :full-name="lastCustomerName"
+      :phone-number="lastCustomerPhone"
+      :total-items="lastOrderTotalItems"
+      :total-price="lastOrderTotalPrice"
+      @close="showOrderSuccess = false"
+      @go-back="handleGoBackToProducts"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cart'
 import { useToast } from '#imports'
 import CheckoutForm from '@/components/CheckoutForm.vue'
+import OrderSuccessModal from '@/components/OrderSuccessModal.vue'
 
 const router = useRouter()
 const colorMode = useColorMode()
@@ -148,6 +160,14 @@ const toast = useToast()
 
 // Состояние для отображения формы оформления заказа
 const showCheckout = ref(false)
+
+// Данные для окна успеха (СОХРАНЯЕМ ДО ОЧИСТКИ КОРЗИНЫ!)
+const showOrderSuccess = ref(false)
+const lastOrderNumber = ref(0)
+const lastCustomerName = ref('')
+const lastCustomerPhone = ref('')
+const lastOrderTotalItems = ref(0)  // <--- Добавили переменную для количества
+const lastOrderTotalPrice = ref(0)
 
 // Возврат назад в истории браузера
 const goBack = () => router.back()
@@ -162,7 +182,6 @@ const toggleTheme = () => {
 const handleIncrement = (item: any) => {
   const result = cart.increment(item.id)
 
-  // Если товар закончился на складе (Красный тост)
   if (!result.success) {
     toast.add({
       title: 'Предупреждение',
@@ -173,7 +192,6 @@ const handleIncrement = (item: any) => {
     return
   }
 
-  // Если выбрали последний товар (Оранжевый тост)
   if (item.count == Number(item.quantity)) {
     toast.add({
       title: 'Предупреждение',
@@ -185,16 +203,30 @@ const handleIncrement = (item: any) => {
 }
 
 // Обработчик успешного оформления заказа
-const handleOrderSubmitted = () => {
+const handleOrderSubmitted = (orderData: any) => {
+  // Закрываем форму
   showCheckout.value = false
-  cart.clearCart() // Очищаем корзину после успешного заказа
   
-  toast.add({
-    title: 'Заказ оформлен',
-    description: 'Спасибо за заказ! Мы свяжемся с вами в ближайшее время.',
-    color: 'success',
-    icon: 'i-heroicons-check-circle'
-  })
+  // Сохраняем данные, полученные из формы
+  lastOrderNumber.value = orderData.orderNumber
+  lastCustomerName.value = orderData.fullName
+  lastCustomerPhone.value = orderData.phoneNumber
+  
+  // ВАЖНО: Сохраняем количество и сумму ДО очистки корзины!
+  lastOrderTotalItems.value = cart.totalCount
+  lastOrderTotalPrice.value = cart.totalPrice
+
+  // Очищаем корзину
+  cart.clearCart()
+
+  // Открываем модальное окно успеха вместо тоста
+  showOrderSuccess.value = true
+}
+
+// Возврат к товарам из окна успеха
+const handleGoBackToProducts = () => {
+  showOrderSuccess.value = false
+  router.push('/catalog') // или router.back()
 }
 </script>
 

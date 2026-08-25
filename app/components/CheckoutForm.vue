@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useToast } from '#imports'
+
+const toast = useToast()
 
 const props = defineProps<{
   totalItems: number
@@ -21,21 +24,18 @@ const paymentMethod = ref<'now' | 'delivery'>('now')
 // Обработчик отправки формы
 const submitOrder = () => {
   if (!fullName.value.trim() || !phoneNumber.value.trim()) {
-    alert('Пожалуйста, заполните обязательные поля!')
+    toast.add({
+      title: 'Ошибка',
+      description: 'Пожалуйста, заполните все обязательные поля!',
+      color: 'error',
+      icon: 'i-heroicons-exclamation-circle'
+    })
     return
   }
 
   // Генерируем номер заказа
   const orderNumber = Math.floor(100 + Math.random() * 900)
 
-  console.log('Данные заказа:', {
-    fullName: fullName.value,
-    phoneNumber: phoneNumber.value,
-    paymentMethod: paymentMethod.value,
-    totalItems: props.totalItems,
-    totalPrice: props.totalPrice
-  })
-  
   // Закрываем форму и передаем данные в родителя
   isOpen.value = false
   emit('orderSubmitted', {

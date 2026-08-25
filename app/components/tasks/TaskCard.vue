@@ -20,11 +20,11 @@
       </div>
       <div>
         <p class="text-gray-500 dark:text-gray-400 text-[10px] uppercase tracking-wide">Приоритет</p>
-        <p class="font-medium mt-0.5 text-black dark:text-white text-xs">{{ task.priority }}</p>
+        <!-- <p class="font-medium mt-0.5 text-black dark:text-white text-xs">{{ task.priority }}</p> -->
       </div>
       <div>
         <p class="text-gray-500 dark:text-gray-400 text-[10px] uppercase tracking-wide whitespace-nowrap">Выполнить до</p>
-        <p class="font-medium mt-0.5 text-black dark:text-white text-xs whitespace-nowrap">{{ task.deadline }}</p>
+        <!-- <p class="font-medium mt-0.5 text-black dark:text-white text-xs whitespace-nowrap">{{ task.deadline }}</p> -->
       </div>
     </div>
   </div>

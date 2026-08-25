@@ -1,5 +1,5 @@
 // app/api/tasks/index.ts
-const MOCK_TOKEN = 'mock-token-123'
+import { MOCK_TOKEN } from '#server/utils/auth-mock'
 
 
 const MOCK_TASKS = [

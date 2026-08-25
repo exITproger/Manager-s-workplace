@@ -1,12 +1,13 @@
 // composables/useTasksRequest.ts
 import type { TaskListItem } from "~/types/TaskListItem";
+import { token } from '~/composables/useAuth'
 
 export function useTasksRequest(status?: string) {
     const config = useRuntimeConfig()
-    const token = useCookie<string | null>('token') // 👈 Просто берём токен из куки
+    const { token } = useAuth()
     const queryBody: any = {}
 
-    if (status && status !== 'any') {
+    if (status) {
         queryBody.status = status
     }
 

@@ -1,3 +1,98 @@
+<script setup lang="ts">
+import {useRouter} from 'vue-router'
+import {useCartRequest, useCartAddRequest} from '~/api/cart'
+import type {CartItem} from '~/types/CartItem'
+import CheckoutForm from '~/components/CheckoutForm.vue'
+import OrderSuccessModal from '~/components/OrderSuccessModal.vue'
+
+const router = useRouter()
+const colorMode = useColorMode()
+
+const {data: cartData} = await useCartRequest()
+
+const items = ref<CartItem[]>([])
+const itemRequestMap = new Map<number, ReturnType<typeof useCartAddRequest>>()
+
+if (cartData.value) {
+  items.value = [...cartData.value.deferredStocks]
+
+  items.value.forEach(item => {
+    const req = useCartAddRequest(item.productId, item.quantityInCart)
+    itemRequestMap.set(item.productId, req)
+
+    watch(req.data, (newData) => {
+      if (newData) {
+        const target = items.value.find(i => i.productId === newData.productId)
+        if (newData.selectedQuantity <= 0) {
+          items.value = items.value.filter(i => i.productId !== newData.productId)
+        } else if (target) {
+          target.quantityInCart = newData.selectedQuantity
+        }
+      }
+    })
+  })
+}
+
+const totalCount = () => items.value.reduce((sum, item) => sum + item.quantityInCart, 0)
+const totalPrice = () => items.value.reduce((sum, item) => sum + item.price * item.quantityInCart, 0)
+
+const showCheckout = ref(false)
+
+const showOrderSuccess = ref(false)
+const lastOrderNumber = ref(0)
+const lastCustomerName = ref('')
+const lastCustomerPhone = ref('')
+const lastOrderTotalItems = ref(0)
+const lastOrderTotalPrice = ref(0)
+
+const goBack = () => router.back()
+
+const goCatalog = () => router.push('/catalog')
+
+const toggleTheme = () => {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
+
+const handleIncrement = (item: CartItem) => {
+  const req = itemRequestMap.get(item.productId)
+  if (req) {
+    req.quantity.value = item.quantityInCart + 1
+  }
+}
+
+const handleDecrement = (item: CartItem) => {
+  const req = itemRequestMap.get(item.productId)
+  if (req) {
+    req.quantity.value = item.quantityInCart - 1
+  }
+}
+
+const handleRemove = (item: CartItem) => {
+  const req = itemRequestMap.get(item.productId)
+  if (req) {
+    req.quantity.value = 0
+  }
+}
+
+const handleOrderSubmitted = (orderData: any) => {
+  showCheckout.value = false
+
+  lastOrderNumber.value = orderData.orderNumber
+  lastCustomerName.value = orderData.fullName
+  lastCustomerPhone.value = orderData.phoneNumber
+
+  lastOrderTotalItems.value = totalCount()
+  lastOrderTotalPrice.value = totalPrice()
+
+  items.value = []
+  showOrderSuccess.value = true
+}
+
+const handleGoBackToProducts = () => {
+  showOrderSuccess.value = false
+  router.push('/catalog')
+}
+</script>
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col">
     <!-- Header -->
@@ -163,103 +258,6 @@
     />
   </div>
 </template>
-
-<script setup lang="ts">
-import {useRouter} from 'vue-router'
-import {useCartRequest, useCartAddRequest} from '~/api/cart'
-import type {CartItem} from '~/types/CartItem'
-import CheckoutForm from '~/components/CheckoutForm.vue'
-import OrderSuccessModal from '~/components/OrderSuccessModal.vue'
-
-const router = useRouter()
-const colorMode = useColorMode()
-
-const {data: cartData} = await useCartRequest()
-
-const items = ref<CartItem[]>([])
-const itemRequestMap = new Map<number, ReturnType<typeof useCartAddRequest>>()
-
-if (cartData.value) {
-  items.value = [...cartData.value.deferredStocks]
-
-  items.value.forEach(item => {
-    const req = useCartAddRequest(item.productId, item.quantityInCart)
-    itemRequestMap.set(item.productId, req)
-
-    watch(req.data, (newData) => {
-      if (newData) {
-        const target = items.value.find(i => i.productId === newData.productId)
-        if (newData.selectedQuantity <= 0) {
-          items.value = items.value.filter(i => i.productId !== newData.productId)
-        } else if (target) {
-          target.quantityInCart = newData.selectedQuantity
-        }
-      }
-    })
-  })
-}
-
-const totalCount = () => items.value.reduce((sum, item) => sum + item.quantityInCart, 0)
-const totalPrice = () => items.value.reduce((sum, item) => sum + item.price * item.quantityInCart, 0)
-
-const showCheckout = ref(false)
-
-const showOrderSuccess = ref(false)
-const lastOrderNumber = ref(0)
-const lastCustomerName = ref('')
-const lastCustomerPhone = ref('')
-const lastOrderTotalItems = ref(0)
-const lastOrderTotalPrice = ref(0)
-
-const goBack = () => router.back()
-
-const goCatalog = () => router.push('/catalog')
-
-const toggleTheme = () => {
-  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-}
-
-const handleIncrement = (item: CartItem) => {
-  const req = itemRequestMap.get(item.productId)
-  if (req) {
-    req.quantity.value = item.quantityInCart + 1
-  }
-}
-
-const handleDecrement = (item: CartItem) => {
-  const req = itemRequestMap.get(item.productId)
-  if (req) {
-    req.quantity.value = item.quantityInCart - 1
-  }
-}
-
-const handleRemove = (item: CartItem) => {
-  const req = itemRequestMap.get(item.productId)
-  if (req) {
-    req.quantity.value = 0
-  }
-}
-
-const handleOrderSubmitted = (orderData: any) => {
-  showCheckout.value = false
-
-  lastOrderNumber.value = orderData.orderNumber
-  lastCustomerName.value = orderData.fullName
-  lastCustomerPhone.value = orderData.phoneNumber
-
-  lastOrderTotalItems.value = totalCount()
-  lastOrderTotalPrice.value = totalPrice()
-
-  items.value = []
-  showOrderSuccess.value = true
-}
-
-const handleGoBackToProducts = () => {
-  showOrderSuccess.value = false
-  router.push('/catalog')
-}
-</script>
-
 <style>
 input {
   outline: none !important;

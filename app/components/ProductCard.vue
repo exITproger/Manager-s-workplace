@@ -65,7 +65,7 @@
       </UButton>
 
       <span
-          v-if="product"
+          v-if="quantity > 0"
           class="absolute -top-1.5 -right-1.5 min-w-5.5 h-5.5 px-1 rounded-full bg-[#B3261E] text-white text-[12px] font-semibold flex items-center justify-center">
         {{ quantity }}
       </span>

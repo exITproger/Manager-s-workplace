@@ -7,7 +7,7 @@ const colorMode = useColorMode()
 
 const searchQuery = ref('')
 
-const {data: products, pending} = await useCatalogRequest()
+const {data: products, pending} = useCatalogRequest({productName: searchQuery})
 
 const toggleTheme = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'

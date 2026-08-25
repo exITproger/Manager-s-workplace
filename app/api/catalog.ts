@@ -1,43 +1,42 @@
-import type { CartItem } from '~/types/CartItem'
-import { token, tokenCookie } from '~/composables/useAuth'
+import type {CartItem} from '~/types/CartItem'
+import {token, tokenCookie} from '~/composables/useAuth'
 
-export function useCatalogRequest(
-  id?: number,
-  price?: number,
-  priceFrom?: number,
-  priceTo?: number,
-  quantity?: number,
-  quantityFrom?: number,
-  quantityTo?: number,
-  productName?: string,
-  page?: number,
-  pageLimit?: number
-) {
-  const config = useRuntimeConfig()
-  const queryBody: Record<string, string | number> = {}
+export function useCatalogRequest(options?: {
+    id?: MaybeRefOrGetter<number | undefined>
+    price?: MaybeRefOrGetter<number | undefined>
+    priceFrom?: MaybeRefOrGetter<number | undefined>
+    priceTo?: MaybeRefOrGetter<number | undefined>
+    quantity?: MaybeRefOrGetter<number | undefined>
+    quantityFrom?: MaybeRefOrGetter<number | undefined>
+    quantityTo?: MaybeRefOrGetter<number | undefined>
+    productName?: MaybeRefOrGetter<string | undefined>
+    page?: MaybeRefOrGetter<number | undefined>
+    pageLimit?: MaybeRefOrGetter<number | undefined>
+}) {
+    const config = useRuntimeConfig()
 
-  if (id !== undefined) queryBody.id = id
-  if (price !== undefined) queryBody.price = price
-  if (priceFrom !== undefined) queryBody.price_from = priceFrom
-  if (priceTo !== undefined) queryBody.price_to = priceTo
-  if (quantity !== undefined) queryBody.quantity = quantity
-  if (quantityFrom !== undefined) queryBody.quantity_from = quantityFrom
-  if (quantityTo !== undefined) queryBody.quantity_to = quantityTo
-  if (productName) queryBody.product_name = productName
-  if (page !== undefined) queryBody.page = page
-  if (pageLimit !== undefined) queryBody.page_limit = pageLimit
-
-  return useFetch<CartItem[]>('/catalog', {
-    key: 'catalog',
-    baseURL: config.public.apiBase as string,
-    headers: { Authorization: `Bearer ${token()}` },
-    query: queryBody,
-    default: () => [],
-    onResponseError({ response }) {
-      if (response.status === 401) {
-        tokenCookie().value = null
-        navigateTo('/')
-      }
-    }
-  })
+    return useFetch<CartItem[]>('/catalog', {
+        key: 'catalog',
+        baseURL: config.public.apiBase as string,
+        headers: {Authorization: `Bearer ${token()}`},
+        query: {
+            id: options?.id,
+            price: options?.price,
+            price_from: options?.priceFrom,
+            price_to: options?.priceTo,
+            quantity: options?.quantity,
+            quantity_from: options?.quantityFrom,
+            quantity_to: options?.quantityTo,
+            product_name: options?.productName,
+            page: options?.page,
+            page_limit: options?.pageLimit,
+        },
+        default: () => [],
+        onResponseError({response}) {
+            if (response.status === 401) {
+                tokenCookie().value = null
+                navigateTo('/')
+            }
+        }
+    })
 }

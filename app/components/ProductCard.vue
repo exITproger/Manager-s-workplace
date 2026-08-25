@@ -54,7 +54,7 @@
     </div>
 
     <!-- Add to cart -->
-    <div class="absolute right-2 top-[70%] -translate-y-1/2">
+    <div class="absolute right-2 top-[67%] -translate-y-1/2">
       <UButton
         color="neutral"
         variant="solid"

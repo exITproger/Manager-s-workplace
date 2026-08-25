@@ -116,14 +116,14 @@
 
         <!-- Name -->
         <div class="-mt-3">
-          <h1 class="text-xl font-medium text-black dark:text-white">{{ product.name }}</h1>
+          <h1 class="text-xl font-normal text-black dark:text-white">{{ product.name }}</h1>
         </div>
 
         <!-- Stock Quantity -->
         <div class="flex items-center gap-2">
           <UIcon name="i-lucide-inbox" class="w-7 h-7 text-black dark:text-gray-400 shrink-0" />
           <div>
-            <div class="text-xl font-medium text-black dark:text-white">{{ product.quantity }} шт</div>
+            <div class="text-xl font-normal text-black dark:text-white">{{ product.quantity }} шт</div>
           </div>
         </div>
 

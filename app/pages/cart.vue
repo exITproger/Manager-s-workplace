@@ -40,12 +40,13 @@
       <!-- Карточка товара в корзине -->
       <div 
         v-for="item in cart.items" 
-        :key="item.id" 
+        :key="item.productId"
         class="bg-[#F2F2F7] dark:bg-gray-800 border border-gray-200 dark:border-gray-800 rounded-lg p-4 flex gap-4"
       >
         <!-- Image -->
         <div class="h-20 w-20 bg-gray-100 dark:bg-gray-700 rounded overflow-hidden flex-shrink-0 flex items-center">
-          <img :src="item.image" :alt="item.name" class="w-full h-auto object-contain" />
+          <img v-if="item.images?.length > 0" :src="item.images[0]" :alt="item.name" class="w-full h-auto object-contain" />
+          <UIcon v-else name="i-lucide-image" class="w-8 h-8 text-gray-300 dark:text-gray-600 mx-auto" />
         </div>
 
         <!-- Info -->
@@ -62,7 +63,7 @@
             <span class="text-sm font-medium text-black dark:text-white">{{ item.name }}</span>
           </div>
 
-          <div class="text-xs text-gray-500 dark:text-gray-400">{{ item.id }}</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400">{{ item.productId }}</div>
           
           <div class="flex items-center gap-1.5">
             <UIcon name="i-lucide-inbox" class="w-5 h-5 text-black dark:text-gray-400 shrink-0" />
@@ -76,10 +77,10 @@
               
               <UButton 
                 v-if="item.count === 1"
-                color="neutral" 
+                color="neutral"
                 variant="ghost" 
-                class="p-0 min-w-0 h-auto w-6 h-6" 
-                @click="cart.removeFromCart(item.id)"
+                class="p-0 min-w-0 h-auto w-6 h-6"
+                @click="cart.removeFromCart(item.productId)"
               >
                 <UIcon name="i-heroicons-trash" class="w-4 h-4" />
               </UButton>
@@ -88,8 +89,8 @@
                 v-else
                 color="neutral" 
                 variant="ghost" 
-                class="p-0 min-w-0 h-auto w-6 h-6 " 
-                @click="cart.decrement(item.id)"
+                class="p-0 min-w-0 h-auto w-6 h-6 "
+                @click="cart.decrement(item.productId)"
               >
                 <UIcon name="i-heroicons-minus" class="w-4 h-4 " />
               </UButton>
@@ -195,7 +196,7 @@ const toggleTheme = () => {
 }
 
 const handleIncrement = (item: any) => {
-  const result = cart.increment(item.id)
+  const result = cart.increment(item.productId)
 
   if (!result.success) {
     toast.add({

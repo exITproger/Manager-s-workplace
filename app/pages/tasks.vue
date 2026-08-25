@@ -1,174 +1,187 @@
+<!-- pages/tasks.vue -->
 <template>
-  <div class="max-w-7xl w-full bg-white mx-auto min-h-screen p-5 pb-24">
-    <!-- Шапка -->
-    <div class="flex items-center justify-between mb-[18px]">
-      <UButton
-        color="gray"
-        variant="ghost"
-        class="text-[#8a5af0] p-0 min-w-0 h-auto flex items-center gap-1 text-sm font-normal"
-        @click="goBack"
-      >
-        <UIcon name="i-heroicons-arrow-left" class="w-5 h-5" />
-        Назад
-      </UButton>
-    </div>
-
-    <!-- Мои / Филиала -->
-    <div class="flex items-center justify-between gap-2 mb-[14px]">
-      <div class="flex border border-[#8a5af0] rounded-lg overflow-hidden text-sm">
+  <div class="min-h-screen bg-white dark:bg-[#0a0a0a] pb-24">
+    <div class="max-w-7xl w-full mx-auto p-5">
+      <!-- Шапка -->
+      <div class="flex items-center justify-between mb-[18px]">
         <UButton
           color="gray"
           variant="ghost"
-          class="px-2 md:px-3 py-1 text-[11px] md:text-xs font-semibold transition-colors rounded-none"
-          :class="activeTab === 'my' ? 'bg-[#e8dff0] text-[#4a3a5a]' : 'bg-white text-[#6a5a7a]'"
-          @click="activeTab = 'my'"
+          class="text-[#8a5af0] p-0 min-w-0 h-auto flex items-center gap-1 text-sm font-normal"
+          @click="goBack"
         >
-          <span v-if="activeTab === 'my'" class="text-[#8a5af0]">✓</span>
-          Мои <span class="text-[9px] md:text-[10px] font-medium">· 8</span>
+          <UIcon name="i-heroicons-arrow-left" class="w-5 h-5" />
+          Назад
         </UButton>
-        <div class="w-px bg-[#8a5af0]"></div>
         <UButton
-          color="gray"
           variant="ghost"
-          class="px-2 md:px-3 py-1 text-[11px] md:text-xs font-semibold transition-colors rounded-none"
-          :class="activeTab === 'branch' ? 'bg-[#e8dff0] text-[#4a3a5a]' : 'bg-white text-[#6a5a7a]'"
-          @click="activeTab = 'branch'"
+          color="neutral"
+          square
+          class="p-0 min-w-0 h-auto"
+          :icon="colorMode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
+          :ui="{ leadingIcon: 'size-6' }"
+          aria-label="Переключить тему"
+          @click="toggleTheme"
+        />
+      </div>
+
+      <!-- Мои / Филиала -->
+      <div class="flex items-center justify-between gap-2 mb-[14px]">
+        <div class="flex border border-[#8a5af0] dark:border-[#555555] rounded-lg overflow-hidden text-sm">
+          <UButton
+            color="gray"
+            variant="ghost"
+            class="px-2 md:px-3 py-1 text-[11px] md:text-xs font-semibold transition-colors rounded-none"
+            :class="activeTab === 'my' ? 'bg-[#e8dff0] dark:bg-[#1e293b] text-[#4a3a5a] dark:text-white' : 'bg-white dark:bg-[#0a0a0a] text-[#6a5a7a] dark:text-gray-400'"
+            @click="activeTab = 'my'"
+          >
+            <span v-if="activeTab === 'my'" class="text-[#8a5af0] dark:text-white">✓</span>
+            Мои <span class="text-[9px] md:text-[10px] font-medium">· 8</span>
+          </UButton>
+          <div class="w-px bg-[#8a5af0] dark:bg-[#555555]"></div>
+          <UButton
+            color="gray"
+            variant="ghost"
+            class="px-2 md:px-3 py-1 text-[11px] md:text-xs font-semibold transition-colors rounded-none"
+            :class="activeTab === 'branch' ? 'bg-[#e8dff0] dark:bg-[#1e293b] text-[#4a3a5a] dark:text-white' : 'bg-white dark:bg-[#0a0a0a] text-[#6a5a7a] dark:text-gray-400'"
+            @click="activeTab = 'branch'"
+          >
+            <span v-if="activeTab === 'branch'" class="text-[#8a5af0] dark:text-white">✓</span>
+            <span class="whitespace-nowrap">Филиала <span class="text-[9px] md:text-[10px] font-medium">· 15</span></span>
+          </UButton>
+        </div>
+        <UButton
+          color="primary"
+          class="h-[30px] md:h-[34px] px-2.5 md:px-3 text-[11px] md:text-xs font-semibold rounded-lg whitespace-nowrap flex items-center justify-center bg-[#00C16A] hover:bg-[#00a85a] text-white border-none dark:bg-[#00C16A]"
+          @click="createTask"
         >
-          <span v-if="activeTab === 'branch'" class="text-[#8a5af0]">✓</span>
-          <span class="whitespace-nowrap">Филиала <span class="text-[9px] md:text-[10px] font-medium">· 15</span></span>
+          + Создать
         </UButton>
       </div>
-      <UButton
-        color="primary"
-        class="h-[30px] md:h-[34px] px-2.5 md:px-3 text-[11px] md:text-xs font-semibold rounded-lg whitespace-nowrap flex items-center justify-center bg-[#00C16A] hover:bg-[#00a85a] text-white border-none"
-        @click="createTask"
-      >
-        + Создать
-      </UButton>
-    </div>
 
-    <!-- Поиск -->
-    <div class="mb-[14px] w-full">
-      <UInput
-        v-model="searchQuery"
-        placeholder="Search..."
-        class="w-full bg-[#f2f2f7] rounded-xl border-transparent text-black placeholder-[#8e8e93] text-sm focus:border-[#8a5af0]"
-      >
-        <template #leading>
-          <UIcon name="i-heroicons-magnifying-glass" class="w-4 h-4 text-gray-400" />
-        </template>
-      </UInput>
-    </div>
+      <!-- Поиск -->
+      <div class="mb-[14px] w-full">
+        <UInput
+          v-model="searchQuery"
+          placeholder="Search..."
+          class="w-full bg-[#f2f2f7] dark:bg-[#1a1a1a] rounded-xl border-transparent text-black dark:text-white placeholder-[#8e8e93] dark:placeholder-gray-500 text-sm focus:border-[#8a5af0] dark:focus:border-[#8a5af0]"
+        >
+          <template #leading>
+            <UIcon name="i-heroicons-magnifying-glass" class="w-4 h-4 text-gray-400 dark:text-gray-500" />
+          </template>
+        </UInput>
+      </div>
 
-    <!-- Фильтры -->
-    <div class="flex gap-2.5 mb-4 relative" style="z-index: 60;">
-      <!-- Статус -->
-      <div class="flex-1 relative" :class="{ 'opacity-40 pointer-events-none': priorityDropdownOpen }" style="z-index: 61;">
-        <UButton
-          color="gray"
-          variant="ghost"
-          class="w-full justify-between bg-[#f2f2f7] rounded-lg px-3 py-1.5 text-sm font-medium"
-          @click="statusDropdownOpen = !statusDropdownOpen"
-        >
-          <span>{{ selectedStatus.label === 'Любой' ? 'Статус' : 'Статус: ' + selectedStatus.label }}</span>
-          <UIcon name="i-heroicons-chevron-down" class="w-4 h-4" :class="{ 'rotate-180': statusDropdownOpen }" />
-        </UButton>
-        <div
-          v-if="statusDropdownOpen"
-          class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-50 overflow-hidden"
-        >
+      <!-- Фильтры -->
+      <div class="flex gap-2.5 mb-4 relative" style="z-index: 60;">
+        <!-- Статус -->
+        <div class="flex-1 relative" :class="{ 'opacity-40 pointer-events-none': priorityDropdownOpen }" style="z-index: 61;">
+          <UButton
+            color="gray"
+            variant="ghost"
+            class="w-full justify-between bg-[#f2f2f7] dark:bg-[#1a1a1a] rounded-lg px-3 py-1.5 text-sm font-medium text-black dark:text-white"
+            @click="statusDropdownOpen = !statusDropdownOpen"
+          >
+            <span>{{ selectedStatus.label === 'Любой' ? 'Статус' : 'Статус: ' + selectedStatus.label }}</span>
+            <UIcon name="i-heroicons-chevron-down" class="w-4 h-4 text-black dark:text-white" :class="{ 'rotate-180': statusDropdownOpen }" />
+          </UButton>
           <div
-            v-for="item in statusItems"
-            :key="item.value"
-            class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 cursor-pointer"
-            @click="selectStatus(item)"
+            v-if="statusDropdownOpen"
+            class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-[#1a1a1a] rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
           >
             <div
-              class="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
-              :class="selectedStatus.value === item.value ? 'border-[#8a5af0]' : 'border-gray-300'"
+              v-for="item in statusItems"
+              :key="item.value"
+              class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] cursor-pointer text-black dark:text-white"
+              @click="selectStatus(item)"
             >
               <div
-                v-if="selectedStatus.value === item.value"
-                class="w-2.5 h-2.5 rounded-full bg-[#8a5af0]"
-              ></div>
+                class="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
+                :class="selectedStatus.value === item.value ? 'border-[#8a5af0]' : 'border-gray-300 dark:border-gray-600'"
+              >
+                <div
+                  v-if="selectedStatus.value === item.value"
+                  class="w-2.5 h-2.5 rounded-full bg-[#8a5af0]"
+                ></div>
+              </div>
+              <span class="text-sm">{{ item.label }}</span>
             </div>
-            <span class="text-sm">{{ item.label }}</span>
           </div>
         </div>
-      </div>
 
-      <!-- Приоритет -->
-      <div class="flex-1 relative" :class="{ 'opacity-40 pointer-events-none': statusDropdownOpen }" style="z-index: 61;">
-        <UButton
-          color="gray"
-          variant="ghost"
-          class="w-full justify-between bg-[#f2f2f7] rounded-lg px-3 py-1.5 text-sm font-medium"
-          @click="priorityDropdownOpen = !priorityDropdownOpen"
-        >
-          <span>{{ selectedPriority.label === 'Любой' ? 'Приоритет' : 'Приоритет: ' + selectedPriority.label }}</span>
-          <UIcon name="i-heroicons-chevron-down" class="w-4 h-4" :class="{ 'rotate-180': priorityDropdownOpen }" />
-        </UButton>
-        <div
-          v-if="priorityDropdownOpen"
-          class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-50 overflow-hidden"
-        >
+        <!-- Приоритет -->
+        <div class="flex-1 relative" :class="{ 'opacity-40 pointer-events-none': statusDropdownOpen }" style="z-index: 61;">
+          <UButton
+            color="gray"
+            variant="ghost"
+            class="w-full justify-between bg-[#f2f2f7] dark:bg-[#1a1a1a] rounded-lg px-3 py-1.5 text-sm font-medium text-black dark:text-white"
+            @click="priorityDropdownOpen = !priorityDropdownOpen"
+          >
+            <span>{{ selectedPriority.label === 'Любой' ? 'Приоритет' : 'Приоритет: ' + selectedPriority.label }}</span>
+            <UIcon name="i-heroicons-chevron-down" class="w-4 h-4 text-black dark:text-white" :class="{ 'rotate-180': priorityDropdownOpen }" />
+          </UButton>
           <div
-            v-for="item in priorityItems"
-            :key="item.value"
-            class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 cursor-pointer"
-            @click="selectPriority(item)"
+            v-if="priorityDropdownOpen"
+            class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-[#1a1a1a] rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
           >
             <div
-              class="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
-              :class="selectedPriority.value === item.value ? 'border-[#8a5af0]' : 'border-gray-300'"
+              v-for="item in priorityItems"
+              :key="item.value"
+              class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] cursor-pointer text-black dark:text-white"
+              @click="selectPriority(item)"
             >
               <div
-                v-if="selectedPriority.value === item.value"
-                class="w-2.5 h-2.5 rounded-full bg-[#8a5af0]"
-              ></div>
+                class="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
+                :class="selectedPriority.value === item.value ? 'border-[#8a5af0]' : 'border-gray-300 dark:border-gray-600'"
+              >
+                <div
+                  v-if="selectedPriority.value === item.value"
+                  class="w-2.5 h-2.5 rounded-full bg-[#8a5af0]"
+                ></div>
+              </div>
+              <span class="text-sm">{{ item.label }}</span>
             </div>
-            <span class="text-sm">{{ item.label }}</span>
           </div>
         </div>
+
+        <!-- Заглушка для фона -->
+        <div
+          v-if="statusDropdownOpen || priorityDropdownOpen"
+          class="fixed inset-0 z-40"
+        >
+          <div class="w-full h-full bg-white/40 dark:bg-black/40"></div>
+        </div>
+
+        <!-- Кликабельный оверлей для закрытия -->
+        <div
+          v-if="statusDropdownOpen || priorityDropdownOpen"
+          class="fixed inset-0 z-40"
+          @click="closeDropdowns"
+        ></div>
       </div>
 
-      <!-- Заглушка для фона -->
-      <div
-        v-if="statusDropdownOpen || priorityDropdownOpen"
-        class="fixed inset-0 z-40"
-      >
-        <div class="w-full h-full bg-white/40"></div>
-      </div>
+      <!-- Сегодня -->
+      <div class="text-base font-bold text-black dark:text-white mb-3">Сегодня</div>
 
-      <!-- Кликабельный оверлей для закрытия -->
-      <div
-        v-if="statusDropdownOpen || priorityDropdownOpen"
-        class="fixed inset-0 z-40"
-        @click="closeDropdowns"
-      ></div>
+      <!-- Карточки задач через компонент -->
+      <TaskCardOnPageTasks
+        v-for="(task, idx) in todayTasks"
+        :key="'today-' + idx"
+        :task="task"
+        @toggle-check="toggleCheck(task)"
+      />
+
+      <!-- Завтра -->
+      <div class="text-base font-bold text-black dark:text-white mb-3 mt-6">Завтра</div>
+
+      <!-- Карточки задач через компонент -->
+      <TaskCardOnPageTasks
+        v-for="(task, idx) in tomorrowTasks"
+        :key="'tomorrow-' + idx"
+        :task="task"
+        @toggle-check="toggleCheck(task)"
+      />
     </div>
-
-    <!-- Сегодня -->
-    <div class="text-base font-bold text-black mb-3">Сегодня</div>
-
-    <!-- Карточки задач через компонент -->
-    <TaskCardOnPageTasks
-      v-for="(task, idx) in todayTasks"
-      :key="'today-' + idx"
-      :task="task"
-      @toggle-check="toggleCheck(task)"
-    />
-
-    <!-- Завтра -->
-    <div class="text-base font-bold text-black mb-3 mt-6">Завтра</div>
-
-    <!-- Карточки задач через компонент -->
-    <TaskCardOnPageTasks
-      v-for="(task, idx) in tomorrowTasks"
-      :key="'tomorrow-' + idx"
-      :task="task"
-      @toggle-check="toggleCheck(task)"
-    />
   </div>
 </template>
 
@@ -176,6 +189,11 @@
 import TaskCardOnPageTasks from '~/components/tasks/TaskCardOnPageTasks.vue'
 
 const router = useRouter()
+const colorMode = useColorMode()
+
+const toggleTheme = () => {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
 
 const activeTab = ref('my')
 const searchQuery = ref('')

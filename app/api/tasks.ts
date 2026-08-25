@@ -1,6 +1,6 @@
 // composables/useTasksRequest.ts
 import type { TaskListItem } from "~/types/TaskListItem";
-import { token } from '~/composables/useAuth'
+import { token } from '~/composables/useAuth';
 
 export function useTasksRequest(status?: string) {
     const config = useRuntimeConfig()

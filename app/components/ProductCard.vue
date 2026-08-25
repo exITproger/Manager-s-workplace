@@ -56,7 +56,8 @@
           color="neutral"
           variant="solid"
           class="w-12 h-9 rounded-lg bg-white text-gray-700 border border-gray-300 flex items-center justify-center shadow-md hover:bg-gray-100"
-          aria-label="Добавить в корзину">
+          aria-label="Добавить в корзину"
+          @click.stop="addToCart">
         <UIcon
             name="i-lucide-shopping-basket"
             class="w-5 h-5"
@@ -66,7 +67,7 @@
       <span
           v-if="product"
           class="absolute -top-1.5 -right-1.5 min-w-5.5 h-5.5 px-1 rounded-full bg-[#B3261E] text-white text-[12px] font-semibold flex items-center justify-center">
-        {{ product.quantityInCart }}
+        {{ quantity }}
       </span>
     </div>
   </div>
@@ -74,8 +75,22 @@
 
 <script setup lang="ts">
 import type {CartItem} from '~/types/CartItem'
+import {useCartAddRequest} from '~/api/cart'
 
-defineProps<{
+const props = defineProps<{
   product: CartItem
 }>()
+
+const {productId, quantity, data} = useCartAddRequest(props.product.productId, props.product.quantityInCart)
+
+watch(data, (newData) => {
+  if (newData) {
+    props.product.quantityInCart = newData.selectedQuantity
+  }
+})
+
+const addToCart = () => {
+  productId.value = props.product.productId
+  quantity.value = props.product.quantityInCart + 1
+}
 </script>

@@ -32,6 +32,7 @@ export function useCatalogRequest(
     baseURL: config.public.apiBase as string,
     headers: { Authorization: `Bearer ${token()}` },
     query: queryBody,
+    default: () => [],
     onResponseError({ response }) {
       if (response.status === 401) {
         tokenCookie().value = null

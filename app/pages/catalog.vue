@@ -65,7 +65,7 @@ const goBack = () => router.back()
 
     <!-- Product grid -->
     <div class="px-4 pb-24 mt-4">
-      <div v-if="!pending && products!.length > 0" class="grid grid-cols-2 gap-4">
+      <div v-if="!pending && products.length > 0" class="grid grid-cols-2 gap-4">
         <ProductCard
             v-for="product in products"
             :key="product.productId"
@@ -80,7 +80,7 @@ const goBack = () => router.back()
       </div>
 
       <!-- Empty state -->
-      <div v-if="!pending && products!.length === 0" class="py-16 text-center">
+      <div v-if="!pending && products.length === 0" class="py-16 text-center">
         <UIcon name="i-heroicons-magnifying-glass" class="w-10 h-10 mx-auto text-gray-400"/>
         <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Товары не найдены</p>
       </div>

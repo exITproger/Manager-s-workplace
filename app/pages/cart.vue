@@ -76,9 +76,9 @@
               
               <UButton 
                 v-if="item.count === 1"
-                color="error" 
+                color="neutral" 
                 variant="ghost" 
-                class="p-0 min-w-0 h-auto w-6 h-6 text-red-500" 
+                class="p-0 min-w-0 h-auto w-6 h-6" 
                 @click="cart.removeFromCart(item.id)"
               >
                 <UIcon name="i-heroicons-trash" class="w-4 h-4" />
@@ -88,10 +88,10 @@
                 v-else
                 color="neutral" 
                 variant="ghost" 
-                class="p-0 min-w-0 h-auto w-6 h-6" 
+                class="p-0 min-w-0 h-auto w-6 h-6 " 
                 @click="cart.decrement(item.id)"
               >
-                <UIcon name="i-heroicons-minus" class="w-4 h-4" />
+                <UIcon name="i-heroicons-minus" class="w-4 h-4 " />
               </UButton>
 
               <span class="text-sm font-medium w-4 text-center text-black dark:text-white">{{ item.count }}</span>
@@ -100,7 +100,6 @@
                 color="neutral" 
                 variant="ghost" 
                 class="p-0 min-w-0 h-auto w-6 h-6"
-                :class="{ 'text-red-500': item.count >= Number(item.quantity) }"
                 @click="handleIncrement(item)"
               >
                 <UIcon name="i-heroicons-plus" class="w-4 h-4" />
@@ -119,7 +118,7 @@
     </div>
 
     <!-- Footer (К оформлению) -->
-    <div v-if="cart.items.length > 0" class="fixed bottom-16 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 p-4 z-40">
+    <div v-if="cart.items.length > 0" class="fixed bottom-16 left-0 right-0 p-4 z-40">
       <UButton
         color="neutral"
         variant="solid"

@@ -59,8 +59,7 @@
           <UInput
             v-model="form.name"
             placeholder="Отложить товар"
-            variant="outline"
-            class="w-full rounded-xl text-sm"
+            class="w-full rounded text-sm border border-gray-300 dark:border-gray-700"
           />
         </label>
 
@@ -72,8 +71,7 @@
           <UInput
             v-model="form.type"
             placeholder="Резервирование"
-            variant="outline"
-            class="w-full rounded-xl text-sm"
+            class="w-full rounded text-sm border border-gray-300 dark:border-gray-700"
           />
         </label>
 

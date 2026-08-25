@@ -1,4 +1,3 @@
-<!-- components/tasks/TaskCardOnPageTasks.vue -->
 <template>
   <div class="bg-[#E8DEF8] dark:bg-[#0F172B] p-4 rounded-lg mb-3 hover:shadow-md transition-shadow">
     <div class="flex items-center justify-between">
@@ -49,12 +48,22 @@
     </div>
 
     <!-- Модалка -->
-    <div v-if="showModal" class="fixed inset-0 z-[100] flex items-center justify-center">
-      <!-- Затемнение с блюром для всей страницы -->
-      <div class="fixed inset-0 bg-black/40 backdrop-blur-sm" @click="closeModal"></div>
+    <div 
+      v-if="showModal" 
+      class="fixed inset-0 z-[100] flex items-center justify-center"
+      @click.self="closeModal"
+    >
+      <!-- Затемнение с блюром -->
+      <div 
+        class="fixed inset-0 bg-black/40 backdrop-blur-sm" 
+        @click="closeModal"
+      ></div>
       
       <!-- Модальное окно -->
-      <div class="relative bg-white dark:bg-[#1a1a1a] rounded-2xl shadow-2xl p-6 max-w-[340px] w-full mx-4 text-center z-[101]">
+      <div 
+        class="relative bg-white dark:bg-[#1a1a1a] rounded-2xl shadow-2xl p-6 max-w-[340px] w-full mx-4 text-center z-[101]"
+        @click.stop
+      >
         <UIcon 
           :name="task.done ? 'i-heroicons-arrow-path' : 'i-heroicons-check-circle'" 
           class="w-12 h-12 text-[#8a5af0] mx-auto mb-3" 
@@ -66,10 +75,10 @@
           {{ task.done ? 'Задача будет снова в работе' : 'Задача будет отмечена как выполненная' }}
         </p>
         <div class="flex gap-3 justify-center">
-          <UButton color="gray" variant="ghost" @click="closeModal">
+          <UButton color="gray" variant="ghost" @click.stop="closeModal">
             Отмена
           </UButton>
-          <UButton color="primary" @click="confirmToggle">
+          <UButton color="primary" @click.stop="confirmToggle">
             {{ task.done ? 'Открыть' : 'Закрыть' }}
           </UButton>
         </div>
@@ -100,6 +109,8 @@ const closeModal = () => {
 
 const confirmToggle = () => {
   showModal.value = false
-  emit('toggle-check')
+  nextTick(() => {
+    emit('toggle-check')
+  })
 }
 </script>

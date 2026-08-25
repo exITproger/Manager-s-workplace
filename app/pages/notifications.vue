@@ -1,100 +1,5 @@
-<script setup lang="ts">
-import NotificationCard from '~/components/notifications/NotificationCard.vue'
-import {useMeRequest} from "~/api/me.ts";
-import {useNotificationsRequest} from "~/api/notifications.ts";
-
-const colorMode = useColorMode()
-
-const toggleTheme = () => {
-  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-}
-
-const {data: user} = await useMeRequest()
-const {data: notifications, pending} = await useNotificationsRequest(user.value?.id ?? undefined)
-
-const activeTab = ref<'my' | 'branch'>('my')
-
-// Тестовые данные для "Собственные"
-const myNotifications = [
-  {
-    id: 1,
-    title: 'Новая задача: Проверить остаток товара',
-    recipient: { name: 'Смирнова Е.С.', icon: null },
-    recipientId: user.value?.id,
-    date: new Date(),
-    isRead: false
-  },
-  {
-    id: 2,
-    title: 'Заказ №12134 готов к выдаче',
-    recipient: { name: 'Иванов И.И.', icon: null },
-    recipientId: user.value?.id,
-    date: new Date(Date.now() - 3600000),
-    isRead: true
-  },
-  {
-    id: 3,
-    title: 'Изменение статуса заказа №77777',
-    recipient: { name: 'Петров П.П.', icon: null },
-    recipientId: user.value?.id,
-    date: new Date(Date.now() - 7200000),
-    isRead: false
-  }
-]
-
-// Тестовые данные для "Уведомления филиала"
-const branchNotifications = [
-  {
-    id: 10,
-    title: 'Новый заказ в филиале №17',
-    recipient: { name: 'Магазин №17', icon: null },
-    recipientId: 'branch_17',
-    date: new Date(Date.now() - 1800000),
-    isRead: false
-  },
-  {
-    id: 11,
-    title: 'Поставка товара задерживается',
-    recipient: { name: 'Магазин №17', icon: null },
-    recipientId: 'branch_17',
-    date: new Date(Date.now() - 5400000),
-    isRead: true
-  },
-  {
-    id: 12,
-    title: 'Инвентаризация назначена на завтра',
-    recipient: { name: 'Магазин №17', icon: null },
-    recipientId: 'branch_17',
-    date: new Date(Date.now() - 10800000),
-    isRead: false
-  }
-]
-
-const filteredNotifications = computed(() => {
-  // Если API вернул данные, используем их + добавляем тестовые для демонстрации
-  if (notifications.value && notifications.value.length > 0) {
-    if (activeTab.value === 'my') {
-      const myFromApi = notifications.value.filter(n => n.recipientId === user.value?.id)
-      // Если в API есть свои, показываем их, иначе тестовые
-      return myFromApi.length > 0 ? myFromApi : myNotifications
-    } else {
-      const branchFromApi = notifications.value.filter(n => n.recipientId !== user.value?.id)
-      return branchFromApi.length > 0 ? branchFromApi : branchNotifications
-    }
-  }
-  
-  // Если API пустой или ещё не загрузился — показываем тестовые
-  if (activeTab.value === 'my') {
-    return myNotifications
-  } else {
-    return branchNotifications
-  }
-})
-</script>
-
 <template>
   <div class="min-h-screen bg-white dark:bg-[#0a0a0a] flex flex-col pb-20">
-    <!-- Шапка с кнопкой темы -->
     <div class="bg-white dark:bg-[#0a0a0a] px-4 py-3 flex justify-between items-center">
       <BackButton/>
       <UButton
@@ -109,7 +14,6 @@ const filteredNotifications = computed(() => {
       />
     </div>
 
-    <!-- вкладки Собственные / Уведомления филиала -->
     <div class="px-4 mt-3 flex-shrink-0 flex justify-center">
       <div class="flex border border-[#555555] dark:border-gray-600 rounded-full h-6 overflow-hidden max-w-[360px] w-full">
         <button
@@ -136,18 +40,85 @@ const filteredNotifications = computed(() => {
       </div>
     </div>
 
-    <!-- список уведомлений -->
     <div v-if="pending" class="flex-1 flex items-center justify-center">
       <span class="text-sm text-gray-500 dark:text-gray-400">Загрузка...</span>
     </div>
+    <div v-else-if="notifications.length === 0" class="flex-1 flex items-center justify-center">
+      <span class="text-sm text-gray-500 dark:text-gray-400">Нет уведомлений</span>
+    </div>
     <div v-else class="px-4 mt-4 space-y-4 flex-1 overflow-y-auto pb-40" style="padding-top: 16px;">
-      <NotificationCard
-        v-for="notification in filteredNotifications"
+      <div
+        v-for="notification in notifications"
         :key="notification.id"
-        :notification="notification"
-      />
+        class="relative bg-[#FEF7FF] dark:bg-[#0F172B] rounded-2xl shadow-sm h-[95px] overflow-visible border border-gray-200 dark:border-gray-700"
+      >
+        <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10">
+          <div class="w-9 h-9 rounded-full bg-[#E8DEF8] dark:bg-[#1e293b] flex items-center justify-center">
+            <span class="text-[#70439e] dark:text-white font-medium text-sm">{{ notification.recipient?.name?.charAt(0) || 'Ф' }}</span>
+          </div>
+        </div>
+        <div class="absolute left-[60px] top-1/2 -translate-y-1/2 z-10" style="width: calc(100% - 115px);">
+          <span class="font-semibold text-sm text-black dark:text-white block leading-tight">{{ notification.title }}</span>
+          <span class="text-xs text-gray-400 dark:text-gray-500 block leading-tight mt-1">
+            {{ notification.date ? new Date(notification.date).toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'}) : '' }}
+          </span>
+        </div>
+        <div
+          v-if="!notification.isRead"
+          class="absolute -top-1 -right-0.5 w-3.5 h-3.5 rounded-full"
+          style="z-index: 50; background-color: #B3261E; box-shadow: 0 0 0 2px #ffffff;"
+        >
+        </div>
+      </div>
     </div>
 
     <BottomNav/>
   </div>
 </template>
+
+<script setup lang="ts">
+import type { NotificationListItem } from '~/types/NotificationListItem'
+
+const colorMode = useColorMode()
+
+const toggleTheme = () => {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
+
+const activeTab = ref<'my' | 'branch'>('my')
+const notifications = ref<NotificationListItem[]>([])
+const pending = ref(false)
+
+// Функция для загрузки уведомлений
+const fetchNotifications = async () => {
+  pending.value = true
+  try {
+    let url = '/api/notifications'
+    
+    // Добавляем параметр recipient_id в зависимости от выбранной вкладки
+    if (activeTab.value === 'my') {
+      url += '?recipient_id=1' // ID текущего пользователя
+    } else {
+      url += '?recipient_id=0' // Филиальные уведомления
+    }
+    
+    const response = await $fetch<NotificationListItem[]>(url)
+    notifications.value = response
+  } catch (error) {
+    console.error('Ошибка загрузки уведомлений:', error)
+    notifications.value = []
+  } finally {
+    pending.value = false
+  }
+}
+
+// Следим за изменением активной вкладки и перезагружаем данные
+watch(activeTab, () => {
+  fetchNotifications()
+})
+
+// Загружаем данные при монтировании компонента
+onMounted(() => {
+  fetchNotifications()
+})
+</script>

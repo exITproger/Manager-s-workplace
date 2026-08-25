@@ -1,7 +1,6 @@
-<!-- pages/tasks.vue -->
 <template>
   <div class="min-h-screen bg-white dark:bg-[#0a0a0a] pb-24">
-    <div class="max-w-7xl w-full mx-auto p-5">
+    <div class="w-full p-5">
       <!-- Шапка -->
       <div class="flex items-center justify-between mb-[18px]">
         <UButton
@@ -163,24 +162,34 @@
       <!-- Сегодня -->
       <div class="text-base font-bold text-black dark:text-white mb-3">Сегодня</div>
 
-      <!-- Карточки задач через компонент -->
-      <TaskCardOnPageTasks
-        v-for="(task, idx) in todayTasks"
+      <!-- Карточки задач -->
+      <div 
+        v-for="(task, idx) in todayTasks" 
         :key="'today-' + idx"
-        :task="task"
-        @toggle-check="toggleCheck(task)"
-      />
+        class="cursor-pointer"
+        @click="openTask(task.id)"
+      >
+        <TaskCardOnPageTasks
+          :task="task"
+          @toggle-check="toggleCheck(task)"
+        />
+      </div>
 
       <!-- Завтра -->
       <div class="text-base font-bold text-black dark:text-white mb-3 mt-6">Завтра</div>
 
-      <!-- Карточки задач через компонент -->
-      <TaskCardOnPageTasks
-        v-for="(task, idx) in tomorrowTasks"
+      <!-- Карточки задач -->
+      <div 
+        v-for="(task, idx) in tomorrowTasks" 
         :key="'tomorrow-' + idx"
-        :task="task"
-        @toggle-check="toggleCheck(task)"
-      />
+        class="cursor-pointer"
+        @click="openTask(task.id)"
+      >
+        <TaskCardOnPageTasks
+          :task="task"
+          @toggle-check="toggleCheck(task)"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -218,14 +227,18 @@ const priorityItems = [
 ]
 
 const todayTasks = reactive([
-  { type: 'Выдача заказа', number: '1947', name: 'Выдать заказ №12134', status: 'Выполнено', execLabel: 'Средний', time: 'Сегодня, 15:00', sub: 'создана сегодня, 10:12', done: true },
-  { type: 'Резервирование', number: '19857', name: 'Отложить iPhone 16 Pro Max', status: 'В работе', execLabel: 'Срочный', time: 'Сегодня, 17:00', sub: 'создана сегодня, 14:12', done: false }
+  { id: 1, type: 'Выдача заказа', number: '1947', name: 'Выдать заказ №12134', status: 'Выполнено', execLabel: 'Средний', time: 'Сегодня, 15:00', sub: 'создана сегодня, 10:12', done: true },
+  { id: 2, type: 'Резервирование', number: '19857', name: 'Отложить iPhone 16 Pro Max', status: 'В работе', execLabel: 'Срочный', time: 'Сегодня, 17:00', sub: 'создана сегодня, 14:12', done: false }
 ])
 
 const tomorrowTasks = reactive([
-  { type: 'Инвентаризация', number: '77777', name: 'Пересчитать товар арт. 12784568', status: 'В работе', execLabel: 'Низкий', time: 'Завтра, 09:00', sub: 'создана сегодня, 08:00', done: false },
-  { type: 'Инвентаризация', number: '77777', name: 'Пересчитать товар арт. 12784568', status: 'Новая', execLabel: 'Низкий', time: 'Завтра, 09:00', sub: 'создана сегодня, 08:00', done: false }
+  { id: 3, type: 'Инвентаризация', number: '77777', name: 'Пересчитать товар арт. 12784568', status: 'В работе', execLabel: 'Низкий', time: 'Завтра, 09:00', sub: 'создана сегодня, 08:00', done: false },
+  { id: 4, type: 'Инвентаризация', number: '77777', name: 'Пересчитать товар арт. 12784568', status: 'Новая', execLabel: 'Низкий', time: 'Завтра, 09:00', sub: 'создана сегодня, 08:00', done: false }
 ])
+
+const openTask = (taskId) => {
+  router.push(`/task/${taskId}`)
+}
 
 function selectStatus(item) {
   selectedStatus.value = item

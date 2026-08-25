@@ -1,10 +1,13 @@
-<!-- components/tasks/TaskCard.vue -->
 <template>
   <div class="bg-white dark:bg-gray-900 shadow overflow-hidden rounded-xl">
-    <div class="px-4 py-3 flex justify-between items-center" style="background-color: rgba(103, 80, 164, 1);">
+    <div 
+      class="px-4 py-3 flex justify-between items-center cursor-pointer"
+      style="background-color: rgba(103, 80, 164, 1);"
+      @click="openTask"
+    >
       <span class="text-white font-medium text-sm">{{ task.title }}</span>
       <div 
-        class="w-6 h-6 border-2 border-white rounded flex items-center justify-center cursor-pointer bg-white hover:bg-gray-50 transition-colors select-none relative" 
+        class="w-6 h-6 border-2 border-white rounded flex items-center justify-center bg-white hover:bg-gray-50 transition-colors select-none relative" 
         @click.stop="openModal"
       >
         <span v-if="task.done" class="text-[#8a5af0] text-xl font-extrabold leading-none select-none">✓</span>
@@ -29,12 +32,22 @@
     </div>
 
     <!-- Модалка -->
-    <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center">
+    <div 
+      v-if="showModal" 
+      class="fixed inset-0 z-50 flex items-center justify-center"
+      @click.self="closeModal"
+    >
       <!-- Затемнение с блюром -->
-      <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="closeModal"></div>
+      <div 
+        class="absolute inset-0 bg-black/40 backdrop-blur-sm" 
+        @click="closeModal"
+      ></div>
       
       <!-- Модальное окно -->
-      <div class="relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6 max-w-[340px] w-full mx-4 text-center">
+      <div 
+        class="relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6 max-w-[340px] w-full mx-4 text-center"
+        @click.stop
+      >
         <UIcon 
           :name="task.done ? 'i-heroicons-arrow-path' : 'i-heroicons-check-circle'" 
           class="w-12 h-12 text-[#8a5af0] mx-auto mb-3" 
@@ -46,10 +59,10 @@
           {{ task.done ? 'Задача будет снова в работе' : 'Задача будет отмечена как выполненная' }}
         </p>
         <div class="flex gap-3 justify-center">
-          <UButton color="gray" variant="ghost" @click="closeModal">
+          <UButton color="gray" variant="ghost" @click.stop="closeModal">
             Отмена
           </UButton>
-          <UButton color="primary" @click="confirmToggle">
+          <UButton color="primary" @click.stop="confirmToggle">
             {{ task.done ? 'Открыть' : 'Закрыть' }}
           </UButton>
         </div>
@@ -66,7 +79,7 @@ defineProps({
   }
 })
 
-const emit = defineEmits(['toggle-done'])
+const emit = defineEmits(['toggle-done', 'open-task'])
 
 const showModal = ref(false)
 
@@ -80,6 +93,13 @@ const closeModal = () => {
 
 const confirmToggle = () => {
   showModal.value = false
-  emit('toggle-done')
+  // Используем nextTick чтобы дождаться обновления DOM
+  nextTick(() => {
+    emit('toggle-done')
+  })
+}
+
+const openTask = () => {
+  emit('open-task')
 }
 </script>

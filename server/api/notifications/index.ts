@@ -1,4 +1,4 @@
-import type {NotificationListItem} from "~/types/NotificationListItem.ts";
+import type { NotificationListItem } from "~/types/NotificationListItem";
 
 const mockNotifications: NotificationListItem[] = [
   // ===== ЛИЧНЫЕ (для пользователя с id = 1) =====
@@ -26,7 +26,6 @@ const mockNotifications: NotificationListItem[] = [
     date: new Date(Date.now() - 7200000),
     isRead: false
   },
-
   // ===== ФИЛИАЛЬНЫЕ (для всех, recipientId = 0) =====
   {
     id: 10,

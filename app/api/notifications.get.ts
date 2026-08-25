@@ -1,10 +1,9 @@
 import type {NotificationListItem} from "~/types/NotificationListItem.ts";
 
 const mockNotifications: NotificationListItem[] = [
-  // ===== ЛИЧНЫЕ (для пользователя с id = 1) =====
   {
     id: 1,
-    title: 'Новая задача: Проверить остаток товара',
+    title: 'Личное: Проверить остаток товара',
     recipient: { name: 'Смирнова Е.С.', icon: null },
     recipientId: 1,
     date: new Date(),
@@ -12,7 +11,7 @@ const mockNotifications: NotificationListItem[] = [
   },
   {
     id: 2,
-    title: 'Заказ №12134 готов к выдаче',
+    title: 'Личное: Заказ №12134 готов',
     recipient: { name: 'Смирнова Е.С.', icon: null },
     recipientId: 1,
     date: new Date(Date.now() - 3600000),
@@ -20,17 +19,15 @@ const mockNotifications: NotificationListItem[] = [
   },
   {
     id: 3,
-    title: 'Изменение статуса заказа №77777',
+    title: 'Личное: Изменение статуса заказа',
     recipient: { name: 'Смирнова Е.С.', icon: null },
     recipientId: 1,
     date: new Date(Date.now() - 7200000),
     isRead: false
   },
-
-  // ===== ФИЛИАЛЬНЫЕ (для всех, recipientId = 0) =====
   {
     id: 10,
-    title: 'Новый заказ в филиале №17',
+    title: 'Филиал: Новый заказ в филиале №17',
     recipient: { name: 'Филиал №17', icon: null },
     recipientId: 0,
     date: new Date(Date.now() - 1800000),
@@ -38,7 +35,7 @@ const mockNotifications: NotificationListItem[] = [
   },
   {
     id: 11,
-    title: 'Поставка товара задерживается на 2 дня',
+    title: 'Филиал: Поставка задерживается',
     recipient: { name: 'Филиал №17', icon: null },
     recipientId: 0,
     date: new Date(Date.now() - 5400000),
@@ -46,7 +43,7 @@ const mockNotifications: NotificationListItem[] = [
   },
   {
     id: 12,
-    title: 'Инвентаризация назначена на завтра в 09:00',
+    title: 'Филиал: Инвентаризация завтра',
     recipient: { name: 'Филиал №17', icon: null },
     recipientId: 0,
     date: new Date(Date.now() - 10800000),
@@ -58,11 +55,9 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
   const recipientId = query.recipient_id ? Number(query.recipient_id) : undefined
 
-  // Если передан recipient_id — возвращаем личные + филиальные
   if (recipientId) {
     return mockNotifications.filter(n => n.recipientId === recipientId || n.recipientId === 0)
   }
 
-  // Если не передан — возвращаем все
   return mockNotifications
 })

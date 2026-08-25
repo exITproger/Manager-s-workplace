@@ -26,11 +26,25 @@
       </div>
     </div>
 
+    <!-- Loading -->
+    <div v-if="pending" class="px-4 py-16 text-center">
+      <UIcon name="i-heroicons-arrow-path" class="w-8 h-8 mx-auto text-gray-400 animate-spin" />
+      <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Загрузка...</p>
+    </div>
+
     <!-- Product -->
-    <div v-if="product" class="px-4 pb-24 mt-6">
+    <div v-else-if="product" class="px-4 pb-24 mt-6">
       <!-- Image -->
       <div class="w-full aspect-square bg-gray-100 dark:bg-gray-800 overflow-hidden">
-        <img :src="product.image" :alt="product.name" class="w-full h-full object-cover" />
+        <img
+          v-if="product.images.length > 0"
+          :src="product.images[0]"
+          :alt="product.name"
+          class="w-full h-full object-cover"
+        />
+        <div v-else class="w-full h-full flex items-center justify-center">
+          <UIcon name="i-lucide-image" class="w-16 h-16 text-gray-300 dark:text-gray-600" />
+        </div>
       </div>
 
       <!-- Product information -->
@@ -94,7 +108,7 @@
               color="neutral"
               variant="ghost"
               class="w-8 h-9 min-w-0 p-0 rounded-none text-white hover:bg-[#70439e] flex items-center justify-center"
-              :class="{ 'text-white/50': cartItem.count >= Number(cartItem.quantity) }"
+              :class="{ 'text-white/50': cartItem.count >= product.quantity }"
               aria-label="Увеличить количество"
               @click="handleIncrement"
             >
@@ -172,35 +186,28 @@
 
           <div class="mt-6 grid grid-cols-[minmax(110px,35%)_1fr] gap-4">
             <span class="text-sm text-gray-500 dark:text-gray-400">Артикул</span>
-            <span class="text-sm font-semibold text-[#6750A4] dark:text-white">{{ product?.id }}</span>
+            <span class="text-sm font-semibold text-[#6750A4] dark:text-white">{{ product?.productId }}</span>
           </div>
 
-          <h2 class="mt-8 text-base font-semibold text-black dark:text-white">Основная информация</h2>
-
-          <div class="mt-4 space-y-4">
-            <div class="grid grid-cols-[minmax(110px,35%)_1fr] gap-4">
-              <span class="text-sm text-gray-500 dark:text-gray-400">Категория</span>
-              <span class="text-sm text-black dark:text-white">{{ product?.category }}</span>
-            </div>
-
-            <div class="grid grid-cols-[minmax(110px,35%)_1fr] gap-4">
-              <span class="text-sm text-gray-500 dark:text-gray-400">Описание</span>
-              <span class="text-sm text-black dark:text-white">{{ product?.description }}</span>
-            </div>
+          <div class="mt-4 grid grid-cols-[minmax(110px,35%)_1fr] gap-4">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Описание</span>
+            <span class="text-sm text-black dark:text-white">{{ product?.description }}</span>
           </div>
 
-          <h2 class="mt-8 text-base font-semibold text-black dark:text-white">Дополнительная информация</h2>
+          <template v-for="characteristic in product?.characteristics" :key="characteristic.name">
+            <h2 class="mt-8 text-base font-semibold text-black dark:text-white">{{ characteristic.name }}</h2>
 
-          <div class="mt-4 space-y-4">
-            <div
-              v-for="characteristic in product?.characteristics"
-              :key="characteristic.name"
-              class="grid grid-cols-[minmax(110px,35%)_1fr] gap-4"
-            >
-              <span class="text-sm text-gray-500 dark:text-gray-400">{{ characteristic.name }}</span>
-              <span class="text-sm text-black dark:text-white">{{ characteristic.value }}</span>
+            <div class="mt-4 space-y-4">
+              <div
+                v-for="prop in characteristic.properties"
+                :key="prop.title"
+                class="grid grid-cols-[minmax(110px,35%)_1fr] gap-4"
+              >
+                <span class="text-sm text-gray-500 dark:text-gray-400">{{ prop.title }}</span>
+                <span class="text-sm text-black dark:text-white">{{ prop.value }}</span>
+              </div>
             </div>
-          </div>
+          </template>
         </div>
       </template>
     </UDrawer>
@@ -208,78 +215,16 @@
 </template>
 
 <script setup lang="ts">
-import { products } from '~/data/products'
-import { useToast } from '#imports'
+import {useProductRequest} from "~/api/product.ts";
 
 const route = useRoute()
 const router = useRouter()
 const colorMode = useColorMode()
-const cart = useCartStore()
-const toast = useToast()
 
-const product = computed(() => {
-  return products.find((item) => item.id === route.params.id)
-})
-
-const cartItem = computed(() => {
-  if (!product.value) {
-    return undefined
-  }
-
-  return cart.items.find(item => item.id === product.value!.id)
-})
+const { data: product, pending } = await useProductRequest(Number(route.params.id))
 
 const toggleTheme = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-}
-
-const addToCartHandler = () => {
-  if (!product.value) return
-  cart.addToCart(product.value)
-}
-
-const handleIncrement = () => {
-  if (!cartItem.value) {
-    return
-  }
-
-  const result = cart.increment(cartItem.value.id)
-
-  if (!result.success) {
-    toast.add({
-      title: 'Предупреждение',
-      description: 'Недостаточное количество товара на складе!',
-      color: 'error',
-      icon: 'i-heroicons-exclamation-circle'
-    })
-
-    return
-  }
-
-  if (cartItem.value.count === Number(cartItem.value.quantity)) {
-    toast.add({
-      title: 'Предупреждение',
-      description: 'Выбран последний товар!',
-      color: 'warning',
-      icon: 'i-heroicons-exclamation-triangle'
-    })
-  }
-}
-
-const handleDecrement = () => {
-  if (!cartItem.value) {
-    return
-  }
-
-  cart.decrement(cartItem.value.id)
-}
-
-const handleRemove = () => {
-  if (!cartItem.value) {
-    return
-  }
-
-  cart.removeFromCart(cartItem.value.id)
 }
 
 const showCharacteristics = ref(false)

@@ -10,10 +10,14 @@
     <!-- Product image -->
     <div class="h-[200px] bg-gray-100 dark:bg-gray-800 overflow-hidden">
       <img
-        :src="product.image"
+        v-if="product.images.length > 0"
+        :src="product.images[0]"
         :alt="product.name"
         class="w-full h-full object-cover"
       />
+      <div v-else class="w-full h-full flex items-center justify-center">
+        <UIcon name="i-lucide-image" class="w-12 h-12 text-gray-300 dark:text-gray-600" />
+      </div>
     </div>
 
     <!-- Product information -->
@@ -49,7 +53,7 @@
 
       <!-- Product ID -->
       <div class="text-xs text-black dark:text-white">
-        {{ product.id }}
+        {{ product.productId }}
       </div>
     </div>
 
@@ -80,22 +84,14 @@
 </template>
 
 <script setup lang="ts">
-import type { Product } from '~/data/products'
-import { useCartStore } from '@/stores/cart'
+import type { CartItem } from '~/types/CartItem'
 
-const props = defineProps<{
-  product: Product
+defineProps<{
+  product: CartItem
 }>()
 
-const emit = defineEmits<{
-  select: [product: Product]
-  'add-to-cart': [product: Product]
+defineEmits<{
+  select: [product: CartItem]
+  'add-to-cart': [product: CartItem]
 }>()
-
-const cart = useCartStore()
-
-const cartItem = computed(() => {
-  return cart.items.find(item => item.id === props.product.id)
-})
-
 </script>

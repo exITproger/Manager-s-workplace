@@ -47,18 +47,23 @@
 
     <!-- Product grid -->
     <div class="px-4 pb-24 mt-4">
-      <div class="grid grid-cols-2 gap-4">
+      <div v-if="!pending && products.length > 0" class="grid grid-cols-2 gap-4">
         <ProductCard
-          v-for="product in filteredProducts"
-          :key="product.id"
+          v-for="product in products"
+          :key="product.productId"
           :product="product"
           @select="openProduct"
-          @add-to-cart="addToCartHandler"
         />
       </div>
 
+      <!-- Loading -->
+      <div v-if="pending" class="py-16 text-center">
+        <UIcon name="i-heroicons-arrow-path" class="w-8 h-8 mx-auto text-gray-400 animate-spin" />
+        <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Загрузка...</p>
+      </div>
+
       <!-- Empty state -->
-      <div v-if="filteredProducts.length === 0" class="py-16 text-center">
+      <div v-if="!pending && products.length === 0" class="py-16 text-center">
         <UIcon name="i-heroicons-magnifying-glass" class="w-10 h-10 mx-auto text-gray-400" />
         <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Товары не найдены</p>
       </div>
@@ -67,41 +72,22 @@
 </template>
 
 <script setup lang="ts">
-import { products } from '~/data/products'
-import type { Product } from '~/data/products'
-import { useCartStore } from '@/stores/cart'
+import type { CartItem } from '~/types/CartItem'
+import {useCatalogRequest} from "~/api/catalog.ts";
 
 const router = useRouter()
 const colorMode = useColorMode()
-const cart = useCartStore() // Инициализируем стор
 
 const searchQuery = ref('')
 
-const filteredProducts = computed(() => {
-  const query = searchQuery.value.trim().toLowerCase()
-
-  if (!query) {
-    return products
-  }
-
-  return products.filter((product) => {
-    return (
-      product.name.toLowerCase().includes(query) ||
-      product.id.toLowerCase().includes(query)
-    )
-  })
-})
+const { data: products, pending } = await useCatalogRequest()
 
 const toggleTheme = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 }
 
-const addToCartHandler = (product: Product) => {
-  cart.addToCart(product) // Метод из стора
-}
-
-const openProduct = (product: Product) => {
-  router.push(`/products/${product.id}`)
+const openProduct = (product: CartItem) => {
+  router.push('/product/' + product.productId)
 }
 
 const goBack = () => router.back()

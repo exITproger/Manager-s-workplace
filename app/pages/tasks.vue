@@ -18,7 +18,6 @@
           :class="activeTab === 'my' ? 'bg-[#e8dff0] dark:bg-[#1e293b] text-[#4a3a5a] dark:text-white' : 'bg-gray-50 dark:bg-[#0a0a0a] text-[#6a5a7a] dark:text-gray-400'"
           @click="activeTab = 'my'"
         >
-          <span v-if="activeTab === 'my'" class="text-[#8a5af0] dark:text-white">✓</span>
           Мои <span class="text-[9px] md:text-[10px] font-medium">· 8</span>
         </UButton>
         <div class="w-px bg-[#8a5af0] dark:bg-[#555555]"></div>
@@ -29,7 +28,6 @@
           :class="activeTab === 'branch' ? 'bg-[#e8dff0] dark:bg-[#1e293b] text-[#4a3a5a] dark:text-white' : 'bg-gray-50 dark:bg-[#0a0a0a] text-[#6a5a7a] dark:text-gray-400'"
           @click="activeTab = 'branch'"
         >
-          <span v-if="activeTab === 'branch'" class="text-[#8a5af0] dark:text-white">✓</span>
           <span class="whitespace-nowrap">Филиала <span class="text-[9px] md:text-[10px] font-medium">· 15</span></span>
         </UButton>
       </div>

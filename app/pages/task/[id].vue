@@ -235,7 +235,7 @@ const route = useRoute()
 const router = useRouter()
 const colorMode = useColorMode()
 
-const openTabs = ref(['details'])
+const openTabs = ref([]) // Убрал 'details' из начального массива
 const newComment = ref('')
 const showStatusModal = ref(false)
 

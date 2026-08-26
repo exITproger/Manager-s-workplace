@@ -2,7 +2,9 @@
   <div
       class="relative bg-[#ECE6F0] dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden cursor-pointer transition-transform active:scale-[0.99]"
       role="button"
-      tabindex="0">
+      tabindex="0"
+      @click="emit('select', product)">
+      
     <!-- Product image -->
     <div class="h-[200px] bg-gray-100 dark:bg-gray-800 overflow-hidden">
       <img
@@ -65,9 +67,9 @@
       </UButton>
 
       <span
-          v-if="quantity > 0"
+          v-if="cartQuantity > 0"
           class="absolute -top-1.5 -right-1.5 min-w-5.5 h-5.5 px-1 rounded-full bg-[#B3261E] text-white text-[12px] font-semibold flex items-center justify-center">
-        {{ quantity }}
+        {{ cartQuantity }}
       </span>
     </div>
   </div>
@@ -75,22 +77,42 @@
 
 <script setup lang="ts">
 import type {CartItem} from '~/types/CartItem'
-import {useCartAddRequest} from '~/api/cart'
+import {token} from '~/composables/useAuth'
 
 const props = defineProps<{
   product: CartItem
 }>()
 
-const {productId, quantity, data} = useCartAddRequest(props.product.productId, props.product.quantityInCart)
+const cartQuantity = ref(props.product.quantityInCart ?? 0)
 
-watch(data, (newData) => {
-  if (newData) {
-    props.product.quantityInCart = newData.selectedQuantity
-  }
-})
+const addToCart = async () => {
+  const config = useRuntimeConfig()
 
-const addToCart = () => {
-  productId.value = props.product.productId
-  quantity.value = props.product.quantityInCart + 1
+  const response = await $fetch<{ productId: number; selectedQuantity: number }>(
+    `/cart/${props.product.productId}/${cartQuantity.value + 1}`,
+    {
+      method: 'POST',
+      baseURL: config.public.apiBase as string,
+      headers: {
+        Authorization: `Bearer ${token()}`
+      }
+    }
+  )
+
+  cartQuantity.value = response.selectedQuantity
+  props.product.quantityInCart = response.selectedQuantity
+
+  await refreshNuxtData('cart')
 }
+
+watch(
+  () => props.product.quantityInCart,
+  (value) => {
+    cartQuantity.value = value ?? 0
+  }
+)
+
+const emit = defineEmits<{
+  select: [product: CartItem]
+}>()
 </script>

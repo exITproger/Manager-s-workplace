@@ -1,24 +1,3 @@
-<script setup lang="ts">
-import type {CartItem} from '~/types/CartItem'
-import {useCatalogRequest} from "~/api/catalog.ts";
-
-const router = useRouter()
-const colorMode = useColorMode()
-
-const searchQuery = ref('')
-
-const {data: products, pending} = useCatalogRequest({productName: searchQuery})
-
-const toggleTheme = () => {
-  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-}
-
-const openProduct = (product: CartItem) => {
-  router.push('/product/' + product.productId)
-}
-
-const goBack = () => router.back()
-</script>
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-950">
     <!-- Header -->
@@ -79,3 +58,44 @@ input {
   box-shadow: none !important;
 }
 </style>
+
+<script setup lang="ts">
+import type {CartItem} from '~/types/CartItem'
+import {useCatalogRequest} from "~/api/catalog.ts";
+import {useCartRequest} from "~/api/cart";
+
+const router = useRouter()
+const colorMode = useColorMode()
+
+const searchQuery = ref('')
+
+const {data: products, pending} = useCatalogRequest({
+  productName: searchQuery
+})
+
+const {data: cart} = useCartRequest()
+
+const syncCartQuantities = () => {
+  if (!products.value) return
+
+  for (const product of products.value) {
+    const cartItem = cart.value?.deferredStocks?.find(
+      item => item.productId === product.productId
+    )
+
+    product.quantityInCart = cartItem?.quantityInCart ?? 0
+  }
+}
+
+watch([products, cart], syncCartQuantities, {immediate: true})
+
+const toggleTheme = () => {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
+
+const openProduct = (product: CartItem) => {
+  router.push('/product/' + product.productId)
+}
+
+const goBack = () => router.back()
+</script>

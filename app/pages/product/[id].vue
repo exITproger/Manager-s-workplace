@@ -38,7 +38,9 @@
       <div class="w-full aspect-square bg-gray-100 dark:bg-gray-800 overflow-hidden">
         <img
           v-if="product.images.length > 0"
-          :src="product.images[0]"
+          :src="product.images[0]!.startsWith('/') || product.images[0]!.startsWith('http')
+            ? product.images[0]
+            : `/${product.images[0]}`"
           :alt="product.name"
           class="w-full h-full object-cover"
         />
@@ -215,19 +217,89 @@
 </template>
 
 <script setup lang="ts">
-import {useProductRequest} from "~/api/product.ts";
+import {useProductRequest} from '~/api/product.ts'
+import {useCartRequest} from '~/api/cart'
+import {token} from '~/composables/useAuth'
 
 const route = useRoute()
 const router = useRouter()
 const colorMode = useColorMode()
 
-const { data: product, pending } = await useProductRequest(Number(route.params.id))
+const productId = Number(route.params.id)
+
+const {data: product, pending} = await useProductRequest(productId)
+const {data: cart} = useCartRequest()
+
+const showCharacteristics = ref(false)
+const currentQuantity = ref(0)
+
+const cartItem = computed(() =>
+  currentQuantity.value > 0
+    ? {count: currentQuantity.value}
+    : null
+)
+
+const existingCartItem = computed(() =>
+  cart.value?.deferredStocks?.find(
+    item => item.productId === productId
+  )
+)
+
+watch(
+  existingCartItem,
+  (item) => {
+    currentQuantity.value = item?.quantityInCart ?? 0
+  },
+  {immediate: true}
+)
+
+const updateCart = async (newQuantity: number) => {
+  const config = useRuntimeConfig()
+
+  const response = await $fetch<{ productId: number; selectedQuantity: number }>(
+    `/cart/${productId}/${newQuantity}`,
+    {
+      method: 'POST',
+      baseURL: config.public.apiBase as string,
+      headers: {
+        Authorization: `Bearer ${token()}`
+      }
+    }
+  )
+
+  currentQuantity.value = response.selectedQuantity
+
+  // Keep the shared cart state in sync for the rest of the app.
+  await refreshNuxtData('cart')
+}
+
+const addToCartHandler = async () => {
+  await updateCart(1)
+}
+
+const handleIncrement = async () => {
+  if (!product.value) return
+  if (currentQuantity.value >= product.value.quantity) return
+
+  await updateCart(currentQuantity.value + 1)
+}
+
+const handleDecrement = async () => {
+  if (currentQuantity.value <= 1) {
+    await handleRemove()
+    return
+  }
+
+  await updateCart(currentQuantity.value - 1)
+}
+
+const handleRemove = async () => {
+  await updateCart(0)
+}
 
 const toggleTheme = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 }
-
-const showCharacteristics = ref(false)
 
 const goBack = () => {
   router.back()

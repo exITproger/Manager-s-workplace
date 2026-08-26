@@ -7,6 +7,7 @@ import OrderSuccessModal from '~/components/OrderSuccessModal.vue'
 
 const router = useRouter()
 const colorMode = useColorMode()
+const toast = useToast()
 
 const {data: cartData} = await useCartRequest()
 
@@ -55,8 +56,29 @@ const toggleTheme = () => {
 
 const handleIncrement = (item: CartItem) => {
   const req = itemRequestMap.get(item.productId)
-  if (req) {
-    req.quantity.value = item.quantityInCart + 1
+  if (!req) return
+
+  // Проверяем, если текущее количество + 1 больше доступного
+  if (item.quantityInCart + 1 > item.quantity) {
+    toast.add({
+      title: 'Ошибка',
+      description: 'Недостаточное количество товара на складе!',
+      color: 'error',
+      icon: 'i-heroicons-exclamation-circle'
+    })
+    return
+  }
+
+  req.quantity.value = item.quantityInCart + 1
+
+  // Если выбрали последний товар (Оранжевый тост)
+  if (item.quantityInCart + 1 === item.quantity) {
+    toast.add({
+      title: 'Внимание',
+      description: `Выбран последний товар "${item.name}"!`,
+      color: 'warning',
+      icon: 'i-heroicons-exclamation-triangle'
+    })
   }
 }
 
@@ -71,6 +93,12 @@ const handleRemove = (item: CartItem) => {
   const req = itemRequestMap.get(item.productId)
   if (req) {
     req.quantity.value = 0
+    toast.add({
+      title: 'Удалено',
+      description: `Товар "${item.name}" удален из корзины`,
+      color: 'error',
+      icon: 'i-heroicons-x-circle'
+    })
   }
 }
 
@@ -86,6 +114,13 @@ const handleOrderSubmitted = (orderData: any) => {
 
   items.value = []
   showOrderSuccess.value = true
+  
+  toast.add({
+    title: 'Успешно',
+    description: 'Заказ успешно оформлен!',
+    color: 'success',
+    icon: 'i-heroicons-check-circle'
+  })
 }
 
 const handleGoBackToProducts = () => {
@@ -147,6 +182,13 @@ const handleGoBackToProducts = () => {
           <div class="flex items-center gap-1.5">
             <UIcon name="i-lucide-inbox" class="w-5 h-5 text-black dark:text-gray-400 shrink-0"/>
             <span class="text-sm text-black dark:text-white">{{ item.quantity }} шт</span>
+            <!-- Индикатор остатка -->
+            <span 
+              v-if="item.quantityInCart === item.quantity" 
+              class="text-xs text-orange-500 dark:text-orange-400 font-medium ml-1"
+            >
+              (последний)
+            </span>
           </div>
 
           <!-- Controls (Плюс/Минус/Корзина) и итоговая цена -->
@@ -247,4 +289,4 @@ input {
   outline-style: none !important;
   box-shadow: none !important;
 }
-</style>  
+</style>

@@ -230,15 +230,15 @@ const form = useState('create-task-draft', () => ({
 }))
 
 const executorOptions = [
-  { label: 'Alex Johnson', value: 'alex-johnson' },
-  { label: 'Maria Smith', value: 'maria-smith' },
-  { label: 'David Lee', value: 'david-lee' }
+  { label: 'Иванов И.И.', value: 'bulgakov-i-i' },
+  { label: 'Смирнова А.Б.', value: 'smirnova-a-b' },
+  { label: 'Булгаков М.А.', value: 'bulgakov-m-a' }
 ]
 
 const branchOptions = [
-  { label: 'Main branch', value: 'main' },
-  { label: 'North branch', value: 'north' },
-  { label: 'South branch', value: 'south' }
+  { label: 'Магазин №17, Центральный', value: 'main' },
+  { label: 'Магазин №18, Северный', value: 'north' },
+  { label: 'Магазин №19, Южный', value: 'south' }
 ]
 
 const formattedDate = computed(() => {
@@ -288,17 +288,17 @@ function assignProduct() {
 }
 
 function createTask() {
-  console.log('Create task', { ...form })
+  console.log('Create task', { ...form.value })
 
   toast.add({
-    title: 'Task created',
-    description: 'The task was created successfully.',
+    title: 'Задача успешно создана!',
+    description: 'Перейти к созданной задаче?',
     color: 'success',
     icon: 'i-heroicons-check-circle',
     duration: 0,
     actions: [
       {
-        label: 'View task',
+        label: 'Перейти',
         color: 'primary',
         variant: 'solid',
         onClick: () => {
@@ -307,7 +307,7 @@ function createTask() {
       },
 
       {
-        label: 'Cancel',
+        label: 'Отмена',
         color: 'neutral',
         variant: 'outline'
       }
@@ -319,26 +319,26 @@ function createTask() {
 
 function requestCancel() {
   toast.add({
-    title: 'Cancel task?',
-    description: 'Your entered information will be lost.',
+    title: 'Отмена',
+    description: 'Отменить создание задачи?',
     color: 'warning',
     icon: 'i-heroicons-question-mark-circle',
     duration: 0,
     actions: [
       {
-        label: 'Discard',
+        label: 'Остаться',
         color: 'warning',
         variant: 'solid',
-        onClick: () => {
-          clearDraft()
-          router.back()
-        }
       },
 
       {
-        label: 'Keep editing',
+        label: 'Отменить',
         color: 'neutral',
-        variant: 'outline'
+        variant: 'outline',
+        onClick: () => {
+        clearDraft()
+        router.back()
+        }
       }
 
     ]

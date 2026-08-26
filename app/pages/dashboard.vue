@@ -97,7 +97,7 @@ input {
         />
         <div class="relative flex items-center">
           <UButton
-              color="gray"
+              color="neutral"
               variant="ghost"
               class="text-gray-700 dark:text-gray-300 p-0 min-w-0 h-auto translate-y-px"
               @click="goToNotifications"
@@ -108,7 +108,7 @@ input {
               class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-[#B3261E] text-white text-[10px] rounded-full">3</span>
         </div>
         <UButton
-            color="gray"
+            color="neutral"
             variant="ghost"
             class="text-gray-700 dark:text-gray-300 p-0 min-w-0 h-auto"
             @click="goToProfile"
@@ -120,7 +120,7 @@ input {
 
     <div class="px-4 pt-4">
       <p class="text-sm text-gray-600 dark:text-gray-300">Добрый день, <span
-          class="font-bold text-black dark:text-white">{{ user.name + " " + user.surname }}</span></p>
+          class="font-bold text-black dark:text-white">{{ user?.name + " " + user?.surname }}</span></p>
       <p class="text-sm text-gray-500 dark:text-gray-400">Магазин Name. Центральный</p>
     </div>
 
@@ -145,7 +145,7 @@ input {
     <div class="px-4 mt-4 flex justify-between items-center">
       <span class="text-sm font-medium text-black dark:text-white">Ближайшие задачи</span>
       <UButton
-          color="gray"
+          color="neutral"
           variant="ghost"
           size="sm"
           class="text-sm text-gray-400 p-0 min-w-0 h-auto flex items-center gap-1"

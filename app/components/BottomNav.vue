@@ -21,7 +21,7 @@
       @click="goToTasks"
     >
       <UIcon name="i-heroicons-clipboard-document-list" class="w-6 h-6" />
-      <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-[#B3261E] text-white text-[10px] rounded-full">5</span>
+      <!--<span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-[#B3261E] text-white text-[10px] rounded-full">5</span>-->
       <span class="text-[10px]">Задачи</span>
     </UButton>
 
@@ -46,7 +46,7 @@
       @click="goToCart"
     >
       <UIcon name="i-heroicons-shopping-cart" class="w-6 h-6" />
-      <span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-[#B3261E] text-white text-[10px] rounded-full">2</span>
+      <!--<span class="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-[#B3261E] text-white text-[10px] rounded-full">2</span>-->
       <span class="text-[10px]">Корзина</span>
     </UButton>
   </div>

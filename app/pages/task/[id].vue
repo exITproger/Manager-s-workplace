@@ -169,7 +169,7 @@
       <UButton 
         color="gray" 
         variant="ghost" 
-        class="flex-1 bg-[#7A66AF] text-white hover:bg-[#70439e] flex items-center justify-center gap-2 h-9 rounded-xl text-sm font-medium"
+        class="flex-1 bg-[#7A66AF] text-white hover:bg-[#70439e] flex items-center justify-center gap-2 h-12 rounded-xl text-sm font-medium"
         @click="showStatusModal = true"
       >
         <UIcon name="i-lucide-book-marked" class="w-4 h-4" />
@@ -177,7 +177,7 @@
       </UButton>
       <UButton 
         color="primary" 
-        class="flex-1 bg-[#00C16A] hover:bg-[#00a85a] text-white flex items-center justify-center gap-2 h-9 rounded-xl text-sm font-medium border-none"
+        class="flex-1 bg-[#00C16A] hover:bg-[#00a85a] text-white flex items-center justify-center gap-2 h-12 rounded-xl text-sm font-medium border-none"
         @click="changeStatus('Выполнено')"
       >
         <UIcon name="i-lucide-square-check-big" class="w-4 h-4" />
@@ -235,7 +235,7 @@ const route = useRoute()
 const router = useRouter()
 const colorMode = useColorMode()
 
-const openTabs = ref([]) // Убрал 'details' из начального массива
+const openTabs = ref([]) // Все вкладки закрыты по умолчанию
 const newComment = ref('')
 const showStatusModal = ref(false)
 
@@ -275,6 +275,7 @@ const addComment = () => {
     })
     newComment.value = ''
     
+    // Автоматически открываем комментарии при добавлении
     if (!isTabOpen('comments')) {
       openTabs.value.push('comments')
     }

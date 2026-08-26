@@ -55,7 +55,7 @@ const goBack = () => router.back()
             v-for="product in products"
             :key="product.productId"
             :product="product"
-            @select="openProduct"/>
+            @click="openProduct(product)"/>
       </div>
 
       <!-- Loading -->

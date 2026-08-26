@@ -1,28 +1,13 @@
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] pb-24">
     <!-- Шапка -->
-    <div class="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-5 mb-[18px]">
-      <UButton
-        color="gray"
-        variant="ghost"
-        class="text-[#8a5af0] p-0 min-w-0 h-auto flex items-center gap-1 text-sm font-normal"
-        @click="goBack"
-      >
-        <UIcon name="i-heroicons-arrow-left" class="w-5 h-5" />
-        Назад
-      </UButton>
-      <UButton
-        variant="ghost"
-        color="neutral"
-        square
-        class="p-0 min-w-0 h-auto"
-        :icon="colorMode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
-        :ui="{ leadingIcon: 'size-6' }"
-        aria-label="Переключить тему"
-        @click="toggleTheme"
-      />
+    <div class="px-4 pt-6 flex-shrink-0">
+      <div class="flex items-center justify-between">
+        <BackButton />
+        <ThemeToggle />
+      </div>
     </div>
-
+     <div class="max-w-7xl w-full bg-gray-50 mx-auto min-h-screen p-5 pb-24">
     <!-- Мои / Филиала -->
     <div class="flex items-center justify-between gap-2 px-4 sm:px-6 lg:px-8 mb-[14px]">
       <div class="flex border border-[#8a5af0] dark:border-[#555555] rounded-lg overflow-hidden text-sm">
@@ -176,6 +161,7 @@
         @toggle-check="toggleCheck(task)"
       />
     </div>
+     </div>
   </div>
 </template>
 

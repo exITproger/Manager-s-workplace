@@ -7,59 +7,38 @@
         <ThemeToggle />
       </div>
     </div>
-<<<<<<< HEAD
-     <div class="max-w-7xl w-full bg-gray-50 mx-auto min-h-screen p-5 pb-24">
-    <!-- Мои / Филиала -->
-    <div class="flex items-center justify-between gap-2 px-4 sm:px-6 lg:px-8 mb-[14px]">
-      <div class="flex border border-[#8a5af0] dark:border-[#555555] rounded-lg overflow-hidden text-sm">
-=======
 
     <!-- Основной контейнер -->
     <div class="max-w-7xl w-full bg-gray-50 mx-auto min-h-screen p-5 pb-24">
       <!-- Мои / Филиала -->
-      <div class="flex items-center justify-between gap-2 mb-[14px]">
-        <div class="flex border border-[#8a5af0] rounded-lg overflow-hidden text-sm">
+      <div class="flex items-center justify-between gap-2 px-4 sm:px-6 lg:px-8 mb-[14px]">
+        <div class="flex border border-[#8a5af0] dark:border-[#555555] rounded-lg overflow-hidden text-sm">
           <UButton
             color="gray"
             variant="ghost"
             class="px-2 md:px-3 py-1 text-[11px] md:text-xs font-semibold transition-colors rounded-none"
-            :class="activeTab === 'my' ? 'bg-[#e8dff0] text-[#4a3a5a]' : 'bg-white text-[#6a5a7a]'"
+            :class="activeTab === 'my' ? 'bg-[#e8dff0] dark:bg-[#1e293b] text-[#4a3a5a] dark:text-white' : 'bg-gray-50 dark:bg-[#0a0a0a] text-[#6a5a7a] dark:text-gray-400'"
             @click="activeTab = 'my'"
           >
             Мои <span class="text-[9px] md:text-[10px] font-medium">· 8</span>
           </UButton>
-          <div class="w-px bg-[#8a5af0]"></div>
+          <div class="w-px bg-[#8a5af0] dark:bg-[#555555]"></div>
           <UButton
             color="gray"
             variant="ghost"
             class="px-2 md:px-3 py-1 text-[11px] md:text-xs font-semibold transition-colors rounded-none"
-            :class="activeTab === 'branch' ? 'bg-[#e8dff0] text-[#4a3a5a]' : 'bg-white text-[#6a5a7a]'"
+            :class="activeTab === 'branch' ? 'bg-[#e8dff0] dark:bg-[#1e293b] text-[#4a3a5a] dark:text-white' : 'bg-gray-50 dark:bg-[#0a0a0a] text-[#6a5a7a] dark:text-gray-400'"
             @click="activeTab = 'branch'"
           >
             <span class="whitespace-nowrap">Филиала <span class="text-[9px] md:text-[10px] font-medium">· 15</span></span>
           </UButton>
         </div>
->>>>>>> parent of 7e37f21 (attept copy)
         <UButton
           color="primary"
           class="h-[30px] md:h-[34px] px-2.5 md:px-3 text-[11px] md:text-xs font-semibold rounded-lg whitespace-nowrap flex items-center justify-center bg-[#00C16A] hover:bg-[#00a85a] text-white border-none"
           @click="createTask"
         >
-<<<<<<< HEAD
-          Мои <span class="text-[9px] md:text-[10px] font-medium">· 8</span>
-        </UButton>
-        <div class="w-px bg-[#8a5af0] dark:bg-[#555555]"></div>
-        <UButton
-          color="gray"
-          variant="ghost"
-          class="px-2 md:px-3 py-1 text-[11px] md:text-xs font-semibold transition-colors rounded-none"
-          :class="activeTab === 'branch' ? 'bg-[#e8dff0] dark:bg-[#1e293b] text-[#4a3a5a] dark:text-white' : 'bg-gray-50 dark:bg-[#0a0a0a] text-[#6a5a7a] dark:text-gray-400'"
-          @click="activeTab = 'branch'"
-        >
-          <span class="whitespace-nowrap">Филиала <span class="text-[9px] md:text-[10px] font-medium">· 15</span></span>
-=======
           + Создать
->>>>>>> parent of 7e37f21 (attept copy)
         </UButton>
       </div>
 
@@ -91,24 +70,24 @@
           </UButton>
           <div
             v-if="statusDropdownOpen"
-            class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-50 overflow-hidden"
+            class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-[#1a1a2e] rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
           >
             <div
               v-for="item in statusItems"
               :key="item.value"
-              class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 cursor-pointer"
+              class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 dark:hover:bg-[#2a2a3e] cursor-pointer"
               @click="selectStatus(item)"
             >
               <div
                 class="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
-                :class="selectedStatus.value === item.value ? 'border-[#8a5af0]' : 'border-gray-300'"
+                :class="selectedStatus.value === item.value ? 'border-[#8a5af0]' : 'border-gray-300 dark:border-gray-600'"
               >
                 <div
                   v-if="selectedStatus.value === item.value"
                   class="w-2.5 h-2.5 rounded-full bg-[#8a5af0]"
                 ></div>
               </div>
-              <span class="text-sm">{{ item.label }}</span>
+              <span class="text-sm dark:text-white">{{ item.label }}</span>
             </div>
           </div>
         </div>
@@ -126,46 +105,38 @@
           </UButton>
           <div
             v-if="priorityDropdownOpen"
-            class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-50 overflow-hidden"
+            class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-[#1a1a2e] rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
           >
             <div
               v-for="item in priorityItems"
               :key="item.value"
-              class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 cursor-pointer"
+              class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 dark:hover:bg-[#2a2a3e] cursor-pointer"
               @click="selectPriority(item)"
             >
               <div
                 class="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0"
-                :class="selectedPriority.value === item.value ? 'border-[#8a5af0]' : 'border-gray-300'"
+                :class="selectedPriority.value === item.value ? 'border-[#8a5af0]' : 'border-gray-300 dark:border-gray-600'"
               >
                 <div
                   v-if="selectedPriority.value === item.value"
                   class="w-2.5 h-2.5 rounded-full bg-[#8a5af0]"
                 ></div>
               </div>
-              <span class="text-sm">{{ item.label }}</span>
+              <span class="text-sm dark:text-white">{{ item.label }}</span>
             </div>
           </div>
         </div>
 
-        <!-- Заглушка для фона -->
+        <!-- Затемняющий оверлей -->
         <div
           v-if="statusDropdownOpen || priorityDropdownOpen"
-          class="fixed inset-0 z-40"
-        >
-          <div class="w-full h-full bg-white/40"></div>
-        </div>
-
-        <!-- Кликабельный оверлей для закрытия -->
-        <div
-          v-if="statusDropdownOpen || priorityDropdownOpen"
-          class="fixed inset-0 z-40"
+          class="fixed inset-0 z-40 bg-white/40 dark:bg-black/40"
           @click="closeDropdowns"
         ></div>
       </div>
 
       <!-- Сегодня -->
-      <div class="text-base font-bold text-black mb-3">Сегодня</div>
+      <div class="text-base font-bold text-black dark:text-white mb-3">Сегодня</div>
 
       <!-- Карточки задач через компонент -->
       <TaskCardOnPageTasks
@@ -176,7 +147,7 @@
       />
 
       <!-- Завтра -->
-      <div class="text-base font-bold text-black mb-3 mt-6">Завтра</div>
+      <div class="text-base font-bold text-black dark:text-white mb-3 mt-6">Завтра</div>
 
       <!-- Карточки задач через компонент -->
       <TaskCardOnPageTasks
@@ -186,7 +157,6 @@
         @toggle-check="toggleCheck(task)"
       />
     </div>
-     </div>
   </div>
 </template>
 

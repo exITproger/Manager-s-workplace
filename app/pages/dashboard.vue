@@ -51,8 +51,16 @@ const tasks = ref([
     deadline: 'Завтра, 19:00'
   }
 ])
-
-const toggleTask = (task) => {
+interface Task {
+  id: number
+  title: string
+  done: boolean
+  status: string
+  statusColor: string
+  priority: string
+  deadline: string
+}
+const toggleTask = (task: Task) => {
   task.done = !task.done
   if (task.done) {
     task.status = 'Выполнено'

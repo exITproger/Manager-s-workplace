@@ -1,6 +1,6 @@
 <!-- components/tasks/TaskCard.vue -->
 <template>
-  <div class="bg-white dark:bg-gray-900 shadow overflow-hidden rounded-xl">
+  <div class="bg-white dark:bg-gray-900 shadow overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
     <div class="px-4 py-3 flex justify-between items-center" style="background-color: rgba(103, 80, 164, 1);">
       <span class="text-white font-medium text-sm">{{ task.title }}</span>
       <div 
@@ -10,7 +10,7 @@
         <span v-if="task.done" class="text-[#8a5af0] text-xl font-extrabold leading-none select-none">✓</span>
       </div>
     </div>
-    <div class="px-4 py-3 grid grid-cols-3 gap-2 text-sm bg-[#E8DEF8] dark:bg-gray-800">
+    <div class="px-4 py-3 grid grid-cols-3 gap-2 text-sm bg-[#E8DEF8] dark:bg-[#1a1a2e]">
       <div>
         <p class="text-gray-500 dark:text-gray-400 text-[10px] uppercase tracking-wide">Статус</p>
         <div class="flex items-center gap-1 mt-0.5">

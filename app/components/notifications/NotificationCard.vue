@@ -1,24 +1,37 @@
 <!-- components/notifications/NotificationCard.vue -->
 <template>
-  <div class="relative bg-[#FEF7FF] rounded-2xl shadow-sm h-[95px] overflow-visible border border-gray-200">
+  <div class="relative bg-[#FEF7FF] dark:bg-gray-900 rounded-2xl shadow-sm h-[95px] overflow-visible border border-gray-200 dark:border-gray-800 transition-all duration-200 hover:shadow-md dark:hover:shadow-gray-800/30">
+    <!-- Аватар -->
     <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10">
       <img
-          v-if="notification.recipient.icon"
-          :src="notification.recipient.icon"
-          :alt="notification.recipient.name"
-          class="w-9 h-9 rounded-full object-cover">
-      <div v-else class="w-9 h-9 rounded-full bg-[#E8DEF8] flex items-center justify-center">
-        <span class="text-[#70439e] font-medium text-sm">{{ notification.recipient.name.charAt(0) }}</span>
+        v-if="notification.recipient?.icon"
+        :src="notification.recipient.icon"
+        :alt="notification.recipient.name"
+        class="w-9 h-9 rounded-full object-cover"
+      >
+      <div v-else class="w-9 h-9 rounded-full bg-[#E8DEF8] dark:bg-[#2d1b4e] flex items-center justify-center">
+        <span class="text-[#70439e] dark:text-[#b388e8] font-medium text-sm">
+          {{ notification.recipient?.name?.charAt(0) || '?' }}
+        </span>
       </div>
     </div>
+
+    <!-- Контент -->
     <div class="absolute left-[60px] top-1/2 -translate-y-1/2 z-10" style="width: calc(100% - 115px);">
-      <span class="font-semibold text-sm text-black block leading-tight">{{ notification.title }}</span>
-      <span class="text-xs text-gray-400 block leading-tight mt-1">{{ formatTime(notification.date) }}</span>
+      <span class="font-semibold text-sm text-[#1E1E1E] dark:text-white block leading-tight">
+        {{ notification.title }}
+      </span>
+      <span class="text-xs text-gray-400 dark:text-gray-500 block leading-tight mt-1">
+        {{ formatTime(notification.date) }}
+      </span>
     </div>
+
+    <!-- Индикатор непрочитанного -->
     <div
-        v-if="!notification.isRead"
-        class="absolute -top-1 -right-0.5 w-3.5 h-3.5 rounded-full"
-        style="z-index: 50; background-color: #B3261E; box-shadow: 0 0 0 2px #ffffff;">
+      v-if="!notification.isRead"
+      class="absolute -top-1 -right-0.5 w-3.5 h-3.5 rounded-full"
+      style="z-index: 50; background-color: #B3261E; box-shadow: 0 0 0 2px #ffffff;"
+    >
     </div>
   </div>
 </template>

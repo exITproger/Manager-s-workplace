@@ -1,3 +1,84 @@
+<!-- pages/index.vue -->
+<script setup lang="ts">
+import TaskCard from '~/components/tasks/TaskCard.vue'
+import {useMeRequest} from "~/api/me.ts";
+
+const router = useRouter()
+const colorMode = useColorMode()
+const {data: user} = await useMeRequest()
+
+const toggleTheme = () => {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
+
+const searchQuery = ref('')
+
+const tasks = ref([
+  {
+    id: 1,
+    title: 'Принять поставку товара',
+    done: false,
+    status: 'В работе',
+    statusColor: 'bg-yellow-500',
+    priority: 'Средний',
+    deadline: 'Сегодня, 15:00'
+  },
+  {
+    id: 2,
+    title: 'Проверить остатки товара',
+    done: false,
+    status: 'В работе',
+    statusColor: 'bg-yellow-500',
+    priority: 'Срочный',
+    deadline: 'Сегодня, 17:00'
+  },
+  {
+    id: 3,
+    title: 'Проверить выкладку',
+    done: false,
+    status: 'В работе',
+    statusColor: 'bg-yellow-500',
+    priority: 'Срочный',
+    deadline: 'Завтра, 10:00'
+  },
+  {
+    id: 4,
+    title: 'Принять поставку товара',
+    done: false,
+    status: 'В работе',
+    statusColor: 'bg-yellow-500',
+    priority: 'Средний',
+    deadline: 'Завтра, 19:00'
+  }
+])
+
+const toggleTask = (task) => {
+  task.done = !task.done
+  if (task.done) {
+    task.status = 'Выполнено'
+    task.statusColor = 'bg-green-500'
+  } else {
+    task.status = 'В работе'
+    task.statusColor = 'bg-yellow-500'
+  }
+}
+
+const goToHome = () => router.push('/dashboard')
+const goToTasks = () => router.push('/tasks')
+const goToCatalog = () => router.push('/products')
+const goToCart = () => router.push('/cart')
+const goToNotifications = () => router.push('/notifications')
+const goToProfile = () => router.push('/profile')
+const goToAllTasks = () => router.push('/tasks')
+</script>
+
+<style>
+input {
+  outline: none !important;
+  outline-style: none !important;
+  box-shadow: none !important;
+}
+</style>
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-950 pb-20">
     <!-- шапка -->
@@ -75,105 +156,13 @@
     </div>
 
     <div class="px-4 mt-3 space-y-4 pb-24">
-      <div 
-        v-for="task in tasks" 
-        :key="task.id"
-        class="cursor-pointer"
-        @click="openTask(task.id)"
-      >
-        <TaskCard
+      <TaskCard
+          v-for="task in tasks"
+          :key="task.id"
           :task="task"
-          @toggle-done="toggleTask(task)"
-          @open-task="openTask(task.id)"
-        />
-      </div>
+          @toggle-done="toggleTask(task)"/>
     </div>
 
     <BottomNav/>
   </div>
 </template>
-
-<script setup lang="ts">
-import TaskCard from '~/components/tasks/TaskCard.vue'
-import { useMeRequest } from "~/api/me.ts"
-
-const router = useRouter()
-const colorMode = useColorMode()
-const { data: user } = await useMeRequest()
-
-const toggleTheme = () => {
-  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-}
-
-const searchQuery = ref('')
-
-const tasks = ref([
-  {
-    id: 1,
-    title: 'Принять поставку товара',
-    done: false,
-    status: 'В работе',
-    statusColor: 'bg-yellow-500',
-    priority: 'Средний',
-    deadline: 'Сегодня, 15:00'
-  },
-  {
-    id: 2,
-    title: 'Проверить остатки товара',
-    done: false,
-    status: 'В работе',
-    statusColor: 'bg-yellow-500',
-    priority: 'Срочный',
-    deadline: 'Сегодня, 17:00'
-  },
-  {
-    id: 3,
-    title: 'Проверить выкладку',
-    done: false,
-    status: 'В работе',
-    statusColor: 'bg-yellow-500',
-    priority: 'Срочный',
-    deadline: 'Завтра, 10:00'
-  },
-  {
-    id: 4,
-    title: 'Принять поставку товара',
-    done: false,
-    status: 'В работе',
-    statusColor: 'bg-yellow-500',
-    priority: 'Средний',
-    deadline: 'Завтра, 19:00'
-  }
-])
-
-const toggleTask = (task) => {
-  task.done = !task.done
-  if (task.done) {
-    task.status = 'Выполнено'
-    task.statusColor = 'bg-green-500'
-  } else {
-    task.status = 'В работе'
-    task.statusColor = 'bg-yellow-500'
-  }
-}
-
-const openTask = (taskId) => {
-  router.push(`/task/${taskId}`)
-}
-
-const goToHome = () => router.push('/dashboard')
-const goToTasks = () => router.push('/tasks')
-const goToCatalog = () => router.push('/products')
-const goToCart = () => router.push('/cart')
-const goToNotifications = () => router.push('/notifications')
-const goToProfile = () => router.push('/profile')
-const goToAllTasks = () => router.push('/tasks')
-</script>
-
-<style>
-input {
-  outline: none !important;
-  outline-style: none !important;
-  box-shadow: none !important;
-}
-</style>

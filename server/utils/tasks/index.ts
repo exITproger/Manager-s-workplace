@@ -1,6 +1,6 @@
 // server/utils/tasks/index.ts
 import { MOCK_TOKEN } from '#server/utils/auth-mock'
-import { MOCK_TASKS } from '#server/utils/mockTasks'
+import { MOCK_TASKS } from '~~/server/utils/tasks-mock.ts'
 
 export default defineEventHandler((event) => {
   const auth = getHeader(event, 'authorization')

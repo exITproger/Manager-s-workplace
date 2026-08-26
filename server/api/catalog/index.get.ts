@@ -1,5 +1,6 @@
 import { MOCK_TOKEN } from '../../utils/auth-mock'
 import { MOCK_CATALOG } from '../../utils/catalog-mock'
+import { MOCK_CART } from '../../utils/cart-mock'
 
 export default defineEventHandler((event) => {
   const auth = getHeader(event, 'authorization')
@@ -59,5 +60,10 @@ export default defineEventHandler((event) => {
   const page = Math.max(Number(query.page) || 1, 1)
   const pageLimit = Number(query.page_limit) || result.length
 
-  return result.slice((page - 1) * pageLimit, page * pageLimit)
+  const mapped = result.map(item => {
+    const cartItem = MOCK_CART.deferredStocks.find(c => c.productId === item.productId)
+    return { ...item, quantityInCart: cartItem ? cartItem.quantityInCart : 0 }
+  })
+
+  return mapped.slice((page - 1) * pageLimit, page * pageLimit)
 })

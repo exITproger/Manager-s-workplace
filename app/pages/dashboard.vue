@@ -121,7 +121,7 @@ input {
     <div class="px-4 pt-4">
       <p class="text-sm text-gray-600 dark:text-gray-300">Добрый день, <span
           class="font-bold text-black dark:text-white">{{ user?.name + " " + user?.surname }}</span></p>
-      <p class="text-sm text-gray-500 dark:text-gray-400">Магазин Name. Центральный</p>
+      <p class="text-sm text-gray-500 dark:text-gray-400">Магазин {{user?.officeName ?? 'не указан'}}.</p>
     </div>
 
     <div class="px-4 mt-3">

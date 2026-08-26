@@ -1,5 +1,6 @@
 import { MOCK_TOKEN } from '../../utils/auth-mock'
 import { MOCK_PRODUCTS } from '../../utils/catalog-mock'
+import { MOCK_CART } from '../../utils/cart-mock'
 
 export default defineEventHandler((event) => {
   const auth = getHeader(event, 'authorization')
@@ -20,5 +21,9 @@ export default defineEventHandler((event) => {
     })
   }
 
-  return MOCK_PRODUCTS[id]
+  const product = { ...MOCK_PRODUCTS[id] }
+  const cartItem = MOCK_CART.deferredStocks.find(item => item.productId === id)
+  product.quantityInCart = cartItem ? cartItem.quantityInCart : 0
+
+  return product
 })

@@ -1,7 +1,8 @@
 import type { ProductCharacteristic } from '~/types/ProductCharacteristic'
 
 export interface Stock {
-  quantity: number
+  quantity: number,
+  quantityInCart: number,
   productId: number
   name: string
   price: number

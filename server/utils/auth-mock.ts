@@ -5,7 +5,8 @@ export const MOCK_USER = {
   name: 'Илья',
   surname: 'Иванов',
   username: 'admin',
-  officeId: 101
+  officeId: 101,
+  officeName: 'Филиал №101'
 }
 
 export const VALID_CREDENTIALS = {

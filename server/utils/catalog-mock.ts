@@ -51,6 +51,7 @@ export const MOCK_CATALOG = [
 
 export const MOCK_PRODUCTS: Record<number, {
   quantity: number
+  quantityInCart: number
   productId: number
   name: string
   price: number
@@ -63,6 +64,7 @@ export const MOCK_PRODUCTS: Record<number, {
     name: 'Coca-Cola 0.5L',
     price: 89,
     quantity: 24,
+    quantityInCart: 0,
     description: 'Классическая Coca-Cola в пластиковой бутылке объёмом 0.5 литра.',
     images: ['/phone.jpg'],
     characteristics: [
@@ -82,6 +84,7 @@ export const MOCK_PRODUCTS: Record<number, {
     name: 'Pepsi 0.5L',
     price: 79,
     quantity: 18,
+    quantityInCart: 0,
     description: 'Освежающий газированный напиток Pepsi с насыщенным вкусом.',
     images: ['/phone.jpg'],
     characteristics: [
@@ -102,6 +105,7 @@ export const MOCK_PRODUCTS: Record<number, {
     name: 'Lay\'s Classic',
     price: 129,
     quantity: 32,
+    quantityInCart: 0,
     description: 'Классические картофельные чипсы с лёгкой солёностью.',
     images: ['/phone.jpg'],
     characteristics: [
@@ -121,6 +125,7 @@ export const MOCK_PRODUCTS: Record<number, {
     name: 'Snickers',
     price: 99,
     quantity: 41,
+    quantityInCart: 0,
     description: 'Шоколадный батончик с арахисом, карамелью и нугой.',
     images: ['/phone.jpg'],
     characteristics: [
@@ -140,6 +145,7 @@ export const MOCK_PRODUCTS: Record<number, {
     name: 'Kinder Chocolate',
     price: 119,
     quantity: 27,
+    quantityInCart: 0,
     description: 'Молочный шоколад с нежной молочной начинкой.',
     images: ['/phone.jpg'],
     characteristics: [
@@ -160,6 +166,7 @@ export const MOCK_PRODUCTS: Record<number, {
     name: 'Red Bull 0.25L',
     price: 149,
     quantity: 15,
+    quantityInCart: 0,
     description: 'Газированный энергетический напиток с кофеином и таурином.',
     images: ['/phone.jpg'],
     characteristics: [

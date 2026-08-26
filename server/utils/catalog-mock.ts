@@ -5,7 +5,7 @@ export const MOCK_CATALOG = [
     price: 89,
     quantity: 24,
     quantityInCart: 0,
-    images: []
+    images: ['/phone.jpg']
   },
   {
     productId: 100002,
@@ -13,7 +13,7 @@ export const MOCK_CATALOG = [
     price: 79,
     quantity: 18,
     quantityInCart: 0,
-    images: []
+    images: ['/phone.jpg']
   },
   {
     productId: 100003,
@@ -21,7 +21,7 @@ export const MOCK_CATALOG = [
     price: 129,
     quantity: 32,
     quantityInCart: 0,
-    images: []
+    images: ['/phone.jpg']
   },
   {
     productId: 100004,
@@ -29,7 +29,7 @@ export const MOCK_CATALOG = [
     price: 99,
     quantity: 41,
     quantityInCart: 0,
-    images: []
+    images: ['/phone.jpg']
   },
   {
     productId: 100005,
@@ -37,7 +37,7 @@ export const MOCK_CATALOG = [
     price: 119,
     quantity: 27,
     quantityInCart: 0,
-    images: []
+    images: ['/phone.jpg']
   },
   {
     productId: 100006,
@@ -45,7 +45,7 @@ export const MOCK_CATALOG = [
     price: 149,
     quantity: 15,
     quantityInCart: 0,
-    images: []
+    images: ['/phone.jpg']
   }
 ]
 
@@ -64,7 +64,7 @@ export const MOCK_PRODUCTS: Record<number, {
     price: 89,
     quantity: 24,
     description: 'Классическая Coca-Cola в пластиковой бутылке объёмом 0.5 литра.',
-    images: [],
+    images: ['/phone.jpg'],
     characteristics: [
       { name: 'Основные', properties: [
         { title: 'Объём', value: '0.5 л' },
@@ -83,7 +83,7 @@ export const MOCK_PRODUCTS: Record<number, {
     price: 79,
     quantity: 18,
     description: 'Освежающий газированный напиток Pepsi с насыщенным вкусом.',
-    images: [],
+    images: ['/phone.jpg'],
     characteristics: [
       { name: 'Основные', properties: [
         { title: 'Объём', value: '0.5 л' },
@@ -103,7 +103,7 @@ export const MOCK_PRODUCTS: Record<number, {
     price: 129,
     quantity: 32,
     description: 'Классические картофельные чипсы с лёгкой солёностью.',
-    images: [],
+    images: ['/phone.jpg'],
     characteristics: [
       { name: 'Основные', properties: [
         { title: 'Вес', value: '140 г' },
@@ -122,7 +122,7 @@ export const MOCK_PRODUCTS: Record<number, {
     price: 99,
     quantity: 41,
     description: 'Шоколадный батончик с арахисом, карамелью и нугой.',
-    images: [],
+    images: ['/phone.jpg'],
     characteristics: [
       { name: 'Основные', properties: [
         { title: 'Вес', value: '50 г' },
@@ -141,7 +141,7 @@ export const MOCK_PRODUCTS: Record<number, {
     price: 119,
     quantity: 27,
     description: 'Молочный шоколад с нежной молочной начинкой.',
-    images: [],
+    images: ['/phone.jpg'],
     characteristics: [
       { name: 'Основные', properties: [
         { title: 'Вес', value: '100 г' },
@@ -161,7 +161,7 @@ export const MOCK_PRODUCTS: Record<number, {
     price: 149,
     quantity: 15,
     description: 'Газированный энергетический напиток с кофеином и таурином.',
-    images: [],
+    images: ['/phone.jpg'],
     characteristics: [
       { name: 'Основные', properties: [
         { title: 'Объём', value: '0.25 л' },

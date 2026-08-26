@@ -1,12 +1,12 @@
-import type { Assignee } from './Assignee'
+// types/Task.ts
+import type { TaskStatusType } from './TaskStatusType' 
+import type { TaskUserPreview } from './TaskUserPreview'
 
-export type TaskStatus = 'new' | 'in_progress' | 'completed' | 'canceled'
-
-export interface Task{
+export interface Task {
     id: number
     title: string
     description: string
-    status: TaskStatus
+    status: TaskStatusType 
+    responsible: TaskUserPreview 
     createdAt: string
-    assignee: Assignee
 }

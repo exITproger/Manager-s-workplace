@@ -1,24 +1,40 @@
-// composables/useTasksRequest.ts
-import type { TaskListItem } from "~/types/TaskListItem";
-import { token } from '~/composables/useAuth';
+// api/tasks.ts
+import type { Task } from "~/types/Task" 
+import { token, tokenCookie } from "~/composables/useAuth"
 
 export function useTasksRequest(status?: string) {
     const config = useRuntimeConfig()
-    const { token } = useAuth()
     const queryBody: any = {}
 
-    if (status) {
+    if (status && status !== 'any') {
         queryBody.status = status
     }
 
-    return useFetch<TaskListItem[]>('/tasks', {
+    return useFetch<Task[]>('/tasks', {
         key: 'tasks',
         baseURL: config.public.apiBase as string,
-        headers: { Authorization: `Bearer ${token.value}` },
+        headers: { Authorization: `Bearer ${token()}` }, 
         query: queryBody,
         onResponseError({ response }) {
             if (response.status === 401) {
-                token.value = null
+                tokenCookie().value = null
+                navigateTo('/')
+            }
+        }
+    })
+}
+
+export function useTaskAction(taskId: number, action: string) {
+    const config = useRuntimeConfig()
+
+    return useFetch(`/task/${taskId}/${action}/`, {
+        method: 'PATCH',
+        key: `task-${taskId}-${action}`,
+        baseURL: config.public.apiBase as string,
+        headers: { Authorization: `Bearer ${token()}` },
+        onResponseError({ response }) {
+            if (response.status === 401) {
+                tokenCookie().value = null
                 navigateTo('/')
             }
         }

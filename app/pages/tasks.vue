@@ -7,6 +7,12 @@
         <ThemeToggle />
       </div>
     </div>
+<<<<<<< HEAD
+     <div class="max-w-7xl w-full bg-gray-50 mx-auto min-h-screen p-5 pb-24">
+    <!-- Мои / Филиала -->
+    <div class="flex items-center justify-between gap-2 px-4 sm:px-6 lg:px-8 mb-[14px]">
+      <div class="flex border border-[#8a5af0] dark:border-[#555555] rounded-lg overflow-hidden text-sm">
+=======
 
     <!-- Основной контейнер -->
     <div class="max-w-7xl w-full bg-gray-50 mx-auto min-h-screen p-5 pb-24">
@@ -33,12 +39,27 @@
             <span class="whitespace-nowrap">Филиала <span class="text-[9px] md:text-[10px] font-medium">· 15</span></span>
           </UButton>
         </div>
+>>>>>>> parent of 7e37f21 (attept copy)
         <UButton
           color="primary"
           class="h-[30px] md:h-[34px] px-2.5 md:px-3 text-[11px] md:text-xs font-semibold rounded-lg whitespace-nowrap flex items-center justify-center bg-[#00C16A] hover:bg-[#00a85a] text-white border-none"
           @click="createTask"
         >
+<<<<<<< HEAD
+          Мои <span class="text-[9px] md:text-[10px] font-medium">· 8</span>
+        </UButton>
+        <div class="w-px bg-[#8a5af0] dark:bg-[#555555]"></div>
+        <UButton
+          color="gray"
+          variant="ghost"
+          class="px-2 md:px-3 py-1 text-[11px] md:text-xs font-semibold transition-colors rounded-none"
+          :class="activeTab === 'branch' ? 'bg-[#e8dff0] dark:bg-[#1e293b] text-[#4a3a5a] dark:text-white' : 'bg-gray-50 dark:bg-[#0a0a0a] text-[#6a5a7a] dark:text-gray-400'"
+          @click="activeTab = 'branch'"
+        >
+          <span class="whitespace-nowrap">Филиала <span class="text-[9px] md:text-[10px] font-medium">· 15</span></span>
+=======
           + Создать
+>>>>>>> parent of 7e37f21 (attept copy)
         </UButton>
       </div>
 
@@ -165,6 +186,7 @@
         @toggle-check="toggleCheck(task)"
       />
     </div>
+     </div>
   </div>
 </template>
 

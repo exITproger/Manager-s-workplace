@@ -230,7 +230,7 @@ const form = useState('create-task-draft', () => ({
 }))
 
 const executorOptions = [
-  { label: 'Иванов И.И.', value: 'bulgakov-i-i' },
+  { label: 'Иванов И.И.', value: 'ivanov-i-i' },
   { label: 'Смирнова А.Б.', value: 'smirnova-a-b' },
   { label: 'Булгаков М.А.', value: 'bulgakov-m-a' }
 ]

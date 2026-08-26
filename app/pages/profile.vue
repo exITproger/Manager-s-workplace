@@ -100,7 +100,7 @@ input {
           </div>
           <div class="px-4 py-3 flex justify-between">
             <span class="text-gray-500 dark:text-gray-400 text-sm">Привязанный филиал</span>
-            <span class="text-[#1E1E1E] dark:text-white text-sm font-medium">{{ user?.officeId ?? 'Не указан' }}</span>
+            <span class="text-[#1E1E1E] dark:text-white text-sm font-medium">{{ user?.officeName ?? 'Не указан' }}</span>
           </div>
           <!--<div class="px-4 py-3 flex justify-between">
             <span class="text-gray-500 dark:text-gray-400 text-sm">Роль</span>

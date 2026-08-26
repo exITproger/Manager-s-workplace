@@ -55,63 +55,46 @@
             <span class="text-xl font-medium text-black dark:text-white">{{ product.price }} ₽</span>
           </div>
 
-          <!-- Add to cart -->
+          <!-- Quantity picker (in cart) -->
           <div
-              class="w-24 h-9 shrink-0 rounded-lg bg-[#7A66AF] shadow-md overflow-hidden flex items-center text-white">
-            <!-- Minus -->
-            <!--v-if="cartItem.count === 1"-->
+              v-if="req.quantity.value > 0"
+              class="w-24 h-9 shrink-0 rounded-lg bg-[#7A66AF] shadow-md overflow-hidden flex items-center text-white"
+          >
             <UButton
                 color="neutral"
                 variant="ghost"
                 class="w-8 h-9 min-w-0 p-0 rounded-none text-white hover:bg-[#70439e] flex items-center justify-center"
-                aria-label="Удалить из корзины">
-              <UIcon
-                  name="i-heroicons-trash"
-                  class="w-4 h-4"
-              />
+                aria-label="Уменьшить количество"
+                @click="decreaseQuantity">
+              <UIcon v-if="req.quantity.value > 1" name="i-heroicons-minus" class="w-4 h-4"/>
+              <UIcon v-else name="i-heroicons-trash" class="w-4 h-4"/>
             </UButton>
 
-            <!--if-else-->
-            <UButton
-                color="neutral"
-                variant="ghost"
-                class="w-8 h-9 min-w-0 p-0 rounded-none text-white hover:bg-[#70439e] flex items-center justify-center"
-                aria-label="Уменьшить количество">
-              <UIcon
-                  name="i-heroicons-minus"
-                  class="w-4 h-4"
-              />
-            </UButton>
-
-            <!-- Separator -->
             <div class="w-px h-5 bg-white/40 shrink-0"/>
 
-            <!-- Quantity -->
-            <div
-                class="w-8 h-9 flex items-center justify-center text-sm font-medium"
-            >
-              <!--quantity-->
+            <div class="w-8 h-9 flex items-center justify-center text-sm font-medium">
+              {{ req.quantity.value }}
             </div>
 
-            <!-- Separator -->
             <div class="w-px h-5 bg-white/40 shrink-0"/>
 
-            <!-- Plus -->
             <UButton
                 color="neutral"
                 variant="ghost"
                 class="w-8 h-9 min-w-0 p-0 rounded-none text-white hover:bg-[#70439e] flex items-center justify-center"
-                aria-label="Увеличить количество">
-              <UIcon
-                  name="i-heroicons-plus"
-                  class="w-4 h-4"
-              />
+                aria-label="Увеличить количество"
+                @click="increaseQuantity"
+            >
+              <UIcon name="i-heroicons-plus" class="w-4 h-4"/>
             </UButton>
           </div>
 
-          <!--if-else-->
+          <!-- Add to cart button -->
           <UButton
-              class="w-24 h-9 shrink-0 rounded-lg bg-[#7A66AF] hover:bg-[#70439e] text-white flex items-center justify-center text-sm font-medium shadow-md">
+              v-else
+              class="w-24 h-9 shrink-0 rounded-lg bg-[#7A66AF] hover:bg-[#70439e] text-white flex items-center justify-center text-sm font-medium shadow-md"
+              @click="addToCart"
+          >
             В корзину
           </UButton>
         </div>
@@ -204,12 +187,35 @@
 
 <script setup lang="ts">
 import {useProductRequest} from "~/api/product.ts";
+import {useCartAddRequest} from "~/api/cart.ts";
 
 const route = useRoute()
 const router = useRouter()
 const colorMode = useColorMode()
 
-const {data: product, pending} = await useProductRequest(Number(route.params.id))
+const id = Number(route.params.id)
+const {data: product, pending} = await useProductRequest(id)
+
+const req = useCartAddRequest(id, product.value?.quantityInCart ?? 0)
+
+const increaseQuantity = () => {
+  if (!product.value) return
+  if (req.quantity.value < product.value.quantity) {
+    req.quantity.value++
+  }
+}
+
+const decreaseQuantity = () => {
+  if (req.quantity.value <= 1) {
+    req.quantity.value = 0
+  } else {
+    req.quantity.value--
+  }
+}
+
+const addToCart = () => {
+  req.quantity.value = 1
+}
 
 const toggleTheme = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'

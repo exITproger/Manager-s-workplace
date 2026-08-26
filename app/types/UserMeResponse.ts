@@ -4,5 +4,6 @@ export interface UserMeResponse {
     surname: string,
     middleName?: string,
     username: string,
-    officeId: number
+    officeId: number,
+    officeName: string,
 }

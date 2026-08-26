@@ -38,7 +38,9 @@
       <div class="w-full aspect-square bg-gray-100 dark:bg-gray-800 overflow-hidden">
         <img
           v-if="product.images.length > 0"
-          :src="product.images[0]"
+          :src="product.images[0]!.startsWith('/') || product.images[0]!.startsWith('http')
+            ? product.images[0]
+            : `/${product.images[0]}`"
           :alt="product.name"
           class="w-full h-full object-cover"
         />
@@ -55,13 +57,13 @@
             <UIcon name="i-lucide-banknote" class="w-7 h-7 text-black dark:text-gray-400 shrink-0" />
             <span class="text-xl font-medium text-black dark:text-white">{{ product.price }} ₽</span>
           </div>
-
-          <!-- Add to cart -->
+          
+          <!-- Add to cart 
           <div
             v-if="cartItem"
             class="w-24 h-9 shrink-0 rounded-lg bg-[#7A66AF] shadow-md overflow-hidden flex items-center text-white"
           >
-            <!-- Minus -->
+            <!-- Minus 
             <UButton
               v-if="cartItem.count === 1"
               color="neutral"
@@ -90,20 +92,20 @@
               />
             </UButton>
 
-            <!-- Separator -->
+            <!-- Separator 
             <div class="w-px h-5 bg-white/40 shrink-0" />
 
-            <!-- Quantity -->
+            <!-- Quantity 
             <div
               class="w-8 h-9 flex items-center justify-center text-sm font-medium"
             >
               {{ cartItem.count }}
             </div>
 
-            <!-- Separator -->
+            <!-- Separator 
             <div class="w-px h-5 bg-white/40 shrink-0" />
 
-            <!-- Plus -->
+            <!-- Plus 
             <UButton
               color="neutral"
               variant="ghost"
@@ -118,7 +120,7 @@
               />
             </UButton>
           </div>
-
+          
           <UButton
             v-else
             class="w-24 h-9 shrink-0 rounded-lg bg-[#7A66AF] hover:bg-[#70439e] text-white flex items-center justify-center text-sm font-medium shadow-md"
@@ -126,8 +128,9 @@
           >
             В корзину
           </UButton>
+          -->
         </div>
-
+        
         <!-- Name -->
         <div class="-mt-3">
           <h1 class="text-xl font-normal text-black dark:text-white">{{ product.name }}</h1>

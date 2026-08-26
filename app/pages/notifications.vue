@@ -4,8 +4,8 @@ import {useMeRequest} from "~/api/me.ts";
 import {useNotificationsRequest} from "~/api/notifications.ts";
 
 const {data: user} = await useMeRequest()
-const {data: notifications, pending} = await useNotificationsRequest(user.value?.id ?? undefined)
-
+const recipientId = ref<number | undefined>(user.value?.id)
+const {data: notifications, pending} = await useNotificationsRequest(recipientId)
 </script>
 <template>
   <div class="min-h-screen bg-white flex flex-col pb-20">
@@ -14,27 +14,27 @@ const {data: notifications, pending} = await useNotificationsRequest(user.value?
     <!-- вкладки Все / Непрочитанные -->
     <!-- Закомментировано: API /notifications/ не поддерживает фильтрацию по прочитанности
          (в спеке только recipient_id, page, page_limit) -->
-    <!--<div class="px-4 mt-3 flex-shrink-0 flex justify-center">
+    <div class="px-4 mt-3 flex-shrink-0 flex justify-center">
       <div class="flex border border-[#555555] rounded-full h-6 overflow-hidden max-w-[360px] w-full">
         <button
           class="flex-1 py-0 text-[11px] font-medium transition-colors duration-300 flex items-center justify-center"
-          :class="activeTab === 'all' ? 'bg-[#E8DEF8] text-[#70439e]' : 'bg-white text-gray-500'"
-          @click="activeTab = 'all'"
+          :class="recipientId === user?.id ? 'bg-[#E8DEF8] text-[#70439e]' : 'bg-white text-gray-500'"
+          @click="recipientId = user?.id"
         >
-          <span v-if="activeTab === 'all'" class="mr-1 text-[11px]">✓</span>
-          Все
+          <span v-if="recipientId === user?.id" class="mr-1 text-[11px]">✓</span>
+          Собственные
         </button>
         <div class="w-px bg-[#555555]"></div>
         <button
           class="flex-1 py-0 text-[11px] font-medium transition-colors duration-300 flex items-center justify-center"
-          :class="activeTab === 'unread' ? 'bg-[#E8DEF8] text-[#70439e]' : 'bg-white text-gray-500'"
-          @click="activeTab = 'unread'"
+          :class="recipientId === undefined ? 'bg-[#E8DEF8] text-[#70439e]' : 'bg-white text-gray-500'"
+          @click="recipientId = undefined"
         >
-          <span v-if="activeTab === 'unread'" class="mr-1 text-[11px]">✓</span>
-          Непрочитанные
+          <span v-if="recipientId === undefined" class="mr-1 text-[11px]">✓</span>
+          Филиал
         </button>
       </div>
-    </div>-->
+    </div>
 
     <!-- список уведомлений -->
     <div v-if="pending" class="flex-1 flex items-center justify-center">

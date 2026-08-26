@@ -98,25 +98,8 @@ const handleGoBackToProducts = () => {
     <!-- Header -->
     <div class="px-4 pt-6 flex-shrink-0">
       <div class="flex items-center justify-between">
-        <UButton
-            color="neutral"
-            variant="ghost"
-            class="text-[#70439e] dark:text-[#b388e8] p-0 min-w-0 h-auto flex items-center gap-1 text-sm font-normal"
-            @click="goBack"
-        >
-          <UIcon name="i-heroicons-arrow-left" class="w-4 h-4"/>
-          <span>Назад</span>
-        </UButton>
-        <UButton
-            variant="ghost"
-            color="neutral"
-            square
-            class="p-0 min-w-0 h-auto"
-            :icon="colorMode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
-            :ui="{ leadingIcon: 'size-5' }"
-            aria-label="Переключить тему"
-            @click="toggleTheme"
-        />
+        <BackButton />
+        <ThemeToggle />
       </div>
     </div>
 

@@ -1,16 +1,8 @@
 <template>
   <div class="max-w-7xl w-full bg-white mx-auto min-h-screen p-5 pb-24">
-    <!-- Шапка -->
     <div class="flex items-center justify-between mb-[18px]">
-      <UButton
-        color="gray"
-        variant="ghost"
-        class="text-[#8a5af0] p-0 min-w-0 h-auto flex items-center gap-1 text-sm font-normal"
-        @click="goBack"
-      >
-        <UIcon name="i-heroicons-arrow-left" class="w-5 h-5" />
-        Назад
-      </UButton>
+      <BackButton />
+      <ThemeToggle />
     </div>
 
     <!-- Мои / Филиала -->
@@ -172,6 +164,7 @@
 
 <script setup>
 import TaskCardOnPageTasks from '~/components/tasks/TaskCardOnPageTasks.vue'
+import ThemeToggle from '~/components/ThemeToggle.vue'
 
 const router = useRouter()
 

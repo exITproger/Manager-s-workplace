@@ -11,9 +11,7 @@ const {data: notifications, pending} = await useNotificationsRequest(recipientId
   <div class="min-h-screen bg-white flex flex-col pb-20">
     <BackButton/>
 
-    <!-- вкладки Все / Непрочитанные -->
-    <!-- Закомментировано: API /notifications/ не поддерживает фильтрацию по прочитанности
-         (в спеке только recipient_id, page, page_limit) -->
+    <!-- вкладки Собственные / Филиала -->
     <div class="px-4 mt-3 flex-shrink-0 flex justify-center">
       <div class="flex border border-[#555555] rounded-full h-6 overflow-hidden max-w-[360px] w-full">
         <button

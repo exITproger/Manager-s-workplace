@@ -1,23 +1,4 @@
-// server/utils/notification-mock.ts
-
-export interface NotificationUserPreview {
-  id: number
-  name: string
-  middleName?: string
-  icon?: string | null
-}
-
-export interface NotificationListItem {
-  id: number
-  title: string
-  isImportant: boolean
-  isRead: boolean
-  recipient: NotificationUserPreview
-  date: string
-}
-
-export const MOCK_NOTIFICATIONS: NotificationListItem[] = [
-  // ===== ЛИЧНЫЕ (для пользователя с id = 1) =====
+export const MOCK_NOTIFICATIONS = [
   {
     id: 1,
     title: 'Вам назначена задача «Проверить остаток товара»',
@@ -66,30 +47,20 @@ export const MOCK_NOTIFICATIONS: NotificationListItem[] = [
     recipient: { id: 1, name: 'Илья', middleName: 'Иванович' },
     date: '2026-08-20T14:20:00.000Z'
   },
-
-  // ===== ФИЛИАЛЬНЫЕ (для всех, recipient.id = 0) =====
   {
-    id: 10,
-    title: 'Новый заказ в филиале №17',
+    id: 7,
+    title: 'Заказ №12140 передан курьеру',
     isImportant: false,
-    isRead: false,
-    recipient: { id: 0, name: 'Филиал №17' },
-    date: '2026-08-24T10:00:00.000Z'
+    isRead: true,
+    recipient: { id: 2, name: 'Пётр', middleName: 'Петрович' },
+    date: '2026-08-19T15:45:00.000Z'
   },
   {
-    id: 11,
-    title: 'Поставка товара задерживается на 2 дня',
-    isImportant: true,
-    isRead: false,
-    recipient: { id: 0, name: 'Филиал №17' },
-    date: '2026-08-23T16:30:00.000Z'
-  },
-  {
-    id: 12,
-    title: 'Инвентаризация назначена на завтра в 09:00',
+    id: 8,
+    title: 'Отчёт по инвентаризации принят',
     isImportant: false,
     isRead: false,
-    recipient: { id: 0, name: 'Филиал №17' },
-    date: '2026-08-22T14:15:00.000Z'
+    recipient: { id: 3, name: 'Анна' },
+    date: '2026-08-18T16:10:00.000Z'
   }
 ]

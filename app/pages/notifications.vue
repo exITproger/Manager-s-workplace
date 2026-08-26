@@ -14,7 +14,6 @@
       />
     </div>
 
-    <!-- Вкладки -->
     <div class="px-4 mt-3 flex-shrink-0 flex justify-center">
       <div class="flex border border-[#555555] dark:border-gray-600 rounded-full h-6 overflow-hidden max-w-[360px] w-full">
         <button
@@ -41,7 +40,6 @@
       </div>
     </div>
 
-    <!-- Список уведомлений -->
     <div v-if="pending" class="flex-1 flex items-center justify-center">
       <span class="text-sm text-gray-500 dark:text-gray-400">Загрузка...</span>
     </div>
@@ -56,15 +54,13 @@
       >
         <div class="absolute left-3 top-1/2 -translate-y-1/2 z-10">
           <div class="w-9 h-9 rounded-full bg-[#E8DEF8] dark:bg-[#1e293b] flex items-center justify-center">
-            <span class="text-[#70439e] dark:text-white font-medium text-sm">
-              {{ getInitials(notification.recipient) }}
-            </span>
+            <span class="text-[#70439e] dark:text-white font-medium text-sm">{{ notification.recipient?.name?.charAt(0) || 'Ф' }}</span>
           </div>
         </div>
         <div class="absolute left-[60px] top-1/2 -translate-y-1/2 z-10" style="width: calc(100% - 115px);">
           <span class="font-semibold text-sm text-black dark:text-white block leading-tight">{{ notification.title }}</span>
           <span class="text-xs text-gray-400 dark:text-gray-500 block leading-tight mt-1">
-            {{ formatDate(notification.date) }}
+            {{ notification.date ? new Date(notification.date).toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'}) : '' }}
           </span>
         </div>
         <div
@@ -89,47 +85,34 @@ const toggleTheme = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 }
 
-const getInitials = (recipient: { name: string; middleName?: string }) => {
-  if (recipient.middleName) {
-    return `${recipient.name.charAt(0)}.${recipient.middleName.charAt(0)}.`
-  }
-  return recipient.name.charAt(0)
-}
-
-const formatDate = (date: string) => {
-  return new Date(date).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
-}
-
-// Состояние
 const activeTab = ref<'my' | 'branch'>('my')
 const notifications = ref<NotificationListItem[]>([])
 const pending = ref(false)
 
-// Функция загрузки
-const loadNotifications = async () => {
+const fetchNotifications = async () => {
   pending.value = true
   try {
-    const recipientId = activeTab.value === 'my' ? 1 : 0
-    console.log('Загрузка уведомлений с recipient_id:', recipientId)
-    
-    const response = await $fetch<NotificationListItem[]>(`/api/notifications?recipient_id=${recipientId}`)
-    console.log('Получено уведомлений:', response.length)
+    let url = '/api/notifications'
+    if (activeTab.value === 'my') {
+      url += '?recipient_id=1'
+    } else {
+      url += '?recipient_id=0'
+    }
+    const response = await $fetch<NotificationListItem[]>(url)
     notifications.value = response
   } catch (error) {
-    console.error('Ошибка загрузки:', error)
+    console.error('Ошибка загрузки уведомлений:', error)
     notifications.value = []
   } finally {
     pending.value = false
   }
 }
 
-// Загружаем при монтировании
-onMounted(() => {
-  loadNotifications()
+watch(activeTab, () => {
+  fetchNotifications()
 })
 
-// Следим за изменением вкладки
-watch(activeTab, () => {
-  loadNotifications()
+onMounted(() => {
+  fetchNotifications()
 })
 </script>

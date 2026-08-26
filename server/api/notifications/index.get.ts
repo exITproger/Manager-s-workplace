@@ -1,16 +1,15 @@
-// server/api/notifications/index.get.ts
-import { MOCK_TOKEN } from '../../utils/auth-mock'
-import { MOCK_NOTIFICATIONS } from '../../utils/notification-mock'
+import {MOCK_TOKEN} from '../../utils/auth-mock'
+import {MOCK_NOTIFICATIONS} from '../../utils/notification-mock'
 
 export default defineEventHandler((event) => {
-  // Временно отключаем авторизацию для теста
-  // const auth = getHeader(event, 'authorization')
-  // if (auth !== `Bearer ${MOCK_TOKEN}`) {
-  //   throw createError({
-  //     statusCode: 401,
-  //     data: { errors: ['Не авторизован'] }
-  //   })
-  // }
+  const auth = getHeader(event, 'authorization')
+
+  if (auth !== `Bearer ${MOCK_TOKEN}`) {
+    throw createError({
+      statusCode: 401,
+      data: { errors: ['Не авторизован'] }
+    })
+  }
 
   const query = getQuery(event)
 

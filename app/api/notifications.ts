@@ -1,24 +1,20 @@
-// app/api/notifications.ts
-import type { NotificationListItem } from "~/types/NotificationListItem";
-import { token, tokenCookie } from "~/composables/useAuth";
+import type {NotificationListItem} from "~/types/NotificationListItem.ts";
+import {token, tokenCookie} from "~/composables/useAuth.ts";
 
 export function useNotificationsRequest(recipientId: number | undefined) {
     const config = useRuntimeConfig()
     const queryBody: any = {}
 
-    if (recipientId !== undefined) {
+    if (recipientId) {
         queryBody.recipient_id = recipientId
     }
-
-    console.log('Токен для запроса:', token()) // Добавь для проверки
 
     return useFetch<NotificationListItem[]>('/notifications', {
         key: 'notifications',
         baseURL: config.public.apiBase as string,
-        headers: { Authorization: `Bearer ${token()}` },
+        headers: {Authorization: `Bearer ${token()}`},
         query: queryBody,
-        onResponseError({ response }) {
-            console.log('Ошибка ответа:', response.status) // Добавь для проверки
+        onResponseError({response}) {
             if (response.status === 401) {
                 tokenCookie().value = null
                 navigateTo('/')

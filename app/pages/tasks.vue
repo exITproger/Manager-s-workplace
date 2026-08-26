@@ -172,6 +172,8 @@
 import TaskCardOnPageTasks from '~/components/tasks/TaskCardOnPageTasks.vue'
 import BackButton from '~/components/BackButton.vue'
 import ThemeToggle from '~/components/ThemeToggle.vue'
+import { useTasksRequest } from '~/api/tasks'
+import { useTaskAction } from '~/api/tasks'
 
 const router = useRouter()
 
@@ -197,15 +199,41 @@ const priorityItems = [
   { label: 'Срочный', value: 'urgent' }
 ]
 
-const todayTasks = reactive([
-  { type: 'Выдача заказа', number: '1947', name: 'Выдать заказ №12134', status: 'Выполнено', execLabel: 'Средний', time: 'Сегодня, 15:00', sub: 'создана сегодня, 10:12', done: true },
-  { type: 'Резервирование', number: '19857', name: 'Отложить iPhone 16 Pro Max', status: 'В работе', execLabel: 'Срочный', time: 'Сегодня, 17:00', sub: 'создана сегодня, 14:12', done: false }
-])
+const { data: tasks, pending, error, refresh } = useTasksRequest()
 
-const tomorrowTasks = reactive([
-  { type: 'Инвентаризация', number: '77777', name: 'Пересчитать товар арт. 12784568', status: 'В работе', execLabel: 'Низкий', time: 'Завтра, 09:00', sub: 'создана сегодня, 08:00', done: false },
-  { type: 'Инвентаризация', number: '77777', name: 'Пересчитать товар арт. 12784568', status: 'Новая', execLabel: 'Низкий', time: 'Завтра, 09:00', sub: 'создана сегодня, 08:00', done: false }
-])
+const formatTask = (task) => {
+  const taskDate = new Date(task.createdAt)
+  
+  return {
+    type: 'Задача', <!-- TODO: В API нет поля type, поэтому пока используем "Задача" -->
+    number: task.id.toString(),
+    name: task.title,
+    status: task.status?.value || 'Новая',
+    execLabel: 'Средний', <!-- TODO: В API нет поля priority, поэтому пока используем заглушку "Средний" -->
+    time: taskDate.toLocaleString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+    sub: `создана ${taskDate.toLocaleString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}`,
+    done: task.status?.value === 'completed',
+    raw: task
+  }
+}
+
+const todayTasks = computed(() => {
+  if (!tasks.value) return []
+  const now = new Date().toDateString()
+  return tasks.value
+    .filter(task => new Date(task.createdAt).toDateString() === now)
+    .map(formatTask)
+})
+
+const tomorrowTasks = computed(() => {
+  if (!tasks.value) return []
+  const tomorrow = new Date()
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  const tomorrowStr = tomorrow.toDateString()
+  return tasks.value
+    .filter(task => new Date(task.createdAt).toDateString() === tomorrowStr)
+    .map(formatTask)
+})
 
 function selectStatus(item) {
   selectedStatus.value = item
@@ -220,6 +248,7 @@ function selectPriority(item) {
 }
 
 function toggleCheck(task) {
+  const newStatus = task.done ? 'pending' : 'completed'
   task.done = !task.done
   if (task.done) {
     task.status = 'Выполнено'
@@ -227,6 +256,7 @@ function toggleCheck(task) {
     task.status = 'В работе'
   }
 }
+
 
 function closeDropdowns() {
   statusDropdownOpen.value = false

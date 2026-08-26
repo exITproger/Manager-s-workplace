@@ -9,7 +9,13 @@ const {data: notifications, pending} = await useNotificationsRequest(recipientId
 </script>
 <template>
   <div class="min-h-screen bg-white flex flex-col pb-20">
-    <BackButton/>
+    <!-- Header -->
+    <div class="px-4 pt-6 flex-shrink-0">
+      <div class="flex items-center justify-between">
+        <BackButton />
+        <ThemeToggle />
+      </div>
+    </div>
 
     <!-- вкладки Собственные / Филиала -->
     <div class="px-4 mt-3 flex-shrink-0 flex justify-center">
